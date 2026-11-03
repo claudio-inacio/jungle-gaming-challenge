@@ -5,7 +5,8 @@
       "url": ["http://localhost:4173/"],
       "numberOfRuns": 3,
       "settings": {
-        "preset": "desktop"
+        "preset": "desktop",
+        "chromeFlags": "--no-sandbox"
       }
     },
     "assert": {
