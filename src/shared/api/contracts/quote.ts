@@ -32,3 +32,15 @@ export const applyCouponRequestSchema = z.object({
   couponCode: z.string().min(1),
 })
 export type ApplyCouponRequest = z.infer<typeof applyCouponRequestSchema>
+
+export const quoteRequestItemSchema = z.object({
+  nftId: idSchema,
+  quantity: z.number().int().min(1),
+})
+export type QuoteRequestItem = z.infer<typeof quoteRequestItemSchema>
+
+export const quoteRequestSchema = z.object({
+  items: z.array(quoteRequestItemSchema).min(1),
+  couponCode: z.string().min(1).optional(),
+})
+export type QuoteRequest = z.infer<typeof quoteRequestSchema>
