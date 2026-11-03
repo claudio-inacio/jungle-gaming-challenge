@@ -74,8 +74,6 @@ graph TD
 | `mocks/handlers/index.ts`     | Só `GET /api/health`.                                                                                                                                                                        |
 | `mocks/socket/index.ts`       | Handler do handshake Socket.IO via `@mswjs/socket.io-binding` (detalhado abaixo).                                                                                                            |
 
-> Observação: existe um `src/components/ui/button.tsx` fora de `shared/ui/`, remanescente da inicialização padrão do CLI `shadcn` (que usa `src/components/ui` por convenção) antes do alias ser ajustado para `@/shared/ui` em `components.json`. O componente usado de fato pela aplicação é `src/shared/ui/button.tsx`. Este arquivo órfão deve ser removido ou migrado na primeira tarefa de UI que tocar botões.
-
 ## Contratos REST e eventos
 
 Ainda não há schemas zod em `src/shared/api/contracts/` — **planejado a partir da Fase 1**, quando `mock-engineer` e `feature-dev` definirem os contratos de catálogo, carrinho, pedidos, etc., compartilhados entre handlers MSW, cliente Axios e testes (ver rule `typescript.md`).
@@ -170,7 +168,7 @@ Nenhuma tela de negócio foi implementada ainda, então não há estados não de
 
 ## Substituições de assets
 
-Nenhuma substituição de asset de produto foi feita ainda (não há telas de catálogo/NFT implementadas). `src/assets/hero.png`, `react.svg` e `vite.svg` são placeholders do template inicial do Vite, usados apenas em `App.tsx` (componente de boilerplate, não roteado — a aplicação real renderiza `pages/home`, não `App.tsx`). Serão substituídos/removidos quando as telas reais de catálogo/home forem implementadas a partir do Figma.
+`src/App.tsx`, `src/App.css` e os placeholders do template inicial do Vite (`src/assets/hero.png`, `react.svg`, `vite.svg`) foram removidos — eram boilerplate não roteado (a aplicação real renderiza `pages/home`, não `App.tsx`). Nenhuma substituição de asset de produto foi feita ainda (não há telas de catálogo/NFT implementadas); os assets reais serão adicionados quando as telas forem implementadas a partir do Figma.
 
 ## Ajustes de acessibilidade
 
