@@ -1,6 +1,8 @@
+import type { ApiErrorCode } from '@/shared/api/contracts/error'
+
 export interface ScenarioOverride {
   status: number
-  code: string
+  code: ApiErrorCode
   message: string
   when?: Record<string, unknown>
 }
