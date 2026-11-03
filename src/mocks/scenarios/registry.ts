@@ -17,6 +17,72 @@ export const scenarios: Record<string, Scenario> = {
     description: 'Toda request falha como erro de rede',
     forceOffline: true,
   },
+  'coupon-invalid': {
+    id: 'coupon-invalid',
+    description: 'Cupom KURIO10 (normalmente válido) responde COUPON_INVALID em /quote e /orders',
+    overrides: {
+      'POST /api/quote': {
+        status: 422,
+        code: 'COUPON_INVALID',
+        message: 'Cupom inválido',
+        when: { couponCode: 'KURIO10' },
+      },
+      'POST /api/orders': {
+        status: 422,
+        code: 'COUPON_INVALID',
+        message: 'Cupom inválido',
+        when: { couponCode: 'KURIO10' },
+      },
+    },
+  },
+  'coupon-expired': {
+    id: 'coupon-expired',
+    description: 'Cupom KURIO10 (normalmente válido) responde COUPON_EXPIRED em /quote e /orders',
+    overrides: {
+      'POST /api/quote': {
+        status: 422,
+        code: 'COUPON_EXPIRED',
+        message: 'Cupom expirado',
+        when: { couponCode: 'KURIO10' },
+      },
+      'POST /api/orders': {
+        status: 422,
+        code: 'COUPON_EXPIRED',
+        message: 'Cupom expirado',
+        when: { couponCode: 'KURIO10' },
+      },
+    },
+  },
+  'payment-declined': {
+    id: 'payment-declined',
+    description: 'Pedido criado nasce com status declined (pagamento recusado pela carteira)',
+  },
+  'order-timeout': {
+    id: 'order-timeout',
+    description: 'Pedido criado fica pending indefinidamente (simula timeout na confirmação)',
+  },
+  'quote-changed': {
+    id: 'quote-changed',
+    description: 'Toda criação de pedido falha com QUOTE_CHANGED (preço mudou desde a cotação)',
+    overrides: {
+      'POST /api/orders': {
+        status: 409,
+        code: 'QUOTE_CHANGED',
+        message: 'A cotação mudou, revise o pedido antes de confirmar',
+      },
+    },
+  },
+  'edition-sold-out': {
+    id: 'edition-sold-out',
+    description: 'Toda criação de pedido falha com AVAILABILITY_CONFLICT (edição esgotada)',
+    overrides: {
+      'POST /api/orders': {
+        status: 409,
+        code: 'AVAILABILITY_CONFLICT',
+        message: 'Edição esgotada',
+      },
+    },
+  },
 }
 
 const STORAGE_KEY = 'kurio-mocks-scenario'
