@@ -9,6 +9,7 @@ import { db, type MockUser } from '../db/store'
 import { withScenario } from '../scenarios/apply'
 import { errorResponse } from './error-response'
 import { hashPassword, verifyPassword } from '../lib/password'
+import { getSessionFromRequest } from './session'
 
 function toPublicUser(user: MockUser): User {
   return {
@@ -88,15 +89,13 @@ export const authHandlers = [
 
   http.get('/api/auth/session', async ({ request }) =>
     withScenario(() => {
-      const token = request.headers.get('Authorization')?.replace('Bearer ', '')
-      const session = token ? db.get().sessions[token] : undefined
-      if (!session || new Date(session.expiresAt) < new Date())
-        return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+      const session = getSessionFromRequest(request)
+      if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
       const user = db.get().users.find((u) => u.id === session.userId)!
       return HttpResponse.json(
         sessionSchema.parse({
           user: toPublicUser(user),
-          accessToken: token,
+          accessToken: session.token,
           expiresAt: session.expiresAt,
         }),
       )
@@ -105,10 +104,10 @@ export const authHandlers = [
 
   http.post('/api/auth/logout', async ({ request }) =>
     withScenario(() => {
-      const token = request.headers.get('Authorization')?.replace('Bearer ', '')
-      if (token)
+      const session = getSessionFromRequest(request)
+      if (session)
         db.update((d) => {
-          delete d.sessions[token]
+          delete d.sessions[session.token]
         })
       return new HttpResponse(null, { status: 204 })
     }),

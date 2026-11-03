@@ -9,13 +9,13 @@ import { db } from '../db/store'
 import { withScenario } from '../scenarios/apply'
 import { errorResponse } from './error-response'
 import { toNftSummary } from './nft-summary'
+import { getSessionFromRequest } from './session'
 
 // `favorited` nunca é um campo estático do NFT - é sempre relativo a quem está
-// pedindo. Sem Authorization (ou sessão expirada), não há usuário: tudo false.
+// pedindo. Sem sessão válida, não há usuário: tudo false.
 function favoriteIdsFromRequest(request: Request): readonly string[] {
-  const token = request.headers.get('Authorization')?.replace('Bearer ', '')
-  const session = token ? db.get().sessions[token] : undefined
-  if (!session || new Date(session.expiresAt) < new Date()) return []
+  const session = getSessionFromRequest(request)
+  if (!session) return []
   return db.get().favorites[session.userId] ?? []
 }
 
