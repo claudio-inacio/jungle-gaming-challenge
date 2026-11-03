@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { http } from '@/shared/api/http'
+import { http } from '@/shared/api'
 // import { socket } from '@/shared/api/socket/client'
 
 export function HomePage() {
