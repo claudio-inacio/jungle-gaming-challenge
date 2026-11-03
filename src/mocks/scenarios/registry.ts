@@ -21,8 +21,6 @@ export const scenarios: Record<string, Scenario> = {
 
 const STORAGE_KEY = 'kurio-mocks-scenario'
 
-// Em Node (testes de integração, SSR) não há `window`/`location`/`localStorage`;
-// nesse caso o cenário ativo é sempre o padrão (sucesso).
 export function getActiveScenario(): Scenario {
   if (typeof window === 'undefined') return successScenario
 

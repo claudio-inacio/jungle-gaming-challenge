@@ -1,8 +1,20 @@
 import { fixtureUsers } from '../fixtures/users'
 import { fixtureNfts } from '../fixtures/nfts'
 
+// `password` existe só nas fixtures (credenciais de demo documentadas no README).
+// `passwordHash` é o que usuários cadastrados em runtime recebem - nunca em claro.
+export interface MockUser {
+  id: string
+  email: string
+  username: string
+  displayName: string
+  createdAt: string
+  password?: string
+  passwordHash?: string
+}
+
 export interface DbState {
-  users: typeof fixtureUsers
+  users: MockUser[]
   sessions: Record<string, { userId: string; expiresAt: string }>
   nfts: typeof fixtureNfts
   favorites: Record<string, string[]> // userId -> nftId[]
@@ -34,7 +46,7 @@ function setStorageItem(key: string, value: string): void {
 
 function createInitialState(): DbState {
   return {
-    users: fixtureUsers,
+    users: [...fixtureUsers],
     sessions: {},
     nfts: fixtureNfts,
     favorites: {},
