@@ -9,6 +9,7 @@ import { errorResponse } from './error-response'
 import { hashPassword } from '../lib/password'
 import { getSessionFromRequest } from './session'
 import { fixtureCoupons } from '../fixtures/coupons'
+import { emitNftUpdated, emitOrderUpdated } from '../socket/emit'
 
 // Taxa de rede fixa e determinística para a simulação (não vem de nenhuma
 // cotação de gas real).
@@ -122,7 +123,25 @@ export const orderHandlers = [
         list.push(order)
         d.orders[session.userId] = list
         d.idempotencyKeys[idempotencyKey] = { userId: session.userId, orderId: order.id, bodyHash }
+
+        // Estoque só é consumido quando o pagamento é confirmado de verdade -
+        // um pedido 'pending' (order-timeout) ou 'declined' nunca deve travar
+        // disponibilidade que outro comprador poderia usar.
+        if (order.status === 'confirmed') {
+          for (const item of order.items) {
+            const nft = d.nfts.find((n) => n.id === item.nftId)
+            if (nft) nft.available = Math.max(0, nft.available - item.quantity)
+          }
+        }
       })
+
+      emitOrderUpdated(order, session.userId)
+      if (order.status === 'confirmed') {
+        for (const item of order.items) {
+          const updatedNft = db.get().nfts.find((n) => n.id === item.nftId)
+          if (updatedNft) emitNftUpdated(updatedNft)
+        }
+      }
 
       return HttpResponse.json(orderSchema.parse(order), { status: 201 })
     }),
