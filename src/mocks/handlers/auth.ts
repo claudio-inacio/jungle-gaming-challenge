@@ -11,7 +11,7 @@ import { errorResponse } from './error-response'
 import { hashPassword, verifyPassword } from '../lib/password'
 import { getSessionFromRequest } from './session'
 
-function toPublicUser(user: MockUser): User {
+export function toPublicUser(user: MockUser): User {
   return {
     id: user.id,
     displayName: user.displayName,
