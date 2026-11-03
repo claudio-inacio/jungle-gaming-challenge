@@ -40,8 +40,11 @@ export const orderSchema = z.object({
 })
 export type Order = z.infer<typeof orderSchema>
 
+// A chave de idempotência agora vai no header HTTP `Idempotency-Key`, não no
+// corpo (ver `src/mocks/handlers/order.ts`).
 export const createOrderRequestSchema = z.object({
-  idempotencyKey: z.string().min(1),
+  items: z.array(z.object({ nftId: idSchema, quantity: z.number().int().min(1) })).min(1),
+  couponCode: z.string().optional(),
   walletAddress: walletAddressSchema,
   network: networkSchema,
 })

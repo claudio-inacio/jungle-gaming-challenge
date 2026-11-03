@@ -1,5 +1,7 @@
+import type { Order } from '@/shared/api/contracts/order'
 import { fixtureUsers } from '../fixtures/users'
 import { fixtureNfts } from '../fixtures/nfts'
+import type { Wallet } from '@/shared/api/contracts/wallet'
 
 // `password` existe só nas fixtures (credenciais de demo documentadas no README).
 // `passwordHash` é o que usuários cadastrados em runtime recebem - nunca em claro.
@@ -19,10 +21,10 @@ export interface DbState {
   nfts: typeof fixtureNfts
   favorites: Record<string, string[]> // userId -> nftId[]
   carts: Record<string, { nftId: string; quantity: number }[]> // userId -> itens
-  orders: Record<string, unknown[]>
+  orders: Record<string, Order[]>
   idempotencyKeys: Record<string, { userId: string; orderId: string; bodyHash: string }>
   profiles: Record<string, unknown>
-  wallets: Record<string, unknown[]>
+  wallets: Record<string, Wallet[]>
 }
 
 const STORAGE_KEY = 'kurio-mocks-db'
