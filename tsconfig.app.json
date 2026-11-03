@@ -23,10 +23,11 @@
     "noFallthroughCasesInSwitch": true,
 
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": { "@/*": ["./src/*"] },
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+    "noImplicitOverride": true
   },
   "include": ["src"]
 }
