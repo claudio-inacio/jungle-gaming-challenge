@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useMediaQuery } from '@/shared/lib/hooks/useMediaQuery'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 import { LoginForm } from '@/features/auth'
@@ -14,6 +14,16 @@ export function LoginPage() {
         Entre para gerenciar sua carteira, coleção e perfil de criador.
       </p>
       <LoginForm redirectTo={redirect} />
+      <p className="text-sm text-muted-foreground mt-6">
+        Não tem conta?{' '}
+        <Link
+          to="/register"
+          search={{ redirect }}
+          className="font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          Criar conta
+        </Link>
+      </p>
     </>
   )
 
