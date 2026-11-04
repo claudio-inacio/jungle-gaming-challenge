@@ -183,7 +183,9 @@ Taxa de rede fixa (`"0.01"`), todo cálculo via `big.js` (`mulEth`, `sumEth`, `s
 
 Idempotência (header, não campo do body): mesma `Idempotency-Key` + mesmo corpo (hash comparado) → retorna o pedido já criado (`201` de novo, mesmo payload). Mesma chave + corpo diferente, **ou** chave já usada por outro `userId` → `409 CONFLICT` — nunca vaza pedido de uma conta para outra.
 
-Estoque: `nft.available` só é decrementado quando o pedido nasce `confirmed`. Pedidos `pending` (cenário `order-timeout`) ou `declined` (cenário `payment-declined`) nunca tocam o catálogo.
+O pedido sempre nasce `pending` na resposta do `POST` (nunca `confirmed`/`declined` sincronamente). A transição é assíncrona, resolvida ~1.2s depois dentro do próprio handler (`resolveOrder` em `handlers/order.ts`, simulando o processamento do pagamento) e entregue via `order.updated` — nunca inferida pelo cliente a partir da resposta REST. No cenário `order-timeout` essa transição nunca é agendada: o pedido fica `pending` para sempre, de propósito.
+
+Estoque: `nft.available` só é decrementado dentro de `resolveOrder`, quando o pedido de fato vira `confirmed` — nunca na criação. Pedidos `pending` (cenário `order-timeout`) ou `declined` (cenário `payment-declined`) nunca tocam o catálogo.
 
 Exemplo de `Order` confirmado:
 
@@ -246,10 +248,12 @@ Exemplo de `Order` confirmado:
 
 União discriminada por `type`, envelope comum `{ eventId, version, occurredAt }`:
 
-| Evento          | Visibilidade                                                         | `resource`              | Campos extra            | Emitido por                                                                                                                            |
-| --------------- | -------------------------------------------------------------------- | ----------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `nft.updated`   | **Pública** — broadcast para toda conexão aberta                     | `{ type: "nft", id }`   | `data: NftDetail`       | `handlers/order.ts`, após pedido `confirmed`, uma vez por item do pedido (NFT já com `available` decrementado)                         |
-| `order.updated` | **Privada** — só conexão(ões) identificadas com o `userId` do pedido | `{ type: "order", id }` | `userId`, `data: Order` | `handlers/order.ts`, imediatamente após criar o pedido (`POST /api/orders`), para qualquer `status` (`pending`/`confirmed`/`declined`) |
+| Evento          | Visibilidade                                                                                         | `resource`              | Campos extra                         | Emitido por                                                                                                                                                         |
+| --------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `nft.updated`   | **Pública** — broadcast para toda conexão aberta                                                     | `{ type: "nft", id }`   | `data: Omit<NftDetail, "favorited">` | `handlers/order.ts` (`resolveOrder`), quando o pedido assíncrono vira `confirmed`, uma vez por item do pedido (NFT já com `available` decrementado)                 |
+| `order.updated` | **Privada** — só conexão(ões) identificadas com o `userId` do pedido, revalidado no momento do envio | `{ type: "order", id }` | `userId`, `data: Order`              | `handlers/order.ts`: uma vez ao criar o pedido (`status: "pending"`) e outra vez em `resolveOrder`, quando a transição assíncrona (`confirmed`/`declined`) acontece |
+
+`favorited` é removido do payload de `nft.updated` porque é um campo por usuário (`nftPublicEventDataSchema = nftDetailSchema.omit({ favorited: true })` em `contracts/events.ts`) — um evento de broadcast nunca pode carregar dado relativo a uma única conta; cada cliente resolve o próprio `favorited` via REST/cache local.
 
 `version` é um contador global (`versionCounter` em `socket/emit.ts`), incrementado a cada emissão de **qualquer** evento — não é um contador por recurso. Uma reconciliação no cliente que descarte "versão menor ou igual à última aplicada" deve comparar por `resource.id`, nunca `version` entre recursos diferentes.
 
@@ -296,7 +300,7 @@ Política detalhada por tipo de erro (não retentar 4xx, backoff em falhas trans
 
 ## Reconciliação REST × Socket.IO
 
-A emissão de eventos de negócio já é real (ver seção de eventos acima): `order.updated` é emitido a cada `POST /api/orders` e `nft.updated` a cada item de pedido confirmado. O que ainda não existe é o consumo no cliente — nenhum código de `app`/`pages`/`shared` assina `nft.updated`/`order.updated` hoje.
+A emissão de eventos de negócio já é real (ver seção de eventos acima): `order.updated` é emitido ao criar o pedido (`pending`) e de novo, de forma assíncrona, quando `resolveOrder` decide `confirmed`/`declined`; `nft.updated` sai junto dessa segunda emissão, a cada item de um pedido que virou `confirmed`. O que ainda não existe é o consumo no cliente — nenhum código de `app`/`pages`/`shared` assina `nft.updated`/`order.updated` hoje.
 
 Pontos que a implementação futura (fase de tempo real) precisa respeitar, já deduzidos do contrato real:
 
@@ -315,7 +319,7 @@ Código do handshake (`src/mocks/socket/index.ts`):
 import { ws } from 'msw'
 import { toSocketIo } from '@mswjs/socket.io-binding'
 import { registerEmitter } from './emit'
-import { db } from '../db/store'
+import { getSessionByToken } from '../lib/session'
 
 const realtime = ws.link('wss://realtime.kurio.local/*')
 
@@ -323,7 +327,7 @@ export const socketHandlers = [
   realtime.addEventListener('connection', (connection) => {
     const io = toSocketIo(connection)
 
-    const { unregister, setUserId } = registerEmitter((event) => {
+    const { unregister, setToken } = registerEmitter((event) => {
       io.client.emit(event.type, event)
     })
     connection.client.addEventListener('close', unregister)
@@ -333,8 +337,8 @@ export const socketHandlers = [
     // `order.updated` (dado privado).
     io.client.on('identify', (_event, payload) => {
       const token = payload?.token
-      const session = typeof token === 'string' ? db.get().sessions[token] : undefined
-      setUserId(session ? session.userId : null)
+      const session = typeof token === 'string' ? getSessionByToken(token) : null
+      setToken(session ? session.token : null)
     })
 
     queueMicrotask(() => {
@@ -344,12 +348,12 @@ export const socketHandlers = [
 ]
 ```
 
-Cada conexão WebSocket registra o seu próprio emissor em `socket/emit.ts` (`registerEmitter`, mantido num `Set<RegisteredEmitter>`) — sem isso, uma segunda aba sobrescreveria a primeira. `userId` começa `null` (a conexão ainda não se identificou) e só é atualizado depois do handshake `identify` acima.
+Cada conexão WebSocket registra o seu próprio emissor em `socket/emit.ts` (`registerEmitter`, mantido num `Set<RegisteredEmitter>`) — sem isso, uma segunda aba sobrescreveria a primeira. A entrada guarda o **token** (não um `userId` já resolvido), começando `null` (a conexão ainda não se identificou) e atualizado depois do handshake `identify` acima — só se `getSessionByToken` validar o token na hora.
 
 A separação entre dado **público** e **privado** é resolvida manualmente, não pelo binding:
 
 - `emitNftUpdated` (NFT = catálogo, dado público) itera **todas** as entradas do `Set` e emite para todas, sem filtro.
-- `emitOrderUpdated(order, userId)` (pedido = dado privado) itera o `Set` e só emite para as entradas cujo `entry.userId === userId` — sem handshake `identify` bem-sucedido, uma conexão nunca recebe nenhum `order.updated`, mesmo que seja do dono do pedido.
+- `emitOrderUpdated(order, userId)` (pedido = dado privado) itera o `Set` e, pra cada entrada com `token` não nulo, chama `getSessionByToken(entry.token)` de novo **no momento do envio** — nunca confia num `userId` cacheado no handshake. Só emite se a sessão daquele token ainda existir e resolver pro mesmo `userId` do pedido. Isso cobre tanto token expirado entre o `identify` e o envio quanto logout (que apaga a sessão do `db` em `handlers/auth.ts`) sem que o cliente precise desconectar o socket explicitamente — a próxima emissão já não entrega mais nada pra aquela conexão.
 
 Isso existe porque `@mswjs/socket.io-binding` não implementa rooms/namespaces nativamente (ver limitações abaixo): a filtragem por usuário que o Socket.IO real faria com uma room (`io.to(userId).emit(...)`) é reimplementada à mão em `emit.ts`, comparando `userId` por conexão.
 
