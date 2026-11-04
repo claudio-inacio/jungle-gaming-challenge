@@ -85,7 +85,7 @@ export const scenarios: Record<string, Scenario> = {
   },
 }
 
-const STORAGE_KEY = 'kurio-mocks-scenario'
+export const STORAGE_KEY = 'kurio-mocks-scenario'
 
 export function getActiveScenario(): Scenario {
   if (typeof window === 'undefined') return successScenario

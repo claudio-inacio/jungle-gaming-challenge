@@ -10,6 +10,7 @@ import { env } from '@/shared/config/env'
 import { queryClient } from '@/shared/api/query-client'
 import { router } from '@/app/router'
 import { Toaster } from '@/shared/ui/sonner'
+import { ScenarioPanelGate } from './mocks/dev/ScenarioPanelGate'
 
 async function enableMocking() {
   if (!env.enableMocks) return
@@ -23,6 +24,7 @@ enableMocking().then(() => {
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <Toaster />
+        <ScenarioPanelGate />
       </QueryClientProvider>
     </StrictMode>,
   )
