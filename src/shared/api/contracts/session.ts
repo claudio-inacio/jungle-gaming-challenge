@@ -30,3 +30,4 @@ export const registerRequestSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
+export type RegisterRequest = z.infer<typeof registerRequestSchema>
