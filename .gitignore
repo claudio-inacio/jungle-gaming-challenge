@@ -12,6 +12,7 @@ dist
 /scripts/
 /.claude/
 /graphify-out/
+/.tanstack/
 dist-ssr
 *.local
 
