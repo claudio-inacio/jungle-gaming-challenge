@@ -1,31 +1,35 @@
 import { realtimeEventSchema, type RealtimeEvent } from '@/shared/api/contracts/events'
 import type { NftDetail } from '@/shared/api/contracts/nft'
 import type { Order } from '@/shared/api/contracts/order'
+import { getSessionByToken } from '../lib/session'
 
 type Emitter = (event: RealtimeEvent) => void
 
 interface RegisteredEmitter {
-  userId: string | null
+  token: string | null
   emit: Emitter
 }
 
 // Conjunto (não uma única referência) porque cada conexão WebSocket registra
 // o seu próprio emissor em `socket/index.ts`; sem isso, uma segunda aba
-// sobrescreveria a primeira. `userId` começa `null` (a conexão ainda não se
-// identificou) e é atualizado depois do handshake `identify` - sem isso,
-// `order.updated` não tem como saber pra qual conexão aquele pedido pertence.
+// sobrescreveria a primeira. Guardamos o `token` (não um `userId` já
+// resolvido) porque o dono daquele token pode mudar com o tempo - logout
+// apaga a sessão do `db`, sessão expira - e um `userId` cacheado nunca
+// saberia disso. `emitOrderUpdated` revalida o token contra o `db` a cada
+// envio, então uma conexão esquecida (sem desconectar no logout) para de
+// receber pedidos do usuário anterior assim que a sessão dele some.
 const emitters = new Set<RegisteredEmitter>()
 
 export function registerEmitter(fn: Emitter): {
   unregister: () => void
-  setUserId: (userId: string | null) => void
+  setToken: (token: string | null) => void
 } {
-  const entry: RegisteredEmitter = { userId: null, emit: fn }
+  const entry: RegisteredEmitter = { token: null, emit: fn }
   emitters.add(entry)
   return {
     unregister: () => emitters.delete(entry),
-    setUserId: (userId) => {
-      entry.userId = userId
+    setToken: (token) => {
+      entry.token = token
     },
   }
 }
@@ -37,6 +41,17 @@ function nextVersion(): number {
   return versionCounter
 }
 
+/**
+ * `favorited` é relativo a cada usuário (quem favoritou o quê), então nunca
+ * pode viajar num evento de broadcast como `nft.updated` - cada conexão
+ * continua resolvendo o próprio `favorited` via REST/cache local.
+ */
+function toPublicNft(nft: NftDetail): Omit<NftDetail, 'favorited'> {
+  const publicNft: Partial<NftDetail> = { ...nft }
+  delete publicNft.favorited
+  return publicNft as Omit<NftDetail, 'favorited'>
+}
+
 /** Catálogo é dado público: toda conexão recebe. */
 export function emitNftUpdated(nft: NftDetail): void {
   const event = realtimeEventSchema.parse({
@@ -45,12 +60,17 @@ export function emitNftUpdated(nft: NftDetail): void {
     version: nextVersion(),
     occurredAt: new Date().toISOString(),
     resource: { type: 'nft', id: nft.id },
-    data: nft,
+    data: toPublicNft(nft),
   } satisfies RealtimeEvent)
   for (const entry of emitters) entry.emit(event)
 }
 
-/** Pedido é dado privado: só entrega pra conexão(ões) já identificadas com o mesmo userId. */
+/**
+ * Pedido é dado privado: só entrega pra conexão(ões) cujo token identificado
+ * ainda resolve, *no momento do envio*, pro mesmo `userId` dono do pedido.
+ * Isso cobre tanto token expirado quanto logout (sessão apagada do `db`)
+ * acontecidos depois do handshake `identify`.
+ */
 export function emitOrderUpdated(order: Order, userId: string): void {
   const event = realtimeEventSchema.parse({
     type: 'order.updated',
@@ -62,6 +82,8 @@ export function emitOrderUpdated(order: Order, userId: string): void {
     data: order,
   } satisfies RealtimeEvent)
   for (const entry of emitters) {
-    if (entry.userId === userId) entry.emit(event)
+    if (!entry.token) continue
+    const session = getSessionByToken(entry.token)
+    if (session?.userId === userId) entry.emit(event)
   }
 }

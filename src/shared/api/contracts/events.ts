@@ -9,10 +9,15 @@ const baseEventSchema = z.object({
   occurredAt: isoDateSchema,
 })
 
+// `favorited` é relativo a cada usuário; `nft.updated` é broadcast pra toda
+// conexão, então o payload público nunca pode incluir esse campo (cada
+// cliente resolve o próprio `favorited` via REST/cache local).
+export const nftPublicEventDataSchema = nftDetailSchema.omit({ favorited: true })
+
 export const nftUpdatedEventSchema = baseEventSchema.extend({
   type: z.literal('nft.updated'),
   resource: z.object({ type: z.literal('nft'), id: idSchema }),
-  data: nftDetailSchema,
+  data: nftPublicEventDataSchema,
 })
 
 export const orderUpdatedEventSchema = baseEventSchema.extend({
