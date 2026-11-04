@@ -38,6 +38,18 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
+  unit-test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run test
+
   playwright:
     name: Playwright
     runs-on: ubuntu-latest
