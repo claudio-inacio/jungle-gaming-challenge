@@ -1,74 +1,93 @@
-import { Bell, Globe, Mail, MessageCircle, Rss, Share2, Shield, Users } from 'lucide-react'
-import { Badge } from '@/shared/ui/badge'
+import { Container } from '@/shared/ui/container'
 import { OutOfScopeButton, OutOfScopeInput, OutOfScopeLink } from '@/shared/ui/out-of-scope'
+import { PendingLink } from '@/shared/ui/pending-link'
 import { Separator } from '@/shared/ui/separator'
+import { CompatibleWallets } from './CompatibleWallets'
+import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from './social-icons'
 
 type Highlight = {
-  icon: typeof Shield
+  glyph: 'W' | 'C' | 'D'
   title: string
   description: string
 }
 
 const HIGHLIGHTS: Highlight[] = [
   {
-    icon: Shield,
+    glyph: 'W',
     title: 'Segurança da carteira',
     description: 'Proteja sua carteira e colecione arte digital verificada com confiança.',
   },
   {
-    icon: Users,
+    glyph: 'C',
     title: 'Criadores em destaque',
     description: 'Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.',
   },
   {
-    icon: Bell,
+    glyph: 'D',
     title: 'Alertas de lançamentos',
     description:
       'Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.',
   },
 ]
 
+type FooterLink = {
+  label: string
+  kind: 'pending' | 'out-of-scope'
+}
+
 type LinkColumn = {
   title: string
-  links: string[]
+  links: FooterLink[]
 }
 
 const LINK_COLUMNS: LinkColumn[] = [
   {
     title: 'Meu perfil',
-    links: ['Meu perfil', 'Minha coleção', 'Atividade', 'Estúdio do criador', 'Lista de interesse'],
+    links: [
+      { label: 'Meu perfil', kind: 'pending' },
+      { label: 'Minha coleção', kind: 'out-of-scope' },
+      { label: 'Atividade', kind: 'out-of-scope' },
+      { label: 'Estúdio do criador', kind: 'out-of-scope' },
+      { label: 'Lista de interesse', kind: 'pending' },
+    ],
   },
   {
     title: 'Central de ajuda',
     links: [
-      'Central de ajuda',
-      'Como comprar NFTs',
-      'Carteira e segurança',
-      'Política do mercado',
-      'Denunciar item',
+      { label: 'Central de ajuda', kind: 'out-of-scope' },
+      { label: 'Como comprar NFTs', kind: 'out-of-scope' },
+      { label: 'Carteira e segurança', kind: 'out-of-scope' },
+      { label: 'Política do mercado', kind: 'out-of-scope' },
+      { label: 'Denunciar item', kind: 'out-of-scope' },
     ],
   },
   {
     title: 'Coleções',
-    links: ['Arte digital', 'Fotografia', 'Música', 'Arte 3D', 'Utilidade'],
+    links: [
+      { label: 'Arte digital', kind: 'out-of-scope' },
+      { label: 'Fotografia', kind: 'out-of-scope' },
+      { label: 'Música', kind: 'out-of-scope' },
+      { label: 'Arte 3D', kind: 'out-of-scope' },
+      { label: 'Utilidade', kind: 'out-of-scope' },
+    ],
   },
 ]
 
 const SOCIAL_LINKS = [
-  { label: 'Facebook', icon: Globe },
-  { label: 'Instagram', icon: Share2 },
-  { label: 'Twitter', icon: MessageCircle },
-  { label: 'LinkedIn', icon: Rss },
-  { label: 'YouTube', icon: Mail },
+  { label: 'Facebook', icon: FacebookIcon },
+  { label: 'Instagram', icon: InstagramIcon },
+  { label: 'Twitter', icon: TwitterIcon },
+  { label: 'LinkedIn', icon: LinkedinIcon },
+  { label: 'YouTube', icon: YoutubeIcon },
 ]
 
-const COMPATIBLE_WALLETS = ['MetaMask', 'WalletConnect', 'Coinbase Wallet']
+const COMPATIBLE_WALLETS = ['MetaMask', 'WalletConnect', 'Coinbase']
 
 function SiteFooter() {
   return (
     <footer className="w-full border-t border-border-soft bg-card text-card-foreground">
-      <div className="border-b border-border-soft px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-8 lg:flex-row lg:items-stretch">
+      <div className="border-b border-border-soft py-8">
+        <Container className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
           {HIGHLIGHTS.map((highlight, index) => (
             <div key={highlight.title} className="flex flex-1 items-stretch gap-8">
               <div className="flex flex-1 flex-col items-start gap-3">
@@ -76,10 +95,12 @@ function SiteFooter() {
                   aria-hidden="true"
                   className="flex size-[74px] shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
                 >
-                  <highlight.icon className="size-7" strokeWidth={2} />
+                  <span aria-hidden="true" className="text-[28px] font-bold">
+                    {highlight.glyph}
+                  </span>
                 </span>
                 <h2 className="text-[17px] font-bold text-foreground">{highlight.title}</h2>
-                <p className="max-w-[220px] text-sm leading-[22px] text-muted-foreground">
+                <p className="max-w-[23ch] text-sm leading-[22px] text-muted-foreground">
                   {highlight.description}
                 </p>
               </div>
@@ -92,6 +113,7 @@ function SiteFooter() {
             </div>
           ))}
 
+          <Separator orientation="vertical" className="hidden self-stretch bg-primary lg:block" />
           <Separator orientation="horizontal" className="bg-primary lg:hidden" />
 
           <div className="flex flex-1 flex-col gap-4 lg:max-w-[357px] lg:pl-4">
@@ -119,73 +141,67 @@ function SiteFooter() {
               Receba lançamentos selecionados, histórias de criadores e novidades do mercado.
             </p>
           </div>
-        </div>
+        </Container>
       </div>
 
-      <div className="border-b border-border-soft bg-muted px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-3 text-sm text-foreground lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+      <div className="border-b border-border-soft bg-muted py-6">
+        <Container className="flex flex-col gap-3 text-sm text-foreground lg:flex-row lg:items-center lg:justify-between lg:gap-8">
           <p className="text-sm font-bold tracking-[1.4px] text-foreground">KURIO</p>
           <p className="leading-[22px]">Feito para colecionadores, criadores e cultura</p>
           <p className="leading-[22px]">contato@email.com</p>
           <p className="leading-[22px]">+55 11 4002 8922</p>
-        </div>
+        </Container>
       </div>
 
-      <div className="px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {LINK_COLUMNS.map((column) => (
-            <nav key={column.title} aria-label={column.title}>
-              <h2 className="mb-2 text-lg font-bold text-foreground">{column.title}</h2>
-              <ul className="flex flex-col gap-1">
-                {column.links.map((link) => (
-                  <li key={link}>
-                    <OutOfScopeLink className="block py-1 text-sm leading-[22px] text-foreground">
-                      {link}
-                    </OutOfScopeLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+      <div className="py-8">
+        <Container>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {LINK_COLUMNS.map((column) => (
+              <nav key={column.title} aria-label={column.title}>
+                <h2 className="mb-2 text-lg font-bold text-foreground">{column.title}</h2>
+                <ul className="flex flex-col gap-1">
+                  {column.links.map((link) => {
+                    const LinkComponent = link.kind === 'pending' ? PendingLink : OutOfScopeLink
+                    return (
+                      <li key={link.label}>
+                        <LinkComponent className="block py-1 text-sm leading-[22px] text-foreground">
+                          {link.label}
+                        </LinkComponent>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </nav>
+            ))}
 
-          <div className="flex flex-col gap-8">
-            <div>
-              <h2 className="mb-3 text-lg font-bold text-foreground">Redes sociais</h2>
-              <ul className="flex flex-wrap items-center gap-2.5">
-                {SOCIAL_LINKS.map((social) => (
-                  <li key={social.label}>
-                    <OutOfScopeLink
-                      aria-label={social.label}
-                      className="flex size-[30px] items-center justify-center rounded-full border border-border-soft text-foreground hover:text-accent-foreground"
-                    >
-                      <social.icon className="size-4" aria-hidden="true" />
-                    </OutOfScopeLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <div className="flex flex-col gap-8">
+              <div>
+                <h2 className="mb-3 text-lg font-bold text-foreground">Redes sociais</h2>
+                <ul className="flex flex-wrap items-center gap-2.5">
+                  {SOCIAL_LINKS.map((social) => (
+                    <li key={social.label}>
+                      <OutOfScopeLink
+                        aria-label={social.label}
+                        className="flex size-[30px] items-center justify-center border border-foreground text-foreground"
+                      >
+                        <social.icon className="size-4" />
+                      </OutOfScopeLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            <div>
-              <h2 className="mb-3 text-lg font-bold text-foreground">Carteiras compatíveis</h2>
-              <ul className="flex flex-wrap gap-1.5" aria-label="Carteiras compatíveis">
-                {COMPATIBLE_WALLETS.map((wallet) => (
-                  <li key={wallet}>
-                    <Badge
-                      variant="outline"
-                      className="h-auto border-border-soft bg-muted px-2 py-1 text-[9px] font-bold tracking-[0.1px] text-accent-foreground uppercase"
-                    >
-                      {wallet}
-                    </Badge>
-                  </li>
-                ))}
-              </ul>
+              <div>
+                <h2 className="mb-3 text-lg font-bold text-foreground">Carteiras compatíveis</h2>
+                <CompatibleWallets wallets={COMPATIBLE_WALLETS} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <p className="mx-auto mt-8 max-w-[1200px] text-center text-sm leading-[30px] text-foreground">
-          © 2026 Kurio. Propriedade digital para todos.
-        </p>
+          <p className="mt-8 text-center text-sm leading-[30px] text-foreground">
+            © 2026 Kurio. Propriedade digital para todos.
+          </p>
+        </Container>
       </div>
     </footer>
   )
