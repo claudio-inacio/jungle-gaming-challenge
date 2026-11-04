@@ -22,6 +22,26 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/mocks', '@/mocks/*', '**/mocks/*'],
+              message:
+                'src/mocks é infraestrutura de simulação; não pode ser importado por código de negócio (app/pages/widgets/features/entities/shared).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/main.tsx'],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
   },
   {
     files: ['src/shared/ui/**/*.{ts,tsx}', 'src/components/ui/**/*.{ts,tsx}'],

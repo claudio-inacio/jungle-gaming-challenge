@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { env } from '@/shared/config/env'
-import { apiErrorSchema, ApiError } from '@/shared/api/contracts/error'
+import { env } from '@/shared/config'
+import { apiErrorSchema, ApiError } from './contracts/error'
 
 export const http = axios.create({ baseURL: env.apiUrl, timeout: 10_000 })
 
