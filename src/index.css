@@ -96,6 +96,13 @@
     overflow: hidden;
     background-color: var(--accent);
   }
+  .bg-gradient-accent {
+    background: linear-gradient(
+      137deg,
+      color-mix(in oklab, var(--primary) 45%, transparent) 24%,
+      var(--primary) 100%
+    );
+  }
   .skeleton-shimmer::after {
     content: '';
     position: absolute;

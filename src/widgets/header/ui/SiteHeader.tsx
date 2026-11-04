@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { LogIn, Search, ShoppingCart, User } from 'lucide-react'
+import { LogIn, Search, ShoppingCart, SlidersHorizontal, User } from 'lucide-react'
 import { cn } from 'cn'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
@@ -13,10 +13,10 @@ type SiteHeaderProps = {
 function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
   return (
     <header className="w-full border-b border-border bg-background">
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-8">
         <Link
           to="/"
-          className="shrink-0 text-sm font-bold tracking-[0.1em] text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="hidden shrink-0 text-sm font-bold tracking-[0.1em] text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:block"
         >
           KURIO
         </Link>
@@ -34,7 +34,7 @@ function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
           <OutOfScopeLink className="text-base font-normal">Aprenda</OutOfScopeLink>
         </nav>
 
-        <div className="flex items-center gap-5 sm:gap-7">
+        <div className="hidden items-center gap-5 sm:gap-7 md:flex">
           <Button type="button" variant="ghost" size="icon" aria-label="Buscar">
             <Search aria-hidden="true" className="size-5" />
           </Button>
@@ -64,6 +64,29 @@ function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
               Entrar
             </Button>
           )}
+        </div>
+
+        <div className="flex w-full items-center gap-3 md:hidden">
+          <div className="relative flex h-[45px] flex-1 items-center gap-2 rounded-xl bg-card pl-3 pr-3">
+            <Search aria-hidden="true" className="size-5 shrink-0 text-brand-secondary" />
+            <label htmlFor="mobile-explore-collections" className="sr-only">
+              Explorar coleções
+            </label>
+            <input
+              id="mobile-explore-collections"
+              type="search"
+              placeholder="Explorar coleções"
+              className="w-full bg-transparent text-sm font-bold text-brand-secondary placeholder:text-brand-secondary focus:outline-none"
+            />
+          </div>
+
+          <button
+            type="button"
+            aria-label="Abrir filtros e opções avançadas"
+            className="bg-gradient-accent flex size-11 shrink-0 items-center justify-center rounded-2xl text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <SlidersHorizontal aria-hidden="true" className="size-5" />
+          </button>
         </div>
       </div>
     </header>
