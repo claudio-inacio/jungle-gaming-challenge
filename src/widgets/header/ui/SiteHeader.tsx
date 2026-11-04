@@ -1,16 +1,28 @@
 import { Link } from '@tanstack/react-router'
-import { LogIn, Search, ShoppingCart, SlidersHorizontal, User } from 'lucide-react'
+import { LogIn, LogOut, Search, ShoppingCart, SlidersHorizontal, User } from 'lucide-react'
+import { useSession } from '@/entities/session'
+import { useLogout } from '@/features/auth'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Container } from '@/shared/ui/container'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
 
 type SiteHeaderProps = {
   itemCount: number
-  isAuthenticated: boolean
 }
 
-function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
+function SiteHeader({ itemCount }: SiteHeaderProps) {
+  const { user, isAuthenticated } = useSession()
+  const logout = useLogout()
+
   return (
     <header className="w-full bg-background">
       <Container className="flex h-16 items-center justify-between gap-4 border-b border-border">
@@ -52,14 +64,37 @@ function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
           </span>
 
           {isAuthenticated ? (
-            <span
-              aria-label="Minha conta"
-              className="flex size-9 items-center justify-center rounded-full border border-border bg-muted text-foreground"
-            >
-              <User aria-hidden="true" className="size-5" />
-            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <button
+                    type="button"
+                    aria-label="Minha conta"
+                    className="flex size-9 items-center justify-center rounded-full border border-border bg-muted text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                  />
+                }
+              >
+                <User aria-hidden="true" className="size-5" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {user ? <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel> : null}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => logout.mutate()}
+                  className="gap-2 text-destructive focus:text-destructive"
+                >
+                  <LogOut aria-hidden="true" className="size-4" />
+                  Sair
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <Button type="button" variant="default" className="gap-1.5">
+            <Button
+              type="button"
+              variant="default"
+              className="gap-1.5"
+              render={<Link to="/login" />}
+            >
               <LogIn aria-hidden="true" className="size-4" />
               Entrar
             </Button>
