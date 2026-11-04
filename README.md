@@ -2,11 +2,11 @@
 
 Marketplace de NFTs 100% simulado (MSW: REST + Socket.IO), construído em React + TypeScript para o desafio técnico `junglegaming/frontend-challenge` (Jungle Gaming).
 
-> **Estado atual: Fase 0 — Setup.** Ainda não existem sessão, carrinho, catálogo, NFTs, pedidos, perfil nem carteiras. Este README documenta o que já funciona hoje e marca como "a definir" o que está planejado para fases futuras do roadmap (veja `.claude/skills/challenge-context/references/roadmap.md`).
+> **Estado atual.** A API simulada está completa: handlers REST de sessão/conta, NFTs, favoritos, carrinho, cotação, pedidos, perfil e carteiras, contratos zod compartilhados, 9 cenários reproduzíveis (latência, offline, cupom inválido/expirado, pagamento recusado, timeout, preço alterado, edição esgotada) e emissão real de eventos (`nft.updated`, `order.updated`) via `socket.io-client`. O que **ainda não existe** são as telas de produto: `entities/`, `features/` e `widgets/` estão vazias, e a única rota real é a Home (smoke test de `/api/health`). Este README documenta o que já funciona hoje.
 
 ## Stack
 
-React 19 · TypeScript · Vite · TanStack Router (file-based) · TanStack Query · Axios · Socket.IO (`socket.io-client`) · Tailwind CSS v4 · shadcn/ui · MSW 2 (+ `@mswjs/socket.io-binding`) · Playwright · Lighthouse CI · zod · husky + commitlint · steiger (lint de arquitetura FSD).
+React 19 · TypeScript · Vite · TanStack Router (file-based) · TanStack Query · Axios · Socket.IO (`socket.io-client`) · Tailwind CSS v4 · shadcn/ui · MSW 2 (+ `@mswjs/socket.io-binding`) · Playwright · Lighthouse CI · zod · big.js · @faker-js/faker · husky + commitlint · steiger (lint de arquitetura FSD).
 
 ## Setup
 
@@ -36,11 +36,40 @@ Essas variáveis são lidas em `src/shared/config/env.ts`. Não há segredos rea
 
 ## Credenciais fictícias
 
-Ainda não existem usuários simulados nem fluxo de login — **a definir na Fase 3** (autenticação), quando a camada `entities/session` e os fixtures de usuário (`src/mocks/fixtures/`) forem criados. Este README será atualizado com e-mail/senha de pelo menos dois usuários fictícios (`faker` com seed fixa) assim que existirem.
+Dois usuários fixos em `src/mocks/fixtures/users.ts`, determinísticos (sem `faker`, hardcoded) e usados pelo handler `POST /api/auth/login`:
+
+| E-mail                          | Senha       | Nome de exibição   | Username      |
+| ------------------------------- | ----------- | ------------------ | ------------- |
+| `ana.colecionadora@kurio.test`  | `Kurio@123` | Ana Colecionadora  | `ana.kurio`   |
+| `bruno.colecionador@kurio.test` | `Kurio@123` | Bruno Colecionador | `bruno.kurio` |
+
+São credenciais **fictícias de demonstração** — não existe backend real, e a senha só é comparada em texto nas fixtures (usuários cadastrados em runtime via `POST /api/auth/register` recebem hash de verdade, nunca senha em claro). Também é possível criar uma conta nova via `POST /api/auth/register`.
 
 ## Seleção e reset de cenários MSW
 
-Ainda não há cenários configuráveis — **a definir na Fase 1** (fundação de mocks: `db/`, `fixtures/`, `scenarios/`, `reset()`). O plano (ver `references/requirements.md` da skill `challenge-context`) prevê selecionar cenário via query param e/ou `localStorage`, com reset para um estado conhecido. Esta seção será substituída pela lista real de cenários (sucesso, vazio, latência, timeout, offline, 4xx/5xx, sessão expirada, conflito, cupom inválido/expirado, preço alterado, edição esgotada, pagamento confirmado/recusado) e pelo comando/atalho de reset quando implementados.
+O motor de cenários vive em `src/mocks/scenarios/registry.ts`. Um cenário fica ativo globalmente (toda request MSW consulta `getActiveScenario()`) e é resolvido, em ordem de prioridade: query param `?scenario=<id>` na URL (persistido automaticamente em `localStorage`) → valor salvo em `localStorage` (chave `kurio-mocks-scenario`) → `success` como padrão.
+
+| id                 | O que simula                                                                                                            | Como ativar                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `success`          | Caminho feliz, sem latência extra                                                                                       | `?scenario=success` (padrão) |
+| `slow-network`     | Latência de 800–2000ms em toda request                                                                                  | `?scenario=slow-network`     |
+| `offline`          | Toda request falha como erro de rede (`HttpResponse.error()`)                                                           | `?scenario=offline`          |
+| `coupon-invalid`   | Cupom `KURIO10` (normalmente válido) responde `COUPON_INVALID` em `POST /api/quote` e `POST /api/orders`                | `?scenario=coupon-invalid`   |
+| `coupon-expired`   | Cupom `KURIO10` (normalmente válido) responde `COUPON_EXPIRED` em `POST /api/quote` e `POST /api/orders`                | `?scenario=coupon-expired`   |
+| `payment-declined` | Todo `POST /api/orders` cria o pedido já com `status: "declined"` (`declineReason: "Pagamento recusado pela carteira"`) | `?scenario=payment-declined` |
+| `order-timeout`    | Todo `POST /api/orders` cria o pedido e o mantém `status: "pending"` indefinidamente (simula timeout de confirmação)    | `?scenario=order-timeout`    |
+| `quote-changed`    | Toda criação de pedido falha com `409 QUOTE_CHANGED`                                                                    | `?scenario=quote-changed`    |
+| `edition-sold-out` | Toda criação de pedido falha com `409 AVAILABILITY_CONFLICT`                                                            | `?scenario=edition-sold-out` |
+
+Três formas de ativar/trocar, todas equivalentes (a terceira grava nas mesmas duas primeiras):
+
+1. **Query param**: acessar `http://localhost:5173/?scenario=offline` — grava automaticamente em `localStorage` e passa a valer em qualquer rota até ser trocado.
+2. **`localStorage` direto**: no console do browser, `localStorage.setItem('kurio-mocks-scenario', 'slow-network')` e recarregar a página (chave exportada como `STORAGE_KEY` em `src/mocks/scenarios/registry.ts`).
+3. **Painel visual** (`src/mocks/dev/ScenarioPanel.tsx`): canto inferior direito, visível sempre em `npm run dev` (`import.meta.env.DEV`) ou em qualquer ambiente com `?devtools=1` na URL (inclusive a demo publicada). Tem um `Select` com os 9 cenários e um botão **Reset**.
+
+### Reset do estado
+
+O botão **Reset** do painel visual chama `db.reset()` (`src/mocks/db/store.ts`) e recarrega a página. `reset()` descarta o estado atual e reconstrói a partir das fixtures determinísticas: os 2 usuários fixos, os 40 NFTs gerados com `withSeed(42, ...)` (`src/mocks/fixtures/nfts.ts`) e tudo mais zerado — sessões, favoritos, carrinhos, pedidos, chaves de idempotência e carteiras voltam vazios. O `db` não é exposto numa variável global hoje, então fora do painel visual o reset mais direto é apagar a chave `kurio-mocks-db` do `localStorage` do navegador (DevTools → Application → Local Storage) e recarregar a página — o próximo `db.get()` reconstrói o mesmo estado inicial por não encontrar nada salvo.
 
 ## Comandos
 
@@ -70,7 +99,22 @@ Sempre rode `typecheck` e `lint` antes de considerar uma tarefa concluída. Rode
 
 ## Como reproduzir cada fluxo de falha
 
-Ainda não existem fluxos de negócio (carrinho, checkout, pedidos) nem cenários de erro simulados — **a definir conforme cada fase do roadmap for implementada** (latência, timeout, offline, 4xx/5xx, sessão expirada, conflito de pedido, cupom inválido/expirado, preço alterado, edição esgotada, pagamento recusado). Esta seção será substituída por uma tabela "cenário → como ativar → o que observar na UI" assim que os cenários existirem em `src/mocks/scenarios/`.
+Hoje não há telas de checkout/carrinho (`entities`/`features`/`widgets` ainda não existem), então os cenários abaixo se reproduzem chamando a API simulada diretamente — com o cenário ativo (via `?scenario=<id>` ou painel, ver seção anterior) e usando o console do browser ou uma aba de DevTools (Network) na própria aplicação rodando (`npm run dev` ou `npm run preview`), já que o MSW intercepta `fetch`/`XHR` nessa origem independente da rota visitada.
+
+| Cenário a reproduzir                           | Como ativar                                                                                                              | Endpoint para observar o efeito                                     | O que observar na resposta                                                                                                           |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Latência alta em qualquer request              | `?scenario=slow-network`                                                                                                 | Qualquer rota, ex. `GET /api/nfts`                                  | Resposta demora 800–2000ms antes de chegar.                                                                                          |
+| Falha de rede (offline)                        | `?scenario=offline`                                                                                                      | Qualquer rota                                                       | A request rejeita com erro de rede (`HttpResponse.error()`), sem corpo de resposta.                                                  |
+| Cupom inválido                                 | `?scenario=coupon-invalid`                                                                                               | `POST /api/quote` ou `POST /api/orders` com `couponCode: "KURIO10"` | `422` com `{ "error": { "code": "COUPON_INVALID" } }`.                                                                               |
+| Cupom expirado                                 | `?scenario=coupon-expired`                                                                                               | `POST /api/quote` ou `POST /api/orders` com `couponCode: "KURIO10"` | `422` com `{ "error": { "code": "COUPON_EXPIRED" } }`.                                                                               |
+| Pagamento recusado                             | `?scenario=payment-declined`                                                                                             | `POST /api/orders` (autenticado, com `Idempotency-Key`)             | `201` com `Order.status === "declined"` e `declineReason` preenchido; estoque não muda.                                              |
+| Timeout na confirmação do pedido               | `?scenario=order-timeout`                                                                                                | `POST /api/orders` (autenticado, com `Idempotency-Key`)             | `201` com `Order.status === "pending"` e permanece assim; estoque não muda.                                                          |
+| Preço mudou desde a cotação                    | `?scenario=quote-changed`                                                                                                | `POST /api/orders` (autenticado, com `Idempotency-Key`)             | `409` com `{ "error": { "code": "QUOTE_CHANGED" } }`.                                                                                |
+| Edição esgotada                                | `?scenario=edition-sold-out`                                                                                             | `POST /api/orders` (autenticado, com `Idempotency-Key`)             | `409` com `{ "error": { "code": "AVAILABILITY_CONFLICT" } }`.                                                                        |
+| Conflito de idempotência (qualquer cenário)    | Não depende de cenário — repetir a mesma `Idempotency-Key` em `POST /api/orders` com corpo diferente, ou de outra sessão | `POST /api/orders`                                                  | `409` com `{ "error": { "code": "CONFLICT" } }`; a mesma chave + mesmo corpo, em vez disso, retorna `201` com o pedido já existente. |
+| Sessão expirada/inexistente (qualquer cenário) | Não depende de cenário — chamar uma rota 🔒 sem header `Authorization` ou com token de sessão já removida                | Qualquer rota 🔒, ex. `GET /api/cart`                               | `401` com `{ "error": { "code": "UNAUTHORIZED" } }`.                                                                                 |
+
+Ver a tabela completa de contratos REST (requests, respostas e todos os códigos de erro por rota) e o detalhamento dos eventos de Socket.IO em `ARCHITECTURE.md`.
 
 ## Estrutura atual do projeto
 
@@ -80,8 +124,8 @@ Ver visão completa e diagrama em `ARCHITECTURE.md`. Resumo rápido:
 src/
 ├── app/           # router, routes (file-based), routeTree.gen.ts
 ├── pages/         # home, not-found
-├── shared/        # api (http, query-client, socket), config, lib, ui (shadcn adaptado)
-└── mocks/         # browser.ts, handlers/ (REST), socket/ (Socket.IO via MSW)
+├── shared/        # api (http, query-client, contracts, socket), config, lib, ui (shadcn adaptado)
+└── mocks/         # db/, fixtures/, handlers/ (REST), scenarios/, socket/ (Socket.IO via MSW), dev/ (ScenarioPanel)
 ```
 
-`entities/`, `features/` e `widgets/` ainda não existem — serão criados a partir da Fase 1/2 do roadmap.
+`entities/`, `features/` e `widgets/` ainda não existem — serão criados a partir das próximas fases do roadmap, consumindo a API simulada que já está pronta.

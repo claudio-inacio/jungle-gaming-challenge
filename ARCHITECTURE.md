@@ -1,12 +1,12 @@
 # Arquitetura — Kurio NFT Marketplace
 
-> **Estado atual: Fase 0 — Setup.** Este documento descreve com precisão o que já existe no código hoje e marca como "planejado" o que está no roadmap mas ainda não foi implementado. Decisões futuras devem ser registradas aqui antes de contradizer o que está escrito.
+> **Estado atual.** A API simulada (MSW) está completa: handlers REST para sessão/conta, NFTs, favoritos, carrinho, cotação, pedidos, perfil e carteiras, todos validados por contratos zod compartilhados, mais um motor de 9 cenários reproduzíveis e emissão real de eventos de negócio (`nft.updated`, `order.updated`) via `socket.io-client`/`@mswjs/socket.io-binding`. O que **ainda não existe** é a camada de produto: `entities/`, `features/` e `widgets/` estão vazias, e as únicas páginas reais são `home` (smoke test de `/api/health`) e `not-found`. Este documento descreve com precisão o que já existe no código hoje e marca como "planejado" o que está no roadmap mas ainda não foi implementado. Decisões futuras devem ser registradas aqui antes de contradizer o que está escrito.
 
 ## Visão geral (Feature-Sliced Design)
 
 Camadas: `app → pages → widgets → features → entities → shared`. Uma camada só importa das camadas abaixo dela. `src/mocks/` é infraestrutura de simulação e nunca é importada por código de negócio (`app`, `pages`, `widgets`, `features`, `entities`, `shared`), exceto pelo bootstrap condicional em `src/main.tsx`.
 
-Hoje, as camadas implementadas são `app`, `pages` e `shared`. `widgets`, `features` e `entities` ainda não existem.
+Hoje, as camadas implementadas são `app`, `pages` e `shared`. `widgets`, `features` e `entities` ainda não existem — mas a API simulada que eles vão consumir (REST + eventos) já está pronta.
 
 ```mermaid
 graph TD
@@ -34,14 +34,14 @@ graph TD
     end
 
     subgraph shared["shared (real)"]
-        api["api/ (http, query-client, socket)"]
+        api["api/ (http, query-client, contracts, socket)"]
         config["config/ (env)"]
-        lib["lib/ (utils)"]
+        lib["lib/ (eth, utils)"]
         ui["ui/ (shadcn adaptado)"]
     end
 
     subgraph mocksInfra["mocks (infraestrutura, fora da pirâmide FSD)"]
-        mocks["mocks/ (browser, handlers, socket)"]
+        mocks["db/ (store + reset)\nfixtures/ (users, nfts, coupons)\nhandlers/ (8 recursos REST)\nscenarios/ (registry + apply)\nsocket/ (handshake + emit)\ndev/ (ScenarioPanel)"]
     end
 
     app --> pages
@@ -56,49 +56,230 @@ graph TD
 
 ## Estrutura real em `src/`
 
-| Caminho                       | Conteúdo                                                                                                                                                                                     |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `app/router.ts`               | `createRouter` do TanStack Router com `routeTree.gen.ts`, contexto `{ queryClient }`, `defaultPreload: 'intent'`, `scrollRestoration: true`.                                                 |
-| `app/routes/__root.tsx`       | Rota raiz (`createRootRouteWithContext<{ queryClient }>`), `notFoundComponent` global apontando para `pages/not-found`.                                                                      |
-| `app/routes/index.tsx`        | Rota `/`, renderiza `pages/home`.                                                                                                                                                            |
-| `app/routeTree.gen.ts`        | Gerado pelo `@tanstack/router-plugin` a partir de `app/routes/`. Não editar manualmente.                                                                                                     |
-| `pages/home`                  | Página inicial: `useQuery` chamando `GET /api/health` via Axios.                                                                                                                             |
-| `pages/not-found`             | Página de 404 global.                                                                                                                                                                        |
-| `shared/api/http.ts`          | Instância única do Axios (`baseURL: env.apiUrl`, `timeout: 10_000`). Ainda sem interceptors de token/erro — planejado para a Fase 3 (sessão).                                                |
-| `shared/api/query-client.ts`  | `QueryClient` com `staleTime: 30_000`, `refetchOnWindowFocus: false`, `retry: 1` (queries), `retry: false` (mutations).                                                                      |
-| `shared/api/socket/client.ts` | Instância única do `socket.io-client`, `autoConnect: false`, `transports: ['websocket']`. Ainda não é conectada por nenhuma tela em produção — a Home tem a chamada comentada como lembrete. |
-| `shared/config/env.ts`        | Leitura tipada de `import.meta.env` (`VITE_API_URL`, `VITE_SOCKET_URL`, `VITE_ENABLE_MOCKS`).                                                                                                |
-| `shared/lib/utils.ts`         | Utilitário `cn` (merge de classes).                                                                                                                                                          |
-| `shared/ui/*`                 | Componentes shadcn/ui adaptados (button, badge, checkbox, dialog, input, label, radio-group, select, separator, sheet, skeleton, slider, sonner, tabs, textarea).                            |
-| `mocks/browser.ts`            | `setupWorker(...restHandlers, ...socketHandlers)`.                                                                                                                                           |
-| `mocks/handlers/index.ts`     | Só `GET /api/health`.                                                                                                                                                                        |
-| `mocks/socket/index.ts`       | Handler do handshake Socket.IO via `@mswjs/socket.io-binding` (detalhado abaixo).                                                                                                            |
+| Caminho                                                            | Conteúdo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/router.ts`                                                    | `createRouter` do TanStack Router com `routeTree.gen.ts`, contexto `{ queryClient }`, `defaultPreload: 'intent'`, `scrollRestoration: true`.                                                                                                                                                                                                                                                                                                                                                                       |
+| `app/routes/__root.tsx`                                            | Rota raiz (`createRootRouteWithContext<{ queryClient }>`), `notFoundComponent` global apontando para `pages/not-found`.                                                                                                                                                                                                                                                                                                                                                                                            |
+| `app/routes/index.tsx`                                             | Rota `/`, renderiza `pages/home`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `app/routeTree.gen.ts`                                             | Gerado pelo `@tanstack/router-plugin` a partir de `app/routes/`. Não editar manualmente.                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `pages/home`                                                       | Página inicial: `useQuery` chamando `GET /api/health` via Axios.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `pages/not-found`                                                  | Página de 404 global.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `shared/api/http.ts`                                               | Instância única do Axios (`baseURL: env.apiUrl`, `timeout: 10_000`). Interceptor de request injeta `Authorization: Bearer <token>` (via `setAccessToken`, estado em memória do módulo). Interceptor de response normaliza erros que batam com `apiErrorSchema` em `ApiError` (`code`/`status`/`fields`); em `code === 'UNAUTHORIZED'` limpa o token e dispara `window.dispatchEvent(new CustomEvent('session:expired'))` — ninguém ainda escuta esse evento (planejado para `entities/session`, inexistente hoje). |
+| `shared/api/query-client.ts`                                       | `QueryClient` com `staleTime: 30_000`, `refetchOnWindowFocus: false`, `retry: 1` (queries), `retry: false` (mutations).                                                                                                                                                                                                                                                                                                                                                                                            |
+| `shared/api/socket/client.ts`                                      | Instância única do `socket.io-client`, `autoConnect: false`, `transports: ['websocket']`. Ainda não é conectada por nenhuma tela em produção — nenhum código de `app`/`pages` chama `socket.connect()` ou emite `identify` hoje (planejado junto das entidades/features de tempo real).                                                                                                                                                                                                                            |
+| `shared/api/contracts/*`                                           | Schemas zod + tipos inferidos por recurso: `common`, `error`, `session`, `nft`, `favorite`, `cart`, `quote`, `order`, `profile`, `wallet`, `events`. Única fonte de verdade de request/response, usada hoje pelos handlers MSW (que validam o que devolvem via `schema.parse`).                                                                                                                                                                                                                                    |
+| `shared/config/env.ts`                                             | Leitura tipada de `import.meta.env` (`VITE_API_URL`, `VITE_SOCKET_URL`, `VITE_ENABLE_MOCKS`).                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `shared/lib/utils.ts`                                              | Utilitário `cn` (merge de classes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `shared/ui/*`                                                      | Componentes shadcn/ui adaptados (button, badge, checkbox, dialog, input, label, radio-group, select, separator, sheet, skeleton, slider, sonner, tabs, textarea).                                                                                                                                                                                                                                                                                                                                                  |
+| `mocks/browser.ts`                                                 | `setupWorker(...restHandlers, ...socketHandlers)`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `mocks/db/store.ts`                                                | Estado único (`users`, `sessions`, `nfts`, `favorites`, `carts`, `orders`, `idempotencyKeys`, `profiles`, `wallets`), persistido em `localStorage` (chave `kurio-mocks-db`, com fallback em memória fora do browser) e `reset()`.                                                                                                                                                                                                                                                                                  |
+| `mocks/fixtures/*`                                                 | `users.ts` (2 usuários fixos, senha em texto só na fixture), `nfts.ts` (40 NFTs determinísticos via `withSeed(42, ...)`), `coupons.ts` (`KURIO10` válido 10%, `KURIO-EXPIRED` expirado 15%).                                                                                                                                                                                                                                                                                                                       |
+| `mocks/handlers/index.ts`                                          | `GET /api/health` + os 8 grupos de handlers (`auth`, `nft`, `favorite`, `cart`, `quote`, `order`, `profile`, `wallet`), reunidos em `restHandlers`.                                                                                                                                                                                                                                                                                                                                                                |
+| `mocks/handlers/session.ts`, `error-response.ts`, `nft-summary.ts` | Helpers compartilhados: sessão a partir do header `Authorization`, envelope de erro (`apiErrorSchema`) e cálculo de `favorited` por sessão.                                                                                                                                                                                                                                                                                                                                                                        |
+| `mocks/scenarios/*`                                                | Motor de cenários: `registry.ts` (9 cenários + leitura de query param/`localStorage`), `apply.ts` (`withScenario` para latência/offline, `matchOverride` para erros determinísticos por rota).                                                                                                                                                                                                                                                                                                                     |
+| `mocks/socket/index.ts`                                            | Handler do handshake Socket.IO via `@mswjs/socket.io-binding` (detalhado abaixo).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `mocks/socket/emit.ts`                                             | Registro de emissores por conexão e as funções `emitNftUpdated`/`emitOrderUpdated`, chamadas pelos handlers de pedido.                                                                                                                                                                                                                                                                                                                                                                                             |
+| `mocks/dev/ScenarioPanel.tsx`, `ScenarioPanelGate.tsx`             | Painel flutuante de dev para trocar cenário e resetar o `db` (ver README).                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ## Contratos REST e eventos
 
-Ainda não há schemas zod em `src/shared/api/contracts/` — **planejado a partir da Fase 1**, quando `mock-engineer` e `feature-dev` definirem os contratos de catálogo, carrinho, pedidos, etc., compartilhados entre handlers MSW, cliente Axios e testes (ver rule `typescript.md`).
+Todos os contratos abaixo são schemas zod em `src/shared/api/contracts/`, usados pelos handlers MSW para validar o que devolvem (`schema.parse(...)`). Rotas sem 🔒 não exigem sessão.
 
-O único contrato real hoje é o health check, sem validação zod:
+### Sessão / conta (`handlers/auth.ts`)
 
-| Método | Rota          | Resposta | Exemplo de payload   |
+| Método | Rota                 | 🔒  | Request                                                                             | Resposta                         | Erros                                           |
+| ------ | -------------------- | --- | ----------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------- |
+| POST   | `/api/auth/login`    |     | `{ "email": "ana.colecionadora@kurio.test", "password": "Kurio@123" }`              | `200` `Session`                  | `401 UNAUTHORIZED`                              |
+| POST   | `/api/auth/register` |     | `{ "username": "nova.kurio", "email": "nova@kurio.test", "password": "Senha@123" }` | `201` `Session`                  | `409 CONFLICT` (e-mail/username já cadastrados) |
+| GET    | `/api/auth/session`  | 🔒  | —                                                                                   | `200` `Session`                  | `401 UNAUTHORIZED` (sem token ou expirado)      |
+| POST   | `/api/auth/logout`   |     | —                                                                                   | `204` (sempre, mesmo sem sessão) | —                                               |
+
+`Session` = `{ user: User, accessToken: string, expiresAt: ISO }`. Token expira em 30 min, checado em `getSessionFromRequest` a cada request autenticada.
+
+### NFTs (`handlers/nft.ts`)
+
+| Método | Rota            | 🔒  | Request                                                                                                                                                            | Resposta                           | Erros           |
+| ------ | --------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- | --------------- |
+| GET    | `/api/nfts`     |     | Query: `q`, `collections[]`, `priceMin`, `priceMax`, `network`, `tab` (`all/new/trending`), `sortBy` (`relevance/price_asc/price_desc/newest`), `page`, `pageSize` | `200` `NftListResponse` (paginado) | —               |
+| GET    | `/api/nfts/:id` |     | —                                                                                                                                                                  | `200` `NftDetail`                  | `404 NOT_FOUND` |
+
+`favorited` nunca é um campo estático do NFT: é recalculado por `toNftSummary` (`handlers/nft-summary.ts`) a partir da sessão da própria request — sem sessão, sempre `false`.
+
+Exemplo de `NftSummary`:
+
+```json
+{
+  "id": "nft_001",
+  "tokenId": "#4821",
+  "name": "Mystic Fox",
+  "collectionId": "col_violet_nomads",
+  "collectionName": "Violet Nomads",
+  "image": "https://picsum.photos/seed/kurio-nft-1/600/600",
+  "price": "1.19",
+  "previousPrice": "1.52",
+  "network": "ethereum",
+  "isRare": true,
+  "favorited": false,
+  "available": 3
+}
+```
+
+### Favoritos (`handlers/favorite.ts`) — todas as rotas 🔒
+
+| Método | Rota                    | Request                  | Resposta                          | Erros                               |
+| ------ | ----------------------- | ------------------------ | --------------------------------- | ----------------------------------- |
+| GET    | `/api/favorites`        | —                        | `200` `{ "items": NftSummary[] }` | `401 UNAUTHORIZED`                  |
+| POST   | `/api/favorites`        | `{ "nftId": "nft_001" }` | `201` `{ "nftId", "createdAt" }`  | `401 UNAUTHORIZED`, `404 NOT_FOUND` |
+| DELETE | `/api/favorites/:nftId` | —                        | `204`                             | `401 UNAUTHORIZED`                  |
+
+### Carrinho (`handlers/cart.ts`) — todas as rotas 🔒
+
+| Método | Rota                     | Request                                 | Resposta                                      | Erros                                                            |
+| ------ | ------------------------ | --------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------- |
+| GET    | `/api/cart`              | —                                       | `200` `Cart`                                  | `401 UNAUTHORIZED`                                               |
+| POST   | `/api/cart/items`        | `{ "nftId": "nft_001", "quantity": 1 }` | `200` `Cart` (upsert: soma à linha existente) | `401 UNAUTHORIZED`, `404 NOT_FOUND`, `409 AVAILABILITY_CONFLICT` |
+| PATCH  | `/api/cart/items/:nftId` | `{ "quantity": 2 }`                     | `200` `Cart`                                  | `401 UNAUTHORIZED`, `404 NOT_FOUND`, `409 AVAILABILITY_CONFLICT` |
+| DELETE | `/api/cart/items/:nftId` | —                                       | `204`                                         | `401 UNAUTHORIZED`                                               |
+
+Preço, nome, imagem e disponibilidade do carrinho **nunca ficam congelados**: `buildCart` busca o estado atual do catálogo a cada resposta. Linhas cujo NFT não existe mais são removidas silenciosamente (do `db` e da resposta).
+
+### Cotação (`handlers/quote.ts`) — não exige sessão
+
+| Método | Rota         | Request                                                                                                 | Resposta      | Erros                                                                                                                                                                                                                |
+| ------ | ------------ | ------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/quote` | `{ "items": [{ "nftId": "nft_001", "quantity": 1 }], "couponCode": "KURIO10" }` (`couponCode` opcional) | `200` `Quote` | `422 COUPON_INVALID` / `422 COUPON_EXPIRED` só via override de cenário (ver tabela de cenários); sem cenário ativo, cupom desconhecido vira `couponStatus: "invalid"` dentro de uma resposta `200`, não um erro HTTP |
+
+Exemplo de resposta:
+
+```json
+{
+  "items": [
+    {
+      "nftId": "nft_001",
+      "quantity": 1,
+      "unitPrice": "1.19",
+      "subtotal": "1.19",
+      "availability": "ok"
+    }
+  ],
+  "subtotal": "1.19",
+  "discount": "0.119",
+  "networkFee": "0.01",
+  "total": "1.081",
+  "couponCode": "KURIO10",
+  "couponStatus": "applied",
+  "quotedAt": "2026-11-03T12:00:00.000Z"
+}
+```
+
+Taxa de rede fixa (`"0.01"`), todo cálculo via `big.js` (`mulEth`, `sumEth`, `subEth`, `addEth`), nunca `Number`/`parseFloat`.
+
+### Pedidos (`handlers/order.ts`) — todas as rotas 🔒
+
+| Método | Rota              | Headers                         | Request                                                                                                                          | Resposta      | Erros                                                                                                                                                                                                                                                                                    |
+| ------ | ----------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/orders`     | `Idempotency-Key` (obrigatório) | `{ "items": [{ "nftId": "nft_001", "quantity": 1 }], "couponCode": "KURIO10", "walletAddress": "0x...", "network": "ethereum" }` | `201` `Order` | `401 UNAUTHORIZED`, `400 VALIDATION_ERROR` (header ausente), `409 CONFLICT` (chave reusada por outro usuário ou com corpo diferente), `404 NOT_FOUND`, `409 AVAILABILITY_CONFLICT`, `422 COUPON_INVALID`/`422 COUPON_EXPIRED`, `409 QUOTE_CHANGED` (override do cenário `quote-changed`) |
+| GET    | `/api/orders/:id` | —                               | —                                                                                                                                | `200` `Order` | `401 UNAUTHORIZED`, `404 NOT_FOUND`                                                                                                                                                                                                                                                      |
+
+Idempotência (header, não campo do body): mesma `Idempotency-Key` + mesmo corpo (hash comparado) → retorna o pedido já criado (`201` de novo, mesmo payload). Mesma chave + corpo diferente, **ou** chave já usada por outro `userId` → `409 CONFLICT` — nunca vaza pedido de uma conta para outra.
+
+Estoque: `nft.available` só é decrementado quando o pedido nasce `confirmed`. Pedidos `pending` (cenário `order-timeout`) ou `declined` (cenário `payment-declined`) nunca tocam o catálogo.
+
+Exemplo de `Order` confirmado:
+
+```json
+{
+  "id": "a1b2c3d4-...",
+  "idempotencyKey": "checkout-a1b2c3d4",
+  "status": "confirmed",
+  "items": [
+    {
+      "nftId": "nft_001",
+      "tokenId": "#4821",
+      "name": "Mystic Fox",
+      "image": "...",
+      "unitPrice": "1.19",
+      "quantity": 1,
+      "subtotal": "1.19"
+    }
+  ],
+  "subtotal": "1.19",
+  "discount": "0.119",
+  "networkFee": "0.01",
+  "total": "1.081",
+  "walletAddress": "0x1234...abcd",
+  "network": "ethereum",
+  "transactionId": "f0e1d2c3-...",
+  "declineReason": null,
+  "createdAt": "2026-11-03T12:00:00.000Z",
+  "confirmedAt": "2026-11-03T12:00:00.100Z"
+}
+```
+
+### Perfil (`handlers/profile.ts`) — todas as rotas 🔒
+
+| Método | Rota                    | Request                                                                     | Resposta     | Erros                                                                                   |
+| ------ | ----------------------- | --------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------- |
+| GET    | `/api/profile`          | —                                                                           | `200` `User` | `401 UNAUTHORIZED`                                                                      |
+| PATCH  | `/api/profile`          | `{ "displayName"?, "username"?, "email"?, "avatarUrl"? }` (todos opcionais) | `200` `User` | `401 UNAUTHORIZED`, `409 CONFLICT` (e-mail/username já usado por outro usuário)         |
+| PATCH  | `/api/profile/password` | `{ "currentPassword", "newPassword" }`                                      | `204`        | `401 UNAUTHORIZED` (sem sessão **ou** senha atual incorreta — mesma semântica do login) |
+
+### Carteiras (`handlers/wallet.ts`) — todas as rotas 🔒
+
+| Método | Rota               | Request                                                                                                | Resposta         | Erros                                                            |
+| ------ | ------------------ | ------------------------------------------------------------------------------------------------------ | ---------------- | ---------------------------------------------------------------- |
+| GET    | `/api/wallets`     | —                                                                                                      | `200` `Wallet[]` | `401 UNAUTHORIZED`                                               |
+| POST   | `/api/wallets`     | `{ "type": "primary", "provider": "metamask", "address": "0x...", "network": "ethereum", "ensName"? }` | `201` `Wallet`   | `401 UNAUTHORIZED`, `409 CONFLICT` (já existe carteira primária) |
+| PATCH  | `/api/wallets/:id` | Parcial de `CreateWalletRequest`                                                                       | `200` `Wallet`   | `401 UNAUTHORIZED`, `404 NOT_FOUND`, `409 CONFLICT`              |
+
+### Health check (sem contrato zod)
+
+| Método | Rota          | Resposta | Exemplo              |
 | ------ | ------------- | -------- | -------------------- |
-| `GET`  | `/api/health` | `200 OK` | `{ "status": "ok" }` |
+| GET    | `/api/health` | `200 OK` | `{ "status": "ok" }` |
 
-Eventos de Socket.IO: nenhum evento de domínio existe ainda. O único pacote emitido hoje é de infraestrutura do mock (não é um evento de negócio):
+### Enum de erro (`contracts/error.ts`)
 
-| Evento         | Emitido por                              | Payload                                | Propósito                                                                                                                                  |
-| -------------- | ---------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `system.ready` | `src/mocks/socket/index.ts`, ao conectar | `{ "at": "2026-11-03T12:00:00.000Z" }` | Sinaliza que o handshake do mock terminou. Usado só para verificação manual durante o setup; não é consumido por nenhuma tela em produção. |
+`apiErrorCodeSchema`: `VALIDATION_ERROR`, `UNAUTHORIZED`, `FORBIDDEN` (declarado, nenhum handler emite hoje), `NOT_FOUND`, `AVAILABILITY_CONFLICT`, `CONFLICT`, `COUPON_INVALID`, `COUPON_EXPIRED`, `QUOTE_CHANGED`, `TRANSIENT` (declarado, reservado para falhas transitórias — nenhum handler emite hoje). Envelope: `{ "error": { "code", "message", "fields"? } }`.
 
-Os eventos de negócio `nft.updated` e `order.updated` (envelope `{ eventId, resource: { type, id }, version, data, userId? }`, ver rule `realtime-socket.md`) ainda não existem — planejados para as fases de catálogo/tempo real e de pedidos.
+## Eventos de Socket.IO (`contracts/events.ts`)
+
+União discriminada por `type`, envelope comum `{ eventId, version, occurredAt }`:
+
+| Evento          | Visibilidade                                                         | `resource`              | Campos extra            | Emitido por                                                                                                                            |
+| --------------- | -------------------------------------------------------------------- | ----------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `nft.updated`   | **Pública** — broadcast para toda conexão aberta                     | `{ type: "nft", id }`   | `data: NftDetail`       | `handlers/order.ts`, após pedido `confirmed`, uma vez por item do pedido (NFT já com `available` decrementado)                         |
+| `order.updated` | **Privada** — só conexão(ões) identificadas com o `userId` do pedido | `{ type: "order", id }` | `userId`, `data: Order` | `handlers/order.ts`, imediatamente após criar o pedido (`POST /api/orders`), para qualquer `status` (`pending`/`confirmed`/`declined`) |
+
+`version` é um contador global (`versionCounter` em `socket/emit.ts`), incrementado a cada emissão de **qualquer** evento — não é um contador por recurso. Uma reconciliação no cliente que descarte "versão menor ou igual à última aplicada" deve comparar por `resource.id`, nunca `version` entre recursos diferentes.
+
+Exemplo de `order.updated`:
+
+```json
+{
+  "type": "order.updated",
+  "eventId": "9f8e7d6c-...",
+  "version": 12,
+  "occurredAt": "2026-11-03T12:00:00.150Z",
+  "resource": { "type": "order", "id": "a1b2c3d4-..." },
+  "userId": "user-1",
+  "data": { "id": "a1b2c3d4-...", "status": "confirmed", "...": "..." }
+}
+```
+
+Não existe nenhum evento de domínio além desses dois. `system.ready` (emitido ao conectar, payload `{ "at": ISO }`) é infraestrutura do mock, não um evento de negócio — usado só para verificação manual do handshake.
 
 ## Política de sessão
 
-Ainda não implementada — **planejado para a Fase 3**. Será documentada aqui: mecanismo de token, onde é persistido, interceptor de 401 no Axios, desconexão do socket e limpeza de cache privado do Query no logout/troca de usuário (regra eliminatória nº 4).
+Implementado no lado da API simulada: login/registro emitem `{ accessToken, expiresAt }` (TTL de 30 min), `GET /api/auth/session` revalida o token, `POST /api/auth/logout` invalida a sessão no `db`. `shared/api/http.ts` já injeta o token (via `setAccessToken`, estado em memória — não persistido) e normaliza `401 UNAUTHORIZED` disparando `session:expired`.
+
+Ainda **planejado** (depende de `entities/session`/`features/auth`, inexistentes hoje): onde o token é persistido no cliente (ex.: memória vs. `sessionStorage`), quem escuta `session:expired` para redirecionar e limpar o cache do Query, conexão/desconexão do `socket.io-client` por sessão (handshake `identify`, ver seção de transporte) e limpeza de cache privado do Query no logout/troca de usuário (regra eliminatória nº 4).
 
 ## Estado do carrinho (visitante → autenticado)
 
-Ainda não implementado — **planejado para a Fase 6** (`entities/cart`, `features/add-to-cart`). Será documentada aqui a estratégia de persistência do carrinho de visitante (ex.: `localStorage`) e sua migração/merge ao autenticar.
+A API simulada já modela o carrinho como recurso do servidor por `userId` (`GET/POST/PATCH/DELETE /api/cart...`, sempre 🔒) — não existe hoje um conceito de "carrinho de visitante" no backend simulado.
+
+Ainda **planejado** (`entities/cart`, `features/add-to-cart`, inexistentes hoje): estratégia de persistência do carrinho de visitante (ex.: `localStorage`) antes do login e sua migração/merge para `/api/cart` ao autenticar.
 
 ## Estratégia de cache, retries e sincronização
 
@@ -111,30 +292,51 @@ Hoje existe apenas a configuração global do `QueryClient` (`src/shared/api/que
 | `retry` (queries)      | `1`         | Uma tentativa adicional em caso de falha.                                    |
 | `retry` (mutations)    | `false`     | Mutations não são retentadas automaticamente.                                |
 
-Política detalhada por tipo de erro (não retentar 4xx, backoff em falhas transitórias, idempotência em `place-order`), query keys com `userId`, `placeholderData: keepPreviousData` em listagens e mutation otimista de favoritos — **planejado**, conforme rule `tanstack-query.md`, a partir das fases de catálogo/pedidos.
+Política detalhada por tipo de erro (não retentar 4xx, backoff em falhas transitórias, idempotência em `place-order` reaproveitando a mesma `Idempotency-Key`), query keys com `userId`, `placeholderData: keepPreviousData` em listagens e mutation otimista de favoritos — **planejado**, conforme rule `tanstack-query.md`, a partir das fases de catálogo/pedidos. `src/shared/api/query-keys.ts` ainda não existe.
 
 ## Reconciliação REST × Socket.IO
 
-A infraestrutura de simulação do socket já existe (ver seção seguinte), mas a lógica de reconciliação de negócio — dedupe por `eventId`, descarte de `version` menor ou igual à última aplicada, invalidação/refetch ao reconectar, filtro por `userId`/sessão — ainda não existe. **Planejado** a partir da fase de tempo real (NFTs/pedidos), conforme rule `realtime-socket.md`.
+A emissão de eventos de negócio já é real (ver seção de eventos acima): `order.updated` é emitido a cada `POST /api/orders` e `nft.updated` a cada item de pedido confirmado. O que ainda não existe é o consumo no cliente — nenhum código de `app`/`pages`/`shared` assina `nft.updated`/`order.updated` hoje.
+
+Pontos que a implementação futura (fase de tempo real) precisa respeitar, já deduzidos do contrato real:
+
+- Dedupe por `eventId` (UUID por emissão).
+- `version` é um contador **global**, não por recurso — descartar "versão menor ou igual à última aplicada" deve ser feito comparando eventos do mesmo `resource.id`, nunca `version` bruto entre `nft.updated` e `order.updated` ou entre NFTs diferentes.
+- `order.updated` só chega para a conexão que já fez `identify` com o token da sessão certa (ver seção de transporte) — o cliente real vai precisar emitir `identify` após `socket.connect()`.
+- Ao reconectar, invalidar/refetch dos recursos ativos (carrinho, cotação, pedido pendente, detalhe aberto) — ainda planejado, conforme rule `realtime-socket.md`.
 
 ## Transporte do Socket no MSW e limitações
 
 O `socket.io-client` conecta por padrão em `/socket.io/...` (não na raiz do host). O handler `ws.link(...)` do MSW precisa do padrão com wildcard — `'wss://realtime.kurio.local/*'`, não `'wss://realtime.kurio.local'` sem path — porque o matcher HTTP do handshake do MSW não faz strip automático de `/socket.io/` (isso só ocorre depois do upgrade, dentro do `WebSocketHandler` interno). Sem o wildcard, a conexão nunca é reconhecida pelo MSW.
 
-Código atual (`src/mocks/socket/index.ts`):
+Código do handshake (`src/mocks/socket/index.ts`):
 
 ```ts
 import { ws } from 'msw'
 import { toSocketIo } from '@mswjs/socket.io-binding'
+import { registerEmitter } from './emit'
+import { db } from '../db/store'
 
 const realtime = ws.link('wss://realtime.kurio.local/*')
 
 export const socketHandlers = [
   realtime.addEventListener('connection', (connection) => {
     const io = toSocketIo(connection)
-    // `toSocketIo` agenda o handshake inicial (pacotes "open"/"connect") via
-    // microtask; emitir no mesmo tick entrega o evento fora de ordem e o
-    // cliente o descarta. Agendar depois garante a ordem correta.
+
+    const { unregister, setUserId } = registerEmitter((event) => {
+      io.client.emit(event.type, event)
+    })
+    connection.client.addEventListener('close', unregister)
+
+    // Handshake mínimo: o cliente emite `identify` com o `accessToken` da
+    // sessão HTTP logo após conectar, pra esta conexão passar a receber
+    // `order.updated` (dado privado).
+    io.client.on('identify', (_event, payload) => {
+      const token = payload?.token
+      const session = typeof token === 'string' ? db.get().sessions[token] : undefined
+      setUserId(session ? session.userId : null)
+    })
+
     queueMicrotask(() => {
       io.client.emit('system.ready', { at: new Date().toISOString() })
     })
@@ -142,11 +344,21 @@ export const socketHandlers = [
 ]
 ```
 
+Cada conexão WebSocket registra o seu próprio emissor em `socket/emit.ts` (`registerEmitter`, mantido num `Set<RegisteredEmitter>`) — sem isso, uma segunda aba sobrescreveria a primeira. `userId` começa `null` (a conexão ainda não se identificou) e só é atualizado depois do handshake `identify` acima.
+
+A separação entre dado **público** e **privado** é resolvida manualmente, não pelo binding:
+
+- `emitNftUpdated` (NFT = catálogo, dado público) itera **todas** as entradas do `Set` e emite para todas, sem filtro.
+- `emitOrderUpdated(order, userId)` (pedido = dado privado) itera o `Set` e só emite para as entradas cujo `entry.userId === userId` — sem handshake `identify` bem-sucedido, uma conexão nunca recebe nenhum `order.updated`, mesmo que seja do dono do pedido.
+
+Isso existe porque `@mswjs/socket.io-binding` não implementa rooms/namespaces nativamente (ver limitações abaixo): a filtragem por usuário que o Socket.IO real faria com uma room (`io.to(userId).emit(...)`) é reimplementada à mão em `emit.ts`, comparando `userId` por conexão.
+
 Limitações conhecidas:
 
 - `toSocketIo(connection)` do `@mswjs/socket.io-binding` agenda os pacotes iniciais do handshake (Engine.IO `open` + Socket.IO `connect`) de forma assíncrona via `queueMicrotask` dentro do próprio construtor. Emitir (`io.client.emit(...)`) sincronamente logo depois entrega o evento customizado antes do handshake, fora de ordem — o `socket.io-client` descarta esse pacote silenciosamente. Qualquer `emit` feito pelos handlers de mock precisa estar dentro de um `queueMicrotask` (a ordem FIFO de microtasks garante que ele rode depois do handshake).
 - `msw` está fixado em `^2.15.0` (não v3), porque `@mswjs/socket.io-binding@^0.2.0` declara peer dependency `msw@^2.10.2`, incompatível com MSW v3.
-- O binding não é mantido 1:1 com a API real do Socket.IO: não há suporte nativo a rooms, namespaces ou broadcast (conforme o próprio README do pacote). Qualquer funcionalidade avançada de tempo real simulada deve ser testada manualmente contra esse limite, e alternativas (ex.: emitir para todas as conexões abertas manualmente) devem ser documentadas quando usadas.
+- O binding não é mantido 1:1 com a API real do Socket.IO: não há suporte nativo a rooms, namespaces ou broadcast (conforme o próprio README do pacote). Por isso a filtragem por usuário em `order.updated` é manual (ver acima), e não via `io.to(room)`. Qualquer outra funcionalidade avançada de tempo real simulada deve ser testada manualmente contra esse limite.
+- O handshake `identify` só é consumido pelo mock hoje — nenhum código de produto (`app`/`pages`/`entities`/`features`) chama `socket.connect()` ou emite `identify` ainda, então `order.updated` não tem, hoje, nenhum destinatário real em runtime além de testes manuais/E2E que simulem o handshake diretamente.
 
 ## Decisões de UX
 
@@ -168,7 +380,7 @@ Nenhuma tela de negócio foi implementada ainda, então não há estados não de
 
 ## Substituições de assets
 
-`src/App.tsx`, `src/App.css` e os placeholders do template inicial do Vite (`src/assets/hero.png`, `react.svg`, `vite.svg`) foram removidos — eram boilerplate não roteado (a aplicação real renderiza `pages/home`, não `App.tsx`). Nenhuma substituição de asset de produto foi feita ainda (não há telas de catálogo/NFT implementadas); os assets reais serão adicionados quando as telas forem implementadas a partir do Figma.
+`src/App.tsx`, `src/App.css` e os placeholders do template inicial do Vite (`src/assets/hero.png`, `react.svg`, `vite.svg`) foram removidos — eram boilerplate não roteado (a aplicação real renderiza `pages/home`, não `App.tsx`). Nenhuma substituição de asset de produto foi feita ainda (não há telas de catálogo/NFT implementadas); as imagens de NFT nas fixtures (`mocks/fixtures/nfts.ts`) usam placeholders de `picsum.photos` (seed determinística por índice), não assets do Figma — os assets reais serão adicionados quando as telas forem implementadas a partir do Figma.
 
 ## Ajustes de acessibilidade
 
@@ -181,11 +393,11 @@ Ajustes específicos (labels, `aria-describedby`, focus trap em Dialog/Sheet, `a
 
 ## ADRs
 
-### ADR-001 — Transporte do Socket.IO no MSW: wildcard no path e `emit` após microtask
+### ADR-001 — Transporte do Socket.IO no MSW: wildcard no path, `emit` após microtask e filtragem manual de rooms
 
-- **Contexto**: `socket.io-client` sempre conecta em `/socket.io/...`, não na raiz do host informado em `VITE_SOCKET_URL`. O handler `ws.link('wss://realtime.kurio.local')` (sem wildcard) nunca reconhecia a conexão, porque o matcher de handshake do MSW não faz strip de path antes do upgrade.
-- **Decisão**: usar `ws.link('wss://realtime.kurio.local/*')` (com wildcard) e envolver todo `emit` feito por handlers de mock em `queueMicrotask(() => ...)`, para rodar depois do handshake assíncrono agendado internamente por `toSocketIo`.
-- **Consequências**: handshake e eventos chegam na ordem correta ao `socket.io-client`. `msw` fica fixado em `^2.15.0` (não v3) por peer dependency de `@mswjs/socket.io-binding@^0.2.0`. O binding não suporta rooms/namespaces/broadcast nativamente — funcionalidades avançadas de tempo real exigem verificação manual.
+- **Contexto**: `socket.io-client` sempre conecta em `/socket.io/...`, não na raiz do host informado em `VITE_SOCKET_URL`. O handler `ws.link('wss://realtime.kurio.local')` (sem wildcard) nunca reconhecia a conexão, porque o matcher de handshake do MSW não faz strip de path antes do upgrade. Além disso, `nft.updated` (dado público) e `order.updated` (dado privado, só do dono do pedido) precisam de visibilidades diferentes, e `@mswjs/socket.io-binding` não implementa rooms/namespaces nativamente para resolver isso.
+- **Decisão**: usar `ws.link('wss://realtime.kurio.local/*')` (com wildcard) e envolver todo `emit` feito por handlers de mock em `queueMicrotask(() => ...)`, para rodar depois do handshake assíncrono agendado internamente por `toSocketIo`. Para a visibilidade por usuário, `socket/emit.ts` mantém um `Set` de emissores (um por conexão), cada um com um `userId` resolvido manualmente via um handshake de aplicação `identify { token }` (`socket/index.ts` resolve o token para um `userId` em `db.get().sessions`); `emitNftUpdated` faz broadcast para todo o `Set`, enquanto `emitOrderUpdated(order, userId)` filtra e só emite para as entradas com `entry.userId === userId`.
+- **Consequências**: handshake e eventos chegam na ordem correta ao `socket.io-client`. `msw` fica fixado em `^2.15.0` (não v3) por peer dependency de `@mswjs/socket.io-binding@^0.2.0`. A ausência de rooms/namespaces nativos é compensada por filtragem manual em `emit.ts` em vez de `io.to(room).emit(...)` — qualquer novo evento privado precisa seguir o mesmo padrão (registrar `userId` por conexão e filtrar na emissão), e o handshake `identify` precisa ser emitido pelo cliente real assim que a feature de tempo real for implementada (hoje nenhum código de produto faz isso).
 
 ### ADR-002 — Cor `--destructive` provisória, ausente no Figma
 
