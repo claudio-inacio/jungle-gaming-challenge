@@ -88,7 +88,7 @@ function SiteFooter() {
     <footer className="w-full bg-background py-10">
       <Container>
         <div className="overflow-hidden rounded-3xl bg-card text-card-foreground">
-          <div className="border-b border-border-soft px-6 py-8 lg:px-8">
+          <div className="border-b border-border-soft px-4 py-8 lg:px-6">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
               {HIGHLIGHTS.map((highlight, index) => (
                 <div key={highlight.title} className="flex flex-1 items-stretch gap-8">
@@ -151,7 +151,7 @@ function SiteFooter() {
             </div>
           </div>
 
-          <div className="border-b border-border-soft bg-muted px-6 py-6 lg:px-8">
+          <div className="border-b border-border-soft bg-muted px-4 py-6 lg:px-6">
             <div className="flex flex-col gap-3 text-sm text-foreground lg:flex-row lg:items-center lg:justify-between lg:gap-8">
               <p className="text-sm font-bold tracking-[1.4px] text-foreground">KURIO</p>
               <p className="leading-[22px]">
@@ -164,7 +164,7 @@ function SiteFooter() {
             </div>
           </div>
 
-          <div className="px-6 py-8 lg:px-8">
+          <div className="px-4 py-8 lg:px-6">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {LINK_COLUMNS.map((column) => (
                 <nav key={column.title} aria-label={column.title}>
