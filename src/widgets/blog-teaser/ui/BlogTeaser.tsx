@@ -1,3 +1,4 @@
+import { Container } from '@/shared/ui/container'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
 
 type BlogPost = {
@@ -36,11 +37,8 @@ const BLOG_POSTS: BlogPost[] = [
 
 function BlogTeaser() {
   return (
-    <section
-      aria-labelledby="blog-teaser-heading"
-      className="w-full bg-background px-4 py-10 sm:px-6 lg:px-8"
-    >
-      <div className="mx-auto max-w-[1200px]">
+    <section aria-labelledby="blog-teaser-heading" className="w-full bg-background py-10">
+      <Container>
         <div className="mb-6 flex flex-col gap-1">
           <h2 id="blog-teaser-heading" className="text-2xl font-bold text-foreground">
             Diário da Cunhagem
@@ -67,7 +65,7 @@ function BlogTeaser() {
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     </section>
   )
 }

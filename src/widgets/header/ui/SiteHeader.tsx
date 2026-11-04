@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { LogIn, Search, ShoppingCart, SlidersHorizontal, User } from 'lucide-react'
-import { cn } from 'cn'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
+import { Container } from '@/shared/ui/container'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
 
 type SiteHeaderProps = {
@@ -13,7 +13,7 @@ type SiteHeaderProps = {
 function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
   return (
     <header className="w-full border-b border-border bg-background">
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-8">
+      <Container className="flex h-16 items-center justify-between gap-4">
         <Link
           to="/"
           className="hidden shrink-0 text-sm font-bold tracking-[0.1em] text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:block"
@@ -59,7 +59,7 @@ function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
               <User aria-hidden="true" className="size-5" />
             </span>
           ) : (
-            <Button type="button" variant="default" className={cn('gap-1.5')}>
+            <Button type="button" variant="default" className="gap-1.5">
               <LogIn aria-hidden="true" className="size-4" />
               Entrar
             </Button>
@@ -88,7 +88,7 @@ function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
             <SlidersHorizontal aria-hidden="true" className="size-5" />
           </button>
         </div>
-      </div>
+      </Container>
     </header>
   )
 }

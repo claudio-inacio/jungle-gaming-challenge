@@ -7,7 +7,11 @@ function MobileTabBar() {
       <div className="relative h-[76px]">
         <div aria-hidden="true" className="absolute inset-0 flex">
           <div className="flex-1 rounded-tl-4xl bg-card" />
-          <svg viewBox="" preserveAspectRatio="none" className="h-full w-28 shrink-0 fill-card">
+          <svg
+            viewBox="0 0 112 76"
+            preserveAspectRatio="none"
+            className="h-full w-28 shrink-0 fill-card"
+          >
             <path d="M0,0 C14,0 19,38 56,38 C93,38 98,0 112,0 L112,76 L0,76 Z" />
           </svg>
           <div className="flex-1 rounded-tr-4xl bg-card" />
