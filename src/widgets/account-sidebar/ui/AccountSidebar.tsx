@@ -4,11 +4,13 @@ import {
   Heart,
   LogOut,
   MapPin,
+  Package,
   ShoppingBag,
   TriangleAlert,
   User,
 } from 'lucide-react'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
+import { PendingLink } from '@/shared/ui/pending-link'
 import { cn } from '@/shared/lib/utils'
 
 type AccountSidebarItemKey = 'profile' | 'wallets'
@@ -22,9 +24,13 @@ const REAL_ITEMS: { key: AccountSidebarItemKey; label: string; icon: typeof User
   { key: 'wallets', label: 'Carteiras', icon: MapPin },
 ]
 
+const PENDING_ITEMS: { label: string; icon: typeof User }[] = [
+  { label: 'Pedidos', icon: Package },
+  { label: 'Lista de interesse', icon: Heart },
+]
+
 const OUT_OF_SCOPE_ITEMS: { label: string; icon: typeof User }[] = [
   { label: 'Atividade', icon: ShoppingBag },
-  { label: 'Lista de interesse', icon: Heart },
   { label: 'Ofertas', icon: Activity },
   { label: 'Arquivos baixados', icon: Download },
   { label: 'Suporte', icon: TriangleAlert },
@@ -47,6 +53,7 @@ function AccountSidebar({ active = 'profile' }: AccountSidebarProps) {
             return (
               <li key={item.key}>
                 <span
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
                     'flex w-full items-center gap-3 border-l-[6px] border-transparent px-4 py-3 text-[15px] text-accent-foreground',
                     isActive && 'border-primary',
@@ -58,6 +65,15 @@ function AccountSidebar({ active = 'profile' }: AccountSidebarProps) {
               </li>
             )
           })}
+
+          {PENDING_ITEMS.map((item) => (
+            <li key={item.label}>
+              <PendingLink className="flex w-full items-center gap-3 border-l-[6px] border-transparent px-4 py-3 text-[15px] text-accent-foreground">
+                <item.icon aria-hidden="true" className="size-[18px] shrink-0" />
+                {item.label}
+              </PendingLink>
+            </li>
+          ))}
 
           {OUT_OF_SCOPE_ITEMS.map((item) => (
             <li key={item.label}>
@@ -71,13 +87,10 @@ function AccountSidebar({ active = 'profile' }: AccountSidebarProps) {
       </nav>
 
       <div className="border-t border-border-soft px-4 py-2.5">
-        <button
-          type="button"
-          className="flex h-10 w-full items-center gap-2 text-[15px] font-bold text-accent-foreground"
-        >
+        <PendingLink className="flex h-10 w-full items-center gap-2 text-[15px] font-bold text-accent-foreground">
           <LogOut aria-hidden="true" className="size-5 shrink-0" />
           Sair
-        </button>
+        </PendingLink>
       </div>
     </aside>
   )
