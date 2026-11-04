@@ -2,6 +2,7 @@ import { useId } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
+import { NoticeLink } from '@/shared/ui/notice-link'
 import { cn } from '@/shared/lib/utils'
 
 const MESSAGE = 'Indisponível na demonstração'
@@ -10,34 +11,29 @@ function notifyOutOfScope() {
   toast.info(MESSAGE)
 }
 
-export function OutOfScopeLink({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
+export function OutOfScopeLink({ children, className, ...rest }: React.ComponentProps<'button'>) {
   return (
-    <button
-      type="button"
+    <NoticeLink
+      message={MESSAGE}
       className={cn('cursor-not-allowed text-muted-foreground opacity-70', className)}
-      aria-disabled="true"
-      onClick={notifyOutOfScope}
+      {...rest}
     >
       {children}
-    </button>
+    </NoticeLink>
   )
 }
 
 export function OutOfScopeButton({ children, ...props }: React.ComponentProps<typeof Button>) {
   const noteId = useId()
   return (
-    <Button {...props} type="button" onClick={notifyOutOfScope} aria-describedby={noteId}>
-      {children}
+    <>
+      <Button {...props} type="button" onClick={notifyOutOfScope} aria-describedby={noteId}>
+        {children}
+      </Button>
       <span id={noteId} className="sr-only">
         {MESSAGE}
       </span>
-    </Button>
+    </>
   )
 }
 
