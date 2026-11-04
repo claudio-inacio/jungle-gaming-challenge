@@ -12,8 +12,8 @@ type SiteHeaderProps = {
 
 function SiteHeader({ itemCount, isAuthenticated }: SiteHeaderProps) {
   return (
-    <header className="w-full border-b border-border bg-background">
-      <Container className="flex h-16 items-center justify-between gap-4">
+    <header className="w-full bg-background">
+      <Container className="flex h-16 items-center justify-between gap-4 border-b border-border">
         <Link
           to="/"
           className="hidden shrink-0 text-sm font-bold tracking-[0.1em] text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:block"
