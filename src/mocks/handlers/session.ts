@@ -1,17 +1,12 @@
-import { db } from '../db/store'
+import { getSessionByToken, type MockSession } from '../lib/session'
 
-export interface RequestSession {
-  userId: string
-  token: string
-  expiresAt: string
-}
+export type RequestSession = MockSession
 
 /** Mesma checagem de `Authorization: Bearer <token>` usada em auth.ts, extraída
- * para não ser reimplementada (de forma inconsistente) em cada handler. */
+ * para não ser reimplementada (de forma inconsistente) em cada handler.
+ * Revalida expiração via `getSessionByToken`, a mesma função usada pelo
+ * handshake e pela emissão privada do socket. */
 export function getSessionFromRequest(request: Request): RequestSession | null {
   const token = request.headers.get('Authorization')?.replace('Bearer ', '')
-  if (!token) return null
-  const session = db.get().sessions[token]
-  if (!session || new Date(session.expiresAt) < new Date()) return null
-  return { userId: session.userId, token, expiresAt: session.expiresAt }
+  return getSessionByToken(token)
 }
