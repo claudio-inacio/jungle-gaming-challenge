@@ -15,6 +15,54 @@ import { emitNftUpdated, emitOrderUpdated } from '../socket/emit'
 // cotação de gas real).
 const NETWORK_FEE = '0.01'
 
+// Tempo simulado de "processamento do pagamento" entre o pedido nascer
+// `pending` (resposta do POST) e a confirmação/recusa assíncrona chegar via
+// `order.updated` - nunca síncrono com a criação, senão a tela de
+// confirmação nunca dependeria de verdade do evento em tempo real.
+const ORDER_RESOLUTION_DELAY_MS = 1200
+
+/**
+ * Resolve um pedido `pending` pra `confirmed`/`declined` de forma assíncrona
+ * e emite `order.updated` nesse momento. Estoque só é consumido aqui (na
+ * confirmação de verdade) - nunca na criação, pra um pedido ainda pendente
+ * (ou recusado) não travar disponibilidade que outro comprador poderia usar.
+ * No cenário `order-timeout` esta função nunca é agendada: o pedido
+ * permanece `pending` indefinidamente, de propósito.
+ */
+function resolveOrder(orderId: string, userId: string, scenarioId: string): void {
+  const nextStatus: Order['status'] = scenarioId === 'payment-declined' ? 'declined' : 'confirmed'
+
+  db.update((d) => {
+    const stored = (d.orders[userId] ?? []).find((o) => o.id === orderId)
+    // Idempotente: só resolve um pedido que ainda está pending (evita
+    // reaplicar a transição se `resolveOrder` for chamado mais de uma vez).
+    if (!stored || stored.status !== 'pending') return
+
+    stored.status = nextStatus
+    if (nextStatus === 'confirmed') {
+      stored.transactionId = crypto.randomUUID()
+      stored.confirmedAt = new Date().toISOString()
+      for (const item of stored.items) {
+        const nft = d.nfts.find((n) => n.id === item.nftId)
+        if (nft) nft.available = Math.max(0, nft.available - item.quantity)
+      }
+    } else {
+      stored.declineReason = 'Pagamento recusado pela carteira'
+    }
+  })
+
+  const resolvedOrder = db.get().orders[userId]?.find((o) => o.id === orderId)
+  if (!resolvedOrder) return
+
+  emitOrderUpdated(resolvedOrder, userId)
+  if (resolvedOrder.status === 'confirmed') {
+    for (const item of resolvedOrder.items) {
+      const updatedNft = db.get().nfts.find((n) => n.id === item.nftId)
+      if (updatedNft) emitNftUpdated(updatedNft)
+    }
+  }
+}
+
 export const orderHandlers = [
   http.post('/api/orders', async ({ request }) =>
     withScenario(async () => {
@@ -106,41 +154,24 @@ export const orderHandlers = [
         confirmedAt: null,
       }
 
-      if (scenario.id === 'payment-declined') {
-        order.status = 'declined'
-        order.declineReason = 'Pagamento recusado pela carteira'
-        order.transactionId = null
-      } else if (scenario.id === 'order-timeout') {
-        order.status = 'pending'
-      } else {
-        order.status = 'confirmed'
-        order.transactionId = crypto.randomUUID()
-        order.confirmedAt = new Date().toISOString()
-      }
-
+      // O pedido nasce `pending`: a confirmação/recusa é sempre assíncrona
+      // (ver `resolveOrder`), nunca decidida aqui na resposta do POST.
       db.update((d) => {
         const list = d.orders[session.userId] ?? []
         list.push(order)
         d.orders[session.userId] = list
         d.idempotencyKeys[idempotencyKey] = { userId: session.userId, orderId: order.id, bodyHash }
-
-        // Estoque só é consumido quando o pagamento é confirmado de verdade -
-        // um pedido 'pending' (order-timeout) ou 'declined' nunca deve travar
-        // disponibilidade que outro comprador poderia usar.
-        if (order.status === 'confirmed') {
-          for (const item of order.items) {
-            const nft = d.nfts.find((n) => n.id === item.nftId)
-            if (nft) nft.available = Math.max(0, nft.available - item.quantity)
-          }
-        }
       })
 
       emitOrderUpdated(order, session.userId)
-      if (order.status === 'confirmed') {
-        for (const item of order.items) {
-          const updatedNft = db.get().nfts.find((n) => n.id === item.nftId)
-          if (updatedNft) emitNftUpdated(updatedNft)
-        }
+
+      // `order-timeout` simula o processamento nunca terminar: o pedido fica
+      // `pending` indefinidamente, de propósito.
+      if (scenario.id !== 'order-timeout') {
+        setTimeout(
+          () => resolveOrder(order.id, session.userId, scenario.id),
+          ORDER_RESOLUTION_DELAY_MS,
+        )
       }
 
       return HttpResponse.json(orderSchema.parse(order), { status: 201 })
