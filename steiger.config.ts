@@ -27,4 +27,19 @@ export default defineConfig([
     files: ['./src/features/login/**', './src/features/register/**', './src/features/logout/**'],
     rules: { 'fsd/insignificant-slice': 'off' },
   },
+  {
+    // hero/catalog-grid/promo-cards/blog-section são seções grandes e
+    // independentes da Home, extraídas em widgets próprios para manter
+    // HomePage.tsx como composição fina (convenção FSD do projeto) — não
+    // "pequenas demais para existir", só com um único consumidor porque a
+    // Home ainda é a única página composta até agora.
+    files: [
+      './src/widgets/hero/**',
+      './src/widgets/catalog-grid/**',
+      './src/widgets/promo-cards/**',
+      './src/widgets/blog-section/**',
+      './src/features/catalog-filters/**',
+    ],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
 ])
