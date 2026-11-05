@@ -168,6 +168,9 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () => {
       .toISOString()
 
     const id = `nft_${String(index + 1).padStart(3, '0')}`
+    const reviewCount = faker.number.int({ min: 0, max: 400 })
+    const attributes = buildAttributes()
+    const editions = buildEditions(id, price, index)
 
     const nft: NftDetail = {
       id,
@@ -176,25 +179,28 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () => {
       collectionId: collection.id,
       collectionName: collection.name,
       image: pickFromSequence(coverSequence, index),
+      editions,
+      reviewCount,
+      attributes,
       price,
       previousPrice,
       network,
       isRare: index % 5 === 0,
+      isFavorited: false,
       favorited: false,
       available: buildAvailability(edition.editionType, edition.totalSupply, soldOut),
       description: faker.lorem.paragraph(),
+      contractAddress: faker.finance.ethereumAddress(),
       images: Array.from(
         { length: faker.number.int({ min: 1, max: MAX_GALLERY_SIZE }) },
         (_, imgIndex) => pickFromSequence(gallerySequence, index + imgIndex),
       ),
       rating: {
         average: faker.number.float({ min: 3, max: 5, fractionDigits: 1 }),
-        count: faker.number.int({ min: 0, max: 400 }),
+        count: reviewCount,
       },
-      attributes: buildAttributes(),
       editionType: edition.editionType,
       totalSupply: edition.totalSupply,
-      editions: buildEditions(id, price, index),
       isNew: index % 7 === 0,
       isTrending: index % 6 === 0,
       createdAt,

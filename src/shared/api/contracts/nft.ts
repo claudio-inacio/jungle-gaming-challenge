@@ -40,6 +40,7 @@ export type NftSummary = z.infer<typeof nftSummarySchema>
 
 export const nftDetailSchema = nftSummarySchema.extend({
   description: z.string(),
+  contractAddress: z.string().min(1),
   images: z.array(z.string().min(1)).min(1),
   rating: z.object({
     average: z.number().min(0).max(5),
