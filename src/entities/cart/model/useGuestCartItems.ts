@@ -14,15 +14,17 @@ function isNotFoundError(error: unknown): boolean {
   return error instanceof ApiError && error.code === 'NOT_FOUND'
 }
 
-export function useGuestCartItems(): UseGuestCartItemsResult {
-  const savedItems = guestCartStorage.get()
+export function useGuestCartItems({
+  enabled = true,
+}: { enabled?: boolean } = {}): UseGuestCartItemsResult {
+  const savedItems = useMemo(() => (enabled ? guestCartStorage.get() : []), [enabled])
   const uniqueNftIds = useMemo(
     () => Array.from(new Set(savedItems.map((item) => item.nftId))),
     [savedItems],
   )
 
   const queries = useQueries({
-    queries: uniqueNftIds.map((nftId) => nftDetailQuery(nftId)),
+    queries: uniqueNftIds.map((nftId) => ({ ...nftDetailQuery(nftId), enabled })),
   })
 
   const notFoundNftIds = useMemo(
@@ -75,8 +77,8 @@ export function useGuestCartItems(): UseGuestCartItemsResult {
 
   const items = useMemo(() => buildCartItems(savedItems, nftById), [savedItems, nftById])
 
-  const isPending = queries.some((query) => query.isPending)
-  const isError = queries.some((query) => query.isError && !isNotFoundError(query.error))
+  const isPending = enabled && queries.some((query) => query.isPending)
+  const isError = enabled && queries.some((query) => query.isError && !isNotFoundError(query.error))
 
   return { items, isPending, isError }
 }
@@ -94,7 +96,7 @@ function buildCartItems(savedItems: GuestCartItem[], nftById: Map<string, NftDet
       editionLabel: edition.label,
       name: nft.name,
       tokenId: nft.tokenId,
-      image: nft.image,
+      imageUrl: nft.image,
       unitPrice: edition.price,
       quantity: savedItem.quantity,
       available: edition.available,

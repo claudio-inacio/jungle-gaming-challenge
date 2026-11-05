@@ -41,6 +41,6 @@ export type QuoteRequestItem = z.infer<typeof quoteRequestItemSchema>
 
 export const quoteRequestSchema = z.object({
   items: z.array(quoteRequestItemSchema).min(1),
-  couponCode: z.string().min(1).optional(),
+  couponCode: z.string().min(1).nullable().optional(),
 })
 export type QuoteRequest = z.infer<typeof quoteRequestSchema>

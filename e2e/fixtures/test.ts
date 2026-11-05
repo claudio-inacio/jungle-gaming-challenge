@@ -22,7 +22,7 @@ type ScenarioId =
 // desatualizada uma vez (v3 vs v4) e quebrou o reset de estado entre testes
 // sem erro visível - sempre que o bump de versão em `db/store.ts` mudar,
 // atualize aqui também.
-const DB_STORAGE_KEY = 'kurio-mocks-db:v5'
+const DB_STORAGE_KEY = 'kurio-mocks-db:v6'
 const SCENARIO_STORAGE_KEY = 'kurio-mocks-scenario'
 
 type ScenarioFixture = {
@@ -57,11 +57,32 @@ export const test = base.extend<Fixtures>({
     const scenarioFixture: ScenarioFixture = {
       use: async (id) => {
         await context.addInitScript(
-          (args: { dbKey: string; scenarioKey: string; scenarioId: ScenarioId }) => {
+          (args: {
+            dbKey: string
+            scenarioKey: string
+            scenarioId: ScenarioId
+            resetMarkerKey: string
+          }) => {
+            // `context.addInitScript` roda de novo em TODA navegação de documento
+            // (não só na primeira), inclusive `page.reload()` e um segundo
+            // `page.goto` depois de login - sem essa guarda, o reset apagaria o db
+            // simulado (sessões e carrinhos criados durante o teste inclusive) a
+            // cada navegação, quebrando qualquer fluxo que precise sobreviver a um
+            // refresh real. `sessionStorage` sobrevive a reloads/navegações da
+            // mesma aba mas não existe numa aba nova - então o marcador garante
+            // "reset só uma vez por teste", sem vazar estado entre testes (cada
+            // teste ganha página/contexto novos do Playwright).
+            if (window.sessionStorage.getItem(args.resetMarkerKey)) return
+            window.sessionStorage.setItem(args.resetMarkerKey, '1')
             window.localStorage.removeItem(args.dbKey)
             window.localStorage.setItem(args.scenarioKey, args.scenarioId)
           },
-          { dbKey: DB_STORAGE_KEY, scenarioKey: SCENARIO_STORAGE_KEY, scenarioId: id },
+          {
+            dbKey: DB_STORAGE_KEY,
+            scenarioKey: SCENARIO_STORAGE_KEY,
+            scenarioId: id,
+            resetMarkerKey: 'kurio-e2e-scenario-reset-done',
+          },
         )
       },
     }

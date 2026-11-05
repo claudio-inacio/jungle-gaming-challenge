@@ -1,22 +1,46 @@
 import { Link } from '@tanstack/react-router'
+import { cn } from 'cn'
 import { Text } from '@/shared/ui/Text'
 import { formatEth } from '@/shared/lib/eth'
 import type { NftSummary } from '@/shared/api'
 
-export function NftCard({ nft }: { nft: NftSummary }) {
+type NftCardSize = 'default' | 'cart-related'
+
+type Props = {
+  nft: NftSummary
+  size?: NftCardSize
+}
+
+const sizeClasses: Record<NftCardSize, { link: string; image: string }> = {
+  default: {
+    link: 'gap-1 lg:w-full lg:max-w-[258px] lg:p-[7px]',
+    image: 'aspect-[244/286]',
+  },
+  'cart-related': {
+    link: 'gap-2 w-[219px]',
+    image: 'h-[255px]',
+  },
+}
+
+export function NftCard({ nft, size = 'default' }: Props) {
+  const classes = sizeClasses[size]
+
   return (
     <Link
       to="/nft/$nftId"
       params={{ nftId: nft.id }}
-      className="flex min-w-0 flex-col gap-1 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl lg:w-full lg:max-w-[258px] lg:p-[7px]"
+      className={cn(
+        'flex min-w-0 flex-col outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl',
+        classes.link,
+      )}
     >
       <img
         src={nft.image}
         alt=""
         width={244}
-        height={286}
+        height={size === 'cart-related' ? 255 : 286}
         loading="lazy"
-        className="aspect-[244/286] w-full shrink-0 rounded-xl object-cover"
+        className={cn('w-full shrink-0 rounded-xl object-cover', classes.image)}
       />
       <Text variant="body-bold" className="line-clamp-1">
         {nft.name}

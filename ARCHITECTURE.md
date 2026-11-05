@@ -428,6 +428,7 @@ Limitações conhecidas:
   - **Regra de saída obrigatória**: nenhum `PendingLink` pode sobreviver até a entrega final nesses pontos (Perfil, Carteiras, Pedidos, Favoritos, Sair/logout) — são eliminatórios do desafio (fluxo principal só visual, regra eliminatória nº 2). Precisam virar operações reais (`<Link>` do TanStack Router ou mutations reais) nas fases de autenticação/conta/pedidos do roadmap. O logout em particular precisa limpar o cache privado do `QueryClient` por `userId` e desconectar o `socket.io-client` (regra eliminatória nº 4, exposição de dados entre usuários).
 - `SiteHeader` importava `cn` do pacote npm `cn` (equivalente ao que `@/shared/lib/utils` reexporta, ambos sobre `clsx`+`tailwind-merge`). Corrigido para `@/shared/lib/utils`, por consistência com o resto do projeto — padronização, não correção de bug funcional.
 - **Limite de 10 unidades por compra — decisão do time, não do enunciado.** `useEditionSelection` (`src/entities/nft/model/useEditionSelection.ts`, linha 15) calcula `maxQuantity` como `edition.totalSupply === null ? 10 : Math.min(edition.available, 10)`. Ou seja: mesmo numa edição "aberta" (`totalSupply: null`, sem limite real de supply) ou numa edição limitada com mais de 10 unidades disponíveis, o stepper de quantidade no painel de compra (`NftPurchasePanel`, `src/features/add-to-cart/ui/NftPurchasePanel.tsx`) trava em 10 por pedido. Essa trava não vem de `docs/challenge/README-challenge.md` nem da skill `challenge-context` — é uma decisão de escopo/UX do time, para evitar quantidades de teste absurdas (ex.: 500 unidades num único pedido) durante a demo. Registrado aqui para não ser confundido com um requisito do desafio nem "redescoberto" como bug.
+- **Resumo da carteira sem card de fundo — decisão de design confirmada no Figma, não um atalho.** `CartSummary` (`src/widgets/cart-summary/ui/CartSummary.tsx`) foi auditado visualmente contra o Figma real (fileKey `TWDGE5ytlsmMSUk7jX50Hw`, node `11:1278` no desktop, `16:360` no mobile) e, de propósito, **não** usa o padrão de card (`rounded-xl border border-border bg-card p-6`) adotado em outros blocos de conteúdo do projeto (ex.: `FilterSidebar`, cards de NFT). No desktop é só tipografia direta sobre o fundo da página, largura fixa de 332px via o token `--spacing-cart-summary-width` (`src/index.css`, calculado como `1200 − 782 (tabela) − 86 (gap) = 332`). No mobile ele é um bottom sheet: `bg-card`, cantos arredondados só no topo (`rounded-t-[40px]`), sem borda. Antes desta auditoria o componente tinha sido implementado com card em ambos os breakpoints — foi corrigido para bater com o Figma. Registrado aqui para que uma tarefa futura não "corrija" isso de volta para o padrão de card por engano: a ausência de card aqui é intencional e confirmada visualmente, não uma pendência.
 - **Tipografia 9–10px: nenhum aumento por legibilidade.** `design-tokens.md` define `Tiny/10 Medium` e `Tiny/9 Bold` como estilos oficiais do design system e alerta que "textos de 9–10px podem prejudicar legibilidade; se aumentar, registre no ARCHITECTURE.md". Conferido nos três usos existentes no código: a variante `tiny` de `src/shared/ui/typography.ts` usa `text-[10px]` (bate com `Tiny/10 Medium`), o badge de quantidade do carrinho no header (`src/widgets/header/ui/SiteHeader.tsx`) usa `text-[10px]`, e a pill "Carteiras compatíveis" do footer (`src/widgets/footer/ui/CompatibleWallets.tsx`) usa `text-[9px]` (bate com `Tiny/9 Bold`). Em nenhum dos três o tamanho foi aumentado além do que o Figma especifica — decisão consciente de manter os 9–10px como especificado, sem ajuste por legibilidade, até que uma revisão de acessibilidade (ex.: teste de zoom 200% ou contraste) aponte necessidade real de mudança, caso em que o ajuste deve ser registrado aqui com before/depois.
 
 ## Estados não desenhados no Figma
@@ -453,6 +454,8 @@ Limitações conhecidas:
 | `NftCardSkeleton`/`CartSummarySkeleton` — estrutura e dimensões                                                                              | O componente real (`NftCard`, `CartSummary`) ainda não existe no projeto (fases futuras do roadmap); estrutura baseada na descrição textual de `figma-frames.md` (card: imagem, nome, preço, preço riscado, badge "RARO", favoritar no mobile; resumo: cupom, subtotal, desconto, taxa de rede, total) | Skeletons expandidos sem confirmação de dimensões em px contra o Figma                                                                                                                                                                                                                           | Pendente de validação — ao criar os componentes reais em `entities/nft`/`entities/cart`, mover os skeletons pra lá no mesmo commit, revalidando a estrutura contra o componente real |
 | `AccountSidebar` — item "Pedidos" e reclassificação dos demais itens                                                                         | `figma-frames.md` descreve a sidebar completa como "Meu perfil, Carteiras, Pedidos, Favoritos, Atividade ⚪, Downloads ⚪, Suporte ⚪, Sair"                                                                                                                                                           | "Dados do perfil"/"Carteiras" são itens reais (ainda sem componente de link, não navegáveis); "Pedidos" e "Lista de interesse" (Favoritos) são `PendingLink`; "Atividade"/"Ofertas"/"Arquivos baixados"/"Suporte" continuam `OutOfScopeLink` (fora do escopo do desafio); "Sair" é `PendingLink` | Em progresso — `PendingLink` precisa virar operação real nas fases de conta/pedidos                                                                                                  |
 | "Minha coleção" no footer                                                                                                                    | Não consta no enunciado (`README-challenge.md`) nem em `figma-frames.md`; sem contrato REST correspondente                                                                                                                                                                                             | Mantido como `OutOfScopeLink`, por cautela, na coluna "Meu perfil" do footer                                                                                                                                                                                                                     | A confirmar — item sem fonte clara no requisito                                                                                                                                      |
+| Ícone de lixeira no mobile (`CartTableMobile`, node `16:360`)                                                                                | No mockup, o ícone de lixeira aparece sobreposto ao botão "+" apenas no 3º item ("Ivory Baron") — lido como erro de edição do próprio arquivo Figma, não como um estado desenhado de propósito                                                                                                         | `src/widgets/cart-table/ui/CartTableMobile.tsx` mantém +/- e remover explícitos e acessíveis em todos os itens, igual ao padrão dos demais                                                                                                                                                       | Pendente de validação — leitura ("erro de edição" vs. "estado intencional") sem 100% de certeza; revisar quando possível                                                             |
+| Botão "Continuar explorando" no mobile (`CartSummary`, bottom sheet)                                                                         | Estilo/posicionamento desse botão especificamente na variante mobile não foi confirmado contra o Figma na última auditoria — só o container do resumo (bottom sheet) foi validado                                                                                                                      | `Button variant="ghost"` dentro do `<aside>` do bottom sheet, mesmo componente usado no desktop                                                                                                                                                                                                  | Pendente de validação                                                                                                                                                                |
 
 ## Substituições de assets
 
@@ -475,6 +478,52 @@ Ajustes feitos nesta rodada, nos primitivos de honestidade de escopo e nos widge
 - `SiteFooter`: cada coluna de links é um `<nav>` com `aria-label` igual ao título da coluna; campo de newsletter com `<label className="sr-only">` associado via `htmlFor`/`id`; ícones de redes sociais com `aria-hidden="true"` dentro do `OutOfScopeLink`, que já carrega o `aria-label` da rede no próprio link.
 
 Ajustes específicos de telas de negócio (focus trap em Dialog/Sheet, `aria-live` em mutations, estados não dependentes só de cor em preço riscado/badges) serão documentados aqui conforme implementados, por `ui-dev`/`quality-auditor`.
+
+## Dados de teste (fixtures determinísticas)
+
+Referência rápida dos valores reais usados pelos testes e2e e no dia a dia de desenvolvimento, para quem for escrever um novo teste não precisar garimpar o código.
+
+### Cupons (`src/mocks/fixtures/coupons.ts`)
+
+| Código          | Desconto | Status    | Comportamento                                           |
+| --------------- | -------- | --------- | ------------------------------------------------------- |
+| `KURIO10`       | 10%      | `valid`   | Único cupom que aplica com sucesso.                     |
+| `KURIO-EXPIRED` | 15%      | `expired` | Sempre retorna `COUPON_EXPIRED`, nunca aplica.          |
+| qualquer outro  | —        | —         | Não existe na fixture; sempre retorna `COUPON_INVALID`. |
+
+### Usuários de demonstração (`e2e/fixtures/test.ts`, `DEMO_USERS`)
+
+| Chave         | E-mail                          | Senha       |
+| ------------- | ------------------------------- | ----------- |
+| `collector-a` | `ana.colecionadora@kurio.test`  | `Kurio@123` |
+| `collector-b` | `bruno.colecionador@kurio.test` | `Kurio@123` |
+
+### Fixtures de NFT determinísticas (`src/mocks/fixtures/nfts.ts`)
+
+40 NFTs gerados deterministicamente via `faker` com seeds isoladas por etapa (`withSeed`, `src/mocks/fixtures/seed.ts`, que chama `faker.seed(n)` antes de cada bloco): `42` para os dados base (nome, preço, coleção, rede, edições...), `43` para a narrativa (`longDescription`/`royaltyInfo`) e `44` para as sequências de artwork (capa/galeria) — mesmos nomes/preços entre execuções. Qualquer chamada nova ao `faker` inserida **no meio** de um desses blocos desloca a sequência inteira do PRNG daquele bloco, mudando todos os valores gerados daí em diante dentro do mesmo `withSeed` — já aconteceu nesta sessão (ver comentário em `e2e/specs/01-catalog.spec.ts`, que fixa nomes/preços recalculados manualmente a partir de `fixtureNfts`).
+
+`nft_001` tem a edição `1/10` que nasce esgotada de propósito (`SOLD_OUT_EDITION_NFT_INDEX = 0`, `SOLD_OUT_EDITION_LABEL = '1/10'`), um caso determinístico e estável entre execuções usado para testar o cenário de "edição esgotada" sem depender de ação do usuário.
+
+### Cenários MSW reproduzíveis (`src/mocks/scenarios/registry.ts`)
+
+Ativados via query param `?scenario=<id>`, `localStorage` (`kurio-mocks-scenario`) ou pela fixture `scenario` do Playwright (`e2e/fixtures/test.ts`):
+
+| Cenário            | Descrição                                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `success`          | Caminho feliz, sem latência extra.                                                                    |
+| `slow-network`     | Latência de 800–2000ms em toda request.                                                               |
+| `offline`          | Toda request falha como erro de rede.                                                                 |
+| `coupon-invalid`   | Cupom `KURIO10` (normalmente válido) responde `COUPON_INVALID` em `/quote` e `/orders`.               |
+| `coupon-expired`   | Cupom `KURIO10` (normalmente válido) responde `COUPON_EXPIRED` em `/quote` e `/orders`.               |
+| `payment-declined` | Pedido criado nasce com status `declined` (pagamento recusado pela carteira).                         |
+| `order-timeout`    | Pedido criado fica `pending` indefinidamente (simula timeout na confirmação).                         |
+| `quote-changed`    | Toda criação de pedido falha com `QUOTE_CHANGED` (preço mudou desde a cotação).                       |
+| `edition-sold-out` | Toda criação de pedido falha com `AVAILABILITY_CONFLICT` (edição esgotada).                           |
+| `mutation-failure` | Favoritar/desfavoritar falha com `TRANSIENT` (simula erro de mutation para testar rollback otimista). |
+
+### Carrinho de visitante (`kurio-guest-cart` em `localStorage`)
+
+Formato persistido por `src/entities/cart/model/guest-cart-storage.ts`: `{ nftId, editionId, quantity }[]`. Hoje não existe nenhum botão de "adicionar ao carrinho" funcional para visitante na UI — o botão "COMPRAR" sempre exige login antes de chegar a tocar o carrinho. Testes e2e que precisam de um carrinho de visitante já populado semeiam essa chave diretamente via `page.addInitScript`/`page.evaluate` (ver `e2e/specs/03-cart.spec.ts`), em vez de passar por um fluxo de UI que não existe.
 
 ## ADRs
 

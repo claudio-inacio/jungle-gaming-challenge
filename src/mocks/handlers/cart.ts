@@ -43,7 +43,7 @@ function buildCart(userId: string): {
       editionLabel: edition.label,
       tokenId: nft.tokenId,
       name: nft.name,
-      image: nft.image,
+      imageUrl: nft.image,
       unitPrice: edition.price,
       quantity: entry.quantity,
       available: edition.available,

@@ -43,14 +43,14 @@ function MobileTabBar() {
           <li aria-hidden="true" className="flex-1" />
 
           <li className="flex flex-1 justify-center">
-            <button
-              type="button"
+            <Link
+              to="/cart"
               aria-label="Carrinho"
-              disabled
-              className="flex flex-col items-center justify-center gap-1 text-muted-foreground disabled:cursor-not-allowed"
+              activeProps={{ className: 'text-primary', 'aria-current': 'page' }}
+              className="flex flex-col items-center justify-center gap-1 text-muted-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               <ShoppingCart aria-hidden="true" className="size-5 fill-current" />
-            </button>
+            </Link>
           </li>
 
           <li className="flex flex-1 justify-center">

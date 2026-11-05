@@ -1,57 +1,56 @@
-import { Trash2 } from 'lucide-react'
+import { Loader2, Minus, Plus, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Text } from '@/shared/ui/Text'
 import { formatEth, mulEth } from '@/shared/lib/eth'
-
-import type { CartItem } from '@/shared/api'
 import { useUpdateCartItem } from '@/entities/cart'
+import type { CartItem } from '@/shared/api'
 
 export function CartTable({ items }: { items: CartItem[] }) {
   const updateItem = useUpdateCartItem()
 
   return (
-    <table className="w-full border-collapse">
-      <thead>
-        <tr className="border-b border-border text-left text-muted-foreground text-sm">
-          <th className="py-3 font-normal" scope="col">
-            NFT
-          </th>
-          <th className="py-3 font-normal" scope="col">
-            Preço
-          </th>
-          <th className="py-3 font-normal" scope="col">
-            Edições
-          </th>
-          <th className="py-3 font-normal text-right" scope="col">
-            Total
-          </th>
-          <th className="py-3" scope="col">
-            <span className="sr-only">Remover</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+    <div>
+      <div className="grid grid-cols-[250px_77px_75px_87px_24px] items-center gap-[61px] border-b border-border pb-4 pr-6 text-base text-foreground">
+        <span className="font-bold">NFTs</span>
+        <span className="font-medium">Preço</span>
+        <span className="font-bold">Edições</span>
+        <span className="font-medium">Total</span>
+        <span className="sr-only">Remover</span>
+      </div>
+      {/* Sem divisor entre linhas, só gap-3 (12px) — confirmado no node 11:1278 do Figma. */}
+      <div className="flex flex-col gap-3 pt-3">
         {items.map((item) => {
           const atLimit = item.quantity >= item.available
+          const isRemoving =
+            updateItem.isPending &&
+            updateItem.variables?.nftId === item.nftId &&
+            updateItem.variables?.editionId === item.editionId &&
+            updateItem.variables?.quantity === 0
           return (
-            <tr key={`${item.nftId}-${item.editionId}`} className="border-b border-border/60">
-              <td className="py-4 flex items-center gap-3">
+            <div
+              key={`${item.nftId}-${item.editionId}`}
+              className="grid h-[70px] grid-cols-[250px_77px_75px_87px_24px] items-center gap-[61px] bg-card pr-6"
+            >
+              <div className="flex items-center gap-4">
+                {' '}
+                {/* imagem→texto: 16px, confirmado no Figma */}
                 <img
-                  src={item.image}
+                  src={item.imageUrl}
                   alt=""
-                  width={56}
-                  height={56}
-                  className="rounded-lg object-cover"
+                  width={70}
+                  height={70}
+                  className="rounded-xl object-cover"
                 />
                 <div>
                   <Text variant="body-bold">{item.name}</Text>
                   <Text variant="caption">ID do token: #{item.tokenId}</Text>
                 </div>
-              </td>
-              <td>
-                <Text variant="body">{formatEth(item.unitPrice)}</Text>
-              </td>
-              <td>
-                <div className="flex items-center border border-border rounded-full w-fit">
+              </div>
+              <Text variant="body">{formatEth(item.unitPrice)}</Text>
+              <div>
+                <div className="flex items-center gap-3">
+                  {' '}
+                  {/* 12px entre botão e número, real */}
                   <button
                     type="button"
                     aria-label={`Diminuir quantidade de ${item.name}`}
@@ -62,11 +61,11 @@ export function CartTable({ items }: { items: CartItem[] }) {
                         quantity: item.quantity - 1,
                       })
                     }
-                    className="px-3 py-1"
+                    className="flex h-[30px] w-5 items-center justify-center rounded-[20px] border border-background bg-primary text-primary-foreground shadow-[0px_4px_6px_rgba(20,13,10,0.15)]"
                   >
-                    −
+                    <Minus className="size-3.5" aria-hidden="true" />
                   </button>
-                  <span aria-live="polite" className="px-2 tabular-nums">
+                  <span aria-live="polite" className="tabular-nums">
                     {item.quantity}
                   </span>
                   <button
@@ -80,9 +79,9 @@ export function CartTable({ items }: { items: CartItem[] }) {
                         quantity: item.quantity + 1,
                       })
                     }
-                    className="px-3 py-1 disabled:opacity-40"
+                    className="flex h-[30px] w-5 items-center justify-center rounded-[20px] border border-background bg-primary text-primary-foreground shadow-[0px_4px_6px_rgba(20,13,10,0.15)] disabled:opacity-40"
                   >
-                    +
+                    <Plus className="size-3.5" aria-hidden="true" />
                   </button>
                 </div>
                 {atLimit && (
@@ -90,25 +89,32 @@ export function CartTable({ items }: { items: CartItem[] }) {
                     Limite disponível atingido
                   </Text>
                 )}
-              </td>
-              <td className="text-right">
-                <Text variant="body-bold">{formatEth(mulEth(item.unitPrice, item.quantity))}</Text>
-              </td>
-              <td>
-                <button
-                  type="button"
-                  aria-label={`Remover ${item.name} do carrinho`}
-                  onClick={() =>
-                    updateItem.mutate({ nftId: item.nftId, editionId: item.editionId, quantity: 0 })
-                  }
-                >
-                  <Trash2 className="size-4 text-muted-foreground" aria-hidden="true" />
-                </button>
-              </td>
-            </tr>
+              </div>
+              <Text variant="body-bold">{formatEth(mulEth(item.unitPrice, item.quantity))}</Text>
+              <button
+                type="button"
+                aria-label={`Remover ${item.name} do carrinho`}
+                disabled={isRemoving}
+                onClick={() =>
+                  updateItem.mutate(
+                    { nftId: item.nftId, editionId: item.editionId, quantity: 0 },
+                    { onSuccess: () => toast.success('Item removido do carrinho') },
+                  )
+                }
+              >
+                {isRemoving ? (
+                  <Loader2
+                    className="size-6 animate-spin text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <Trash2 className="size-6 text-muted-foreground" aria-hidden="true" />
+                )}
+              </button>
+            </div>
           )
         })}
-      </tbody>
-    </table>
+      </div>
+    </div>
   )
 }

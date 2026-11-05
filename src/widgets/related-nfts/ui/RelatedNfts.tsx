@@ -1,14 +1,43 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { cn } from 'cn'
 import { nftListQuery, NftCard } from '@/entities/nft'
 import { NftCardSkeleton } from '@/shared/ui/NftCardSkeleton'
 import { useMediaQuery } from '@/shared/lib/hooks'
 
 const MAX_RELATED_ITEMS = 10
 
+type RelatedNftsVariant = 'detail' | 'cart'
+
 type Props = {
   collectionId: string
   currentNftId: string
+  variant?: RelatedNftsVariant
+}
+
+type VariantConfig = {
+  title: string
+  cardSize: 'default' | 'cart-related'
+  gridGapClassName: string
+  columnWidth: string
+  showDivider: boolean
+}
+
+const variantConfig: Record<RelatedNftsVariant, VariantConfig> = {
+  detail: {
+    title: 'Mais desta coleção',
+    cardSize: 'default',
+    gridGapClassName: 'gap-4',
+    columnWidth: 'minmax(0, 15.25rem)',
+    showDivider: false,
+  },
+  cart: {
+    title: 'Colecionadores também viram',
+    cardSize: 'cart-related',
+    gridGapClassName: 'gap-related-gap',
+    columnWidth: 'minmax(0, 219px)',
+    showDivider: true,
+  },
 }
 
 function usePerPage() {
@@ -20,7 +49,8 @@ function usePerPage() {
   return 2
 }
 
-export function RelatedNfts({ collectionId, currentNftId }: Props) {
+export function RelatedNfts({ collectionId, currentNftId, variant = 'detail' }: Props) {
+  const config = variantConfig[variant]
   const perPage = usePerPage()
   const [page, setPage] = useState(0)
 
@@ -37,10 +67,15 @@ export function RelatedNfts({ collectionId, currentNftId }: Props) {
   if (query.isPending) {
     return (
       <section>
-        <h2 className="mb-4 text-lg font-bold">Mais desta coleção</h2>
+        <h2 className="mb-4 text-lg font-bold">{config.title}</h2>
+        {config.showDivider && <div aria-hidden="true" className="border-t border-border" />}
         <div
-          className="grid justify-center gap-4"
-          style={{ gridTemplateColumns: `repeat(${perPage}, minmax(0, 15.25rem))` }}
+          className={cn(
+            'grid justify-center',
+            config.gridGapClassName,
+            config.showDivider && 'mt-8',
+          )}
+          style={{ gridTemplateColumns: `repeat(${perPage}, ${config.columnWidth})` }}
         >
           {Array.from({ length: perPage }, (_, index) => (
             <NftCardSkeleton key={index} />
@@ -68,13 +103,14 @@ export function RelatedNfts({ collectionId, currentNftId }: Props) {
 
   return (
     <section>
-      <h2 className="mb-4 text-lg font-bold">Mais desta coleção</h2>
+      <h2 className="mb-4 text-lg font-bold">{config.title}</h2>
+      {config.showDivider && <div aria-hidden="true" className="border-t border-border" />}
       <div
-        className="grid justify-center gap-4"
-        style={{ gridTemplateColumns: `repeat(${visibleItems.length}, minmax(0, 15.25rem))` }}
+        className={cn('grid justify-center', config.gridGapClassName, config.showDivider && 'mt-8')}
+        style={{ gridTemplateColumns: `repeat(${visibleItems.length}, ${config.columnWidth})` }}
       >
         {visibleItems.map((nft) => (
-          <NftCard key={nft.id} nft={nft} />
+          <NftCard key={nft.id} nft={nft} size={config.cardSize} />
         ))}
       </div>
 

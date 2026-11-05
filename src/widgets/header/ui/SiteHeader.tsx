@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 import { LogIn, LogOut, Search, ShoppingCart, SlidersHorizontal } from 'lucide-react'
 import { useSession } from '@/entities/session'
 import { toggleMobileFilterSheet, useMobileFilterSheetOpen } from '@/features/catalog-filters'
@@ -7,6 +7,7 @@ import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Container } from '@/shared/ui/container'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
+import { cn } from '@/shared/lib/utils'
 
 type SiteHeaderProps = {
   itemCount: number
@@ -16,6 +17,9 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
   const { user, isAuthenticated } = useSession()
   const logout = useLogout()
   const isMobileFilterOpen = useMobileFilterSheetOpen()
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const isHomeActive = pathname === '/'
+  const isMarketplaceActive = pathname === '/cart' || pathname.startsWith('/nft/')
 
   return (
     <header className="w-full bg-background">
@@ -30,12 +34,25 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
         <nav aria-label="Principal" className="hidden items-center gap-10 lg:flex">
           <Link
             to="/"
-            className="text-base font-bold text-accent-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={cn(
+              'text-base focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+              isHomeActive ? 'font-bold text-accent-foreground' : 'font-normal text-foreground/70',
+            )}
             activeProps={{ 'aria-current': 'page' }}
           >
             Início
           </Link>
-          <span className="text-base font-normal text-foreground/70">Mercado</span>
+          <span
+            aria-current={isMarketplaceActive ? 'page' : undefined}
+            className={cn(
+              'text-base',
+              isMarketplaceActive
+                ? 'font-bold text-accent-foreground'
+                : 'font-normal text-foreground/70',
+            )}
+          >
+            Mercado
+          </span>
           <OutOfScopeLink className="text-base font-normal">Criadores</OutOfScopeLink>
           <OutOfScopeLink className="text-base font-normal">Aprenda</OutOfScopeLink>
         </nav>
@@ -45,17 +62,23 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
             <Search aria-hidden="true" className="size-5" />
           </Button>
 
-          <span className="relative inline-flex">
-            <ShoppingCart aria-hidden="true" className="size-6 text-foreground" />
-            {itemCount > 0 ? (
-              <Badge
-                aria-label={`${itemCount} ${itemCount === 1 ? 'item' : 'itens'} no carrinho`}
-                className="absolute -top-2 -right-2 h-4 min-w-4 justify-center rounded-full px-1 text-[10px]"
-              >
-                {itemCount}
-              </Badge>
-            ) : null}
-          </span>
+          {isAuthenticated && (
+            <Link
+              to="/cart"
+              aria-label="Ver carrinho"
+              className="relative inline-flex outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            >
+              <ShoppingCart aria-hidden="true" className="size-6 text-foreground" />
+              {itemCount > 0 ? (
+                <Badge
+                  aria-label={`${itemCount} ${itemCount === 1 ? 'item' : 'itens'} no carrinho`}
+                  className="absolute -top-2 -right-2 h-4 min-w-4 justify-center rounded-full px-1 text-[10px]"
+                >
+                  {itemCount}
+                </Badge>
+              ) : null}
+            </Link>
+          )}
 
           {isAuthenticated ? (
             <div className="flex items-center gap-3">

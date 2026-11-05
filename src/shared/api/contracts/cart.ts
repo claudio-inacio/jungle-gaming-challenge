@@ -9,7 +9,7 @@ export const cartItemSchema = z.object({
   tokenId: z.string(),
   // Mesmo padrão de `nftSummarySchema`/`orderSchema.image` (caminho relativo em
   // `public/img`, não URL absoluta) - `.url()` quebraria com o dado real do catálogo.
-  image: z.string().min(1),
+  imageUrl: z.string().min(1),
   unitPrice: ethAmountSchema,
   quantity: z.number().int().min(1),
   available: z.number().int().min(0),
