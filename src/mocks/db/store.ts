@@ -27,7 +27,9 @@ export interface DbState {
   wallets: Record<string, Wallet[]>
 }
 
-const STORAGE_KEY = 'kurio-mocks-db'
+// v2: fixtures passaram a usar imagens locais em vez de picsum.photos; o sufixo
+// força sessões com DB persistido na v1 a reidratar a partir das novas fixtures.
+const STORAGE_KEY = 'kurio-mocks-db:v2'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
 // um Map em memória para o processo continuar funcionando sem persistência real.

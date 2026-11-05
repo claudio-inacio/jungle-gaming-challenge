@@ -14,6 +14,17 @@ const COLLECTIONS = [
 
 const NETWORKS = ['ethereum', 'polygon', 'solana'] as const
 
+// Pool fixo de artes reais exportadas do Figma (public/img), reaproveitadas em ciclo
+// para os 40 NFTs fake — evita dependência de serviço externo (picsum).
+const ARTWORK_POOL = [
+  '/img/desktop/nft-artwork-04.png',
+  '/img/desktop/nft-artwork-09.png',
+  '/img/desktop/nft-artwork-18.png',
+  '/img/mobile/mobile-nft-artwork-4.png',
+  '/img/mobile/mobile-nft-artwork-5.png',
+  '/img/mobile/mobile-nft-artwork-6.png',
+] as const
+
 const EDITIONS: Array<{ label: string; editionType: NftEditionType; totalSupply: number | null }> =
   [
     { label: '1/1', editionType: 'unique', totalSupply: 1 },
@@ -88,7 +99,7 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () =>
       name: buildName(),
       collectionId: collection.id,
       collectionName: collection.name,
-      image: `https://picsum.photos/seed/kurio-nft-${index + 1}/600/600`,
+      image: pickCyclic(ARTWORK_POOL, index),
       price,
       previousPrice,
       network,
@@ -96,9 +107,8 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () =>
       favorited: false,
       available: buildAvailability(edition.editionType, edition.totalSupply, soldOut),
       description: faker.lorem.paragraph(),
-      images: Array.from(
-        { length: faker.number.int({ min: 1, max: 4 }) },
-        (_, imgIndex) => `https://picsum.photos/seed/kurio-nft-${index + 1}-${imgIndex}/900/900`,
+      images: Array.from({ length: faker.number.int({ min: 1, max: 4 }) }, (_, imgIndex) =>
+        pickCyclic(ARTWORK_POOL, index + imgIndex),
       ),
       rating: {
         average: faker.number.float({ min: 3, max: 5, fractionDigits: 1 }),

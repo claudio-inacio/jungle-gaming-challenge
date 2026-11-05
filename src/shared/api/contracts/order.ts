@@ -15,7 +15,7 @@ export const orderItemSchema = z.object({
   nftId: idSchema,
   tokenId: z.string(),
   name: z.string(),
-  image: z.string().url(),
+  image: z.string().min(1),
   unitPrice: ethAmountSchema,
   quantity: z.number().int().min(1),
   subtotal: ethAmountSchema,

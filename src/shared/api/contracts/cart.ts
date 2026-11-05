@@ -5,7 +5,7 @@ export const cartItemSchema = z.object({
   nftId: idSchema,
   tokenId: z.string(),
   name: z.string(),
-  image: z.string().url(),
+  image: z.string().min(1),
   unitPrice: ethAmountSchema,
   quantity: z.number().int().min(1),
   available: z.number().int().min(0),

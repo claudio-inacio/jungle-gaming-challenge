@@ -16,7 +16,7 @@ export const nftSummarySchema = z.object({
   name: z.string(),
   collectionId: idSchema,
   collectionName: z.string(),
-  image: z.string().url(),
+  image: z.string().min(1),
   price: ethAmountSchema,
   previousPrice: ethAmountSchema.nullable(),
   network: networkSchema,
@@ -28,7 +28,7 @@ export type NftSummary = z.infer<typeof nftSummarySchema>
 
 export const nftDetailSchema = nftSummarySchema.extend({
   description: z.string(),
-  images: z.array(z.string().url()).min(1),
+  images: z.array(z.string().min(1)).min(1),
   rating: z.object({
     average: z.number().min(0).max(5),
     count: z.number().int().min(0),
