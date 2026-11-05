@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { LogIn, LogOut, Search, ShoppingCart, SlidersHorizontal } from 'lucide-react'
 import { useSession } from '@/entities/session'
+import { toggleMobileFilterSheet, useMobileFilterSheetOpen } from '@/features/catalog-filters'
 import { LogoutDialog, useLogout } from '@/features/logout'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
@@ -14,6 +15,7 @@ type SiteHeaderProps = {
 function SiteHeader({ itemCount }: SiteHeaderProps) {
   const { user, isAuthenticated } = useSession()
   const logout = useLogout()
+  const isMobileFilterOpen = useMobileFilterSheetOpen()
 
   return (
     <header className="w-full bg-background">
@@ -103,6 +105,9 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
           <button
             type="button"
             aria-label="Abrir filtros e opções avançadas"
+            aria-expanded={isMobileFilterOpen}
+            aria-controls="mobile-filter-sheet"
+            onClick={toggleMobileFilterSheet}
             className="bg-gradient-accent flex size-11 shrink-0 items-center justify-center rounded-2xl text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <SlidersHorizontal aria-hidden="true" className="size-5" />

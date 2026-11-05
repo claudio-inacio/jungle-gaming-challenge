@@ -57,7 +57,7 @@ function FilterSidebar({ collections, rangeMin = 0, rangeMax = 20 }: FilterSideb
   }
 
   return (
-    <aside className="w-sidebar-width shrink-0">
+    <aside className="w-full lg:w-sidebar-width lg:shrink-0">
       <div className="flex flex-col gap-6 rounded-md border border-border-soft bg-card p-6">
         <fieldset className="flex flex-col gap-3">
           <legend className="text-base font-bold text-foreground">Coleções</legend>
@@ -103,7 +103,13 @@ function FilterSidebar({ collections, rangeMin = 0, rangeMax = 20 }: FilterSideb
             <span>{formatEthNumber(localRange[0])} ETH</span>
             <span>{formatEth(localRange[1].toFixed(2), 2)}</span>
           </div>
-          <Button type="button" variant="outline" size="sm" onClick={handleApplyPriceRange}>
+          <Button
+            type="button"
+            variant="default"
+            size="sm"
+            className="self-start"
+            onClick={handleApplyPriceRange}
+          >
             Aplicar
           </Button>
         </fieldset>
