@@ -10,7 +10,7 @@ import { queryKeys } from '@/shared/api/query-keys'
 import { ApiError } from '@/shared/api/contracts/error'
 
 const registerFormSchema = registerRequestSchema
-  .extend({ confirmPassword: z.string().min(1) })
+  .extend({ confirmPassword: z.string().min(1, 'Confirme sua senha') })
   .refine((values) => values.password === values.confirmPassword, {
     message: 'As senhas não coincidem',
     path: ['confirmPassword'],

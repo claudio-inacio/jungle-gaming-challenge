@@ -20,14 +20,17 @@ export const sessionSchema = z.object({
 export type Session = z.infer<typeof sessionSchema>
 
 export const loginRequestSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+  email: z.string().min(1, 'Informe seu e-mail').email('E-mail inválido'),
+  password: z.string().min(1, 'Informe sua senha'),
 })
 export type LoginRequest = z.infer<typeof loginRequestSchema>
 
 export const registerRequestSchema = z.object({
-  username: z.string().min(3).max(24),
-  email: z.string().email(),
-  password: z.string().min(8),
+  username: z
+    .string()
+    .min(3, 'Usuário deve ter pelo menos 3 caracteres')
+    .max(24, 'Usuário deve ter no máximo 24 caracteres'),
+  email: z.string().min(1, 'Informe seu e-mail').email('E-mail inválido'),
+  password: z.string().min(8, 'Senha deve ter pelo menos 8 caracteres'),
 })
 export type RegisterRequest = z.infer<typeof registerRequestSchema>
