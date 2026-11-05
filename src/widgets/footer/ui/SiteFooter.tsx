@@ -92,7 +92,7 @@ function SiteFooter() {
             <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
               {HIGHLIGHTS.map((highlight, index) => (
                 <div key={highlight.title} className="flex flex-1 items-stretch gap-8">
-                  <div className="flex flex-1 flex-col items-start gap-3">
+                  <div className="flex flex-1 items-center gap-4 lg:flex-col lg:items-start lg:gap-3">
                     <span
                       aria-hidden="true"
                       className="flex size-[74px] shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
@@ -101,10 +101,12 @@ function SiteFooter() {
                         {highlight.glyph}
                       </span>
                     </span>
-                    <h2 className="text-[17px] font-bold text-foreground">{highlight.title}</h2>
-                    <p className="max-w-[23ch] text-sm leading-[22px] text-muted-foreground">
-                      {highlight.description}
-                    </p>
+                    <div className="flex flex-col gap-1 lg:gap-3">
+                      <h2 className="text-[17px] font-bold text-foreground">{highlight.title}</h2>
+                      <p className="text-sm leading-[22px] text-muted-foreground lg:max-w-[23ch]">
+                        {highlight.description}
+                      </p>
+                    </div>
                   </div>
                   {index < HIGHLIGHTS.length - 1 && (
                     <Separator
