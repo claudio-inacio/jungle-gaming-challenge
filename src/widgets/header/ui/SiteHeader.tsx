@@ -62,7 +62,7 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
               </span>
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 className="gap-1.5 text-destructive hover:text-destructive"
                 onClick={() => logout.mutate()}
