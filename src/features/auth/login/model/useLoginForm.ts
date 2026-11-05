@@ -9,8 +9,6 @@ import { setAccessToken } from '@/shared/api/http'
 import { queryKeys } from '@/shared/api/query-keys'
 import { ApiError } from '@/shared/api/contracts/error'
 
-const SIMULATED_LOGIN_DELAY_MS = 3000
-
 export function useLoginForm(redirectTo?: string) {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -21,10 +19,7 @@ export function useLoginForm(redirectTo?: string) {
   })
 
   const mutation = useMutation({
-    mutationFn: async (values: LoginRequest) => {
-      await new Promise((resolve) => setTimeout(resolve, SIMULATED_LOGIN_DELAY_MS))
-      return login(values)
-    },
+    mutationFn: login,
     onSuccess: (session) => {
       setAccessToken(session.accessToken)
       tokenStorage.set(session.accessToken)
