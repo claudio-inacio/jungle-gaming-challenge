@@ -2,16 +2,16 @@ import { Text } from '@/shared/ui/Text'
 import { Button } from '@/shared/ui/button'
 import { Badge } from '@/shared/ui/badge'
 import { formatEth } from '@/shared/lib/eth'
-import { useEditionSelection } from '@/entities/nft'
 import { FavoriteButton } from '@/features/toggle-favorite'
 import { useAddToCart } from '../model/useAddToCart'
-import type { Nft } from '@/shared/api/contracts/nft'
+import type { NftSummary } from '@/shared/api/contracts/nft'
+import { useEditionSelection } from '@/entities/nft/model/useEditionSelection'
 
 export function NftPurchasePanel({
   nft,
   initialEditionId,
 }: {
-  nft: Nft
+  nft: NftSummary
   initialEditionId?: string
 }) {
   const { edition, quantity, isSoldOut, maxQuantity, selectEdition, setQuantity } =

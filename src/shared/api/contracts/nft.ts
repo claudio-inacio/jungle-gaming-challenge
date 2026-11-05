@@ -31,6 +31,7 @@ export const nftSummarySchema = z.object({
   price: ethAmountSchema,
   previousPrice: ethAmountSchema.nullable(),
   network: networkSchema,
+  isFavorited: z.boolean(),
   isRare: z.boolean(),
   favorited: z.boolean(),
   available: z.number().int().min(0),

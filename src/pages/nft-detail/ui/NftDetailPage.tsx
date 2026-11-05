@@ -6,9 +6,11 @@ import { NotFoundPage } from '@/pages/not-found'
 import { ErrorState } from '@/shared/ui/QueryState'
 
 import { NftGallery } from '@/widgets/nft-gallery'
-import { NftPurchasePanel } from '@/features/add-to-cart'
+
 import { NftDetailTabs } from '@/widgets/nft-detail-tabs'
 import { RelatedNfts } from '@/widgets/related-nfts'
+import { NftDetailSkeleton } from '@/shared/ui/NftDetailSkeleton'
+import { NftPurchasePanel } from '@/features/add-to-cart/ui/NftPurchasePanel'
 
 export function NftDetailPage() {
   const { nftId } = useParams({ from: '/nft/$nftId' })
