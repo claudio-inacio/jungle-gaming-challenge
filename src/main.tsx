@@ -8,11 +8,8 @@ import '@fontsource/roboto-mono/700.css'
 import './index.css'
 import '@/shared/config/zod'
 import { env } from '@/shared/config'
-import { queryClient } from '@/shared/api'
-import { router } from '@/app/router'
-import { SessionExpiryListener } from '@/app/providers/SessionExpiryListener'
 import { Toaster } from '@/shared/ui/sonner'
-import { ScenarioPanelGate } from './mocks/dev/ScenarioPanelGate'
+// import { ScenarioPanelGate } from './mocks/dev/ScenarioPanelGate'
 
 async function enableMocking() {
   if (!env.enableMocks) return
@@ -20,7 +17,19 @@ async function enableMocking() {
   await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
 }
 
-enableMocking().then(() => {
+// `@/shared/api` e `@/app/router` puxam socket.io-client, que lê
+// `globalThis.WebSocket` assim que seu módulo é avaliado (e não só quando
+// conecta). Importá-los estaticamente no topo deste arquivo os avaliaria
+// antes de `enableMocking` interceptar o WebSocket global via MSW, travando
+// a captura na implementação nativa. O import dinâmico abaixo garante que
+// esses módulos só carregam depois do worker do MSW já estar ativo.
+enableMocking().then(async () => {
+  const [{ queryClient }, { router }, { SessionExpiryListener }] = await Promise.all([
+    import('@/shared/api'),
+    import('@/app/router'),
+    import('@/app/model/SessionExpiryListener'),
+  ])
+
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
@@ -29,7 +38,7 @@ enableMocking().then(() => {
           <Matches />
         </RouterContextProvider>
         <Toaster />
-        <ScenarioPanelGate />
+        {/* <ScenarioPanelGate /> */}
       </QueryClientProvider>
     </StrictMode>,
   )

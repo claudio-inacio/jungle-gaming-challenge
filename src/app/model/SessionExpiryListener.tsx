@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { tokenStorage } from '@/entities/session'
-import { socket } from '@/shared/api/socket/client'
+import { socket } from '@/shared/api'
 
 export function SessionExpiryListener() {
   const queryClient = useQueryClient()
