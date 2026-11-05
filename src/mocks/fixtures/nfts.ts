@@ -15,14 +15,13 @@ const COLLECTIONS = [
 const NETWORKS = ['ethereum', 'polygon', 'solana'] as const
 
 // Pool fixo de artes reais exportadas do Figma (public/img), reaproveitadas em ciclo
-// para os 40 NFTs fake — evita dependência de serviço externo (picsum).
+// para os 40 NFTs fake — evita dependência de serviço externo (picsum). `nft-artwork-18`
+// e `mobile-nft-artwork-4/6` são a mesma foto que `nft-artwork-04`/`nft-artwork-09` em
+// outra resolução — ficam de fora para não exibir "duplicatas" lado a lado no grid.
 const ARTWORK_POOL = [
   '/img/desktop/nft-artwork-04.png',
   '/img/desktop/nft-artwork-09.png',
-  '/img/desktop/nft-artwork-18.png',
-  '/img/mobile/mobile-nft-artwork-4.png',
   '/img/mobile/mobile-nft-artwork-5.png',
-  '/img/mobile/mobile-nft-artwork-6.png',
 ] as const
 
 const EDITIONS: Array<{ label: string; editionType: NftEditionType; totalSupply: number | null }> =
@@ -62,6 +61,23 @@ function pickCyclic<T>(arr: readonly T[], index: number): T {
   return item
 }
 
+// Embaralha o pool a cada volta completa (faker.helpers.shuffle respeita a seed ativa
+// dentro de withSeed) e concatena as voltas até cobrir `length` itens — evita o ciclo
+// visualmente idêntico que `pickCyclic` produziria em um grid de 3 colunas.
+function buildShuffledArtworkSequence(length: number): string[] {
+  const sequence: string[] = []
+  while (sequence.length < length) {
+    sequence.push(...faker.helpers.shuffle([...ARTWORK_POOL]))
+  }
+  return sequence.slice(0, length)
+}
+
+function pickFromSequence(sequence: readonly string[], index: number): string {
+  const item = sequence[index]
+  if (item === undefined) throw new Error('pickFromSequence: index out of bounds')
+  return item
+}
+
 function buildAvailability(
   editionType: NftEditionType,
   totalSupply: number | null,
@@ -74,8 +90,14 @@ function buildAvailability(
   return faker.number.int({ min: 1, max: totalSupply ?? 1 })
 }
 
-export const fixtureNfts: NftDetail[] = withSeed(42, () =>
-  Array.from({ length: 40 }, (_, index) => {
+const NFT_COUNT = 40
+const MAX_GALLERY_SIZE = ARTWORK_POOL.length
+
+export const fixtureNfts: NftDetail[] = withSeed(42, () => {
+  const coverSequence = buildShuffledArtworkSequence(NFT_COUNT)
+  const gallerySequence = buildShuffledArtworkSequence(NFT_COUNT + MAX_GALLERY_SIZE)
+
+  return Array.from({ length: NFT_COUNT }, (_, index) => {
     const collection = pickCyclic(COLLECTIONS, index)
     const network = pickCyclic(NETWORKS, index)
     const edition = pickCyclic(EDITIONS, index)
@@ -99,7 +121,7 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () =>
       name: buildName(),
       collectionId: collection.id,
       collectionName: collection.name,
-      image: pickCyclic(ARTWORK_POOL, index),
+      image: pickFromSequence(coverSequence, index),
       price,
       previousPrice,
       network,
@@ -107,8 +129,9 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () =>
       favorited: false,
       available: buildAvailability(edition.editionType, edition.totalSupply, soldOut),
       description: faker.lorem.paragraph(),
-      images: Array.from({ length: faker.number.int({ min: 1, max: 4 }) }, (_, imgIndex) =>
-        pickCyclic(ARTWORK_POOL, index + imgIndex),
+      images: Array.from(
+        { length: faker.number.int({ min: 1, max: MAX_GALLERY_SIZE }) },
+        (_, imgIndex) => pickFromSequence(gallerySequence, index + imgIndex),
       ),
       rating: {
         average: faker.number.float({ min: 3, max: 5, fractionDigits: 1 }),
@@ -123,8 +146,8 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () =>
     }
 
     return nft
-  }),
-)
+  })
+})
 
 // Garante que a fixture nunca diverge do contrato (falha rápido se algum campo ficar fora do schema).
 nftDetailSchema.array().parse(fixtureNfts)
