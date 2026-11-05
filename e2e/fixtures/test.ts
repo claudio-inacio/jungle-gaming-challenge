@@ -15,7 +15,14 @@ type ScenarioId =
 
 // Chaves de `localStorage` reais usadas pela camada de mocks
 // (`src/mocks/db/store.ts` e `src/mocks/scenarios/registry.ts`).
-const DB_STORAGE_KEY = 'kurio-mocks-db:v3'
+// IMPORTANTE: `DB_STORAGE_KEY` é uma cópia manual de `STORAGE_KEY` em
+// `src/mocks/db/store.ts` (não dá pra importar o valor direto - o projeto
+// TS do Playwright não referencia o projeto da app, então um import cross-
+// project quebra a resolução do alias `@/` nesse arquivo). Já ficou
+// desatualizada uma vez (v3 vs v4) e quebrou o reset de estado entre testes
+// sem erro visível - sempre que o bump de versão em `db/store.ts` mudar,
+// atualize aqui também.
+const DB_STORAGE_KEY = 'kurio-mocks-db:v4'
 const SCENARIO_STORAGE_KEY = 'kurio-mocks-scenario'
 
 type ScenarioFixture = {

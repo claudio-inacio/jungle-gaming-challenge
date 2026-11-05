@@ -5,26 +5,30 @@ import { expect, test } from '../fixtures/test'
 // Dados determinísticos: `src/mocks/fixtures/nfts.ts` usa `faker.seed(42)`, então
 // nomes/preços/coleções/redes são sempre os mesmos entre execuções - MAS qualquer
 // chamada nova ao `faker` inserida no meio da geração (ex: o campo `editions` por
-// NFT) desloca a sequência inteira do PRNG compartilhado, mudando todos os nomes
-// daí em diante. Os valores abaixo foram recalculados com `npx tsx` lendo
-// `fixtureNfts` diretamente *depois* da fixture ganhar `editions` (ver tarefa de
-// edições do NFT) - se a geração da fixture mudar de novo, recalcule de novo em vez
+// NFT, ou o tamanho de `ARTWORK_POOL` usado por `buildShuffledArtworkSequence`)
+// desloca a sequência inteira do PRNG compartilhado, mudando todos os nomes daí em
+// diante. Os valores abaixo foram recalculados com `npx tsx` lendo `fixtureNfts`
+// diretamente depois de `buildShuffledArtworkSequence` passar a rodar numa seed
+// isolada (44, não mais 42) só para não repetir esse problema a cada mudança no
+// pool de artes - se a geração da fixture mudar de novo, recalcule de novo em vez
 // de adivinhar. Ordenação padrão da API é `sortBy=newest` (`sort=recent` da URL).
-// "Homely Advertisement" (ethereum, Pixel Dreams) - item 1 da página 1, padrão
-// "Potable Swordfish" (polygon) - item 6 da página 1, padrão, não está em "Em alta"
-// "Hard-to-find E-mail" (ethereum, Violet Nomads) - membro da interseção ethereum+Violet Nomads
-// "Flawed Shipper" (ethereum, mas coleção Pixel Dreams, não Violet Nomads)
-// "Noteworthy Tuba" (solana, Neon Beasts) - único NFT com "Tuba" no nome
-// "Utter Privilege" (0.628 ETH) - o mais barato dos 40, independe de ordenação/filtro
-// "Zealous Tributary" - primeiro item da página 2 (itens 13-24) na ordenação padrão
+// "Same Hexagon" (ethereum, Violet Nomads) - item 4 da página 1, padrão, e também
+//   item 1 ao filtrar só ethereum
+// "Bogus Hamburger" (polygon, Crypto Punks Kurio) - item 2 da página 1, padrão,
+//   não está em "Em alta"
+// "Glorious Curl" (ethereum, Violet Nomads) - membro da interseção ethereum+Violet Nomads
+// "Excellent Cutlet" (ethereum, mas coleção Pixel Dreams, não Violet Nomads)
+// "Considerate Molasses" - único NFT com "Molasses" no nome
+// "Fine Sock" (1.178 ETH) - o mais barato dos 40, independe de ordenação/filtro
+// "Deep Hovel" - primeiro item da página 2 (itens 13-24) na ordenação padrão
 
-const NFT_ETHEREUM_FIRST = 'Homely Advertisement'
-const NFT_POLYGON_DEFAULT = 'Potable Swordfish'
-const NFT_HARD_TO_FIND = 'Hard-to-find E-mail'
-const NFT_WRONG_COLLECTION = 'Flawed Shipper'
-const NFT_IGNORANT_TUBA = 'Noteworthy Tuba'
-const NFT_CHEAPEST_OVERALL = 'Utter Privilege'
-const NFT_FIRST_PAGE_TWO = 'Zealous Tributary'
+const NFT_ETHEREUM_FIRST = 'Same Hexagon'
+const NFT_POLYGON_DEFAULT = 'Bogus Hamburger'
+const NFT_HARD_TO_FIND = 'Glorious Curl'
+const NFT_WRONG_COLLECTION = 'Excellent Cutlet'
+const NFT_UNIQUE_SEARCH_TERM = 'Considerate Molasses'
+const NFT_CHEAPEST_OVERALL = 'Fine Sock'
+const NFT_FIRST_PAGE_TWO = 'Deep Hovel'
 
 const GRID_ASSERTION_TIMEOUT = 15_000
 
@@ -212,9 +216,9 @@ test.describe('Catálogo - busca, filtros, ordenação, paginação e histórico
     // Nota: o input "Explorar coleções" do header mobile é só visual nesta fase
     // (sem estado ligado a `q`), então aqui testamos direto pela URL - ver nota
     // na função `searchByQuery` acima.
-    await searchByQuery(page, 'Tuba')
+    await searchByQuery(page, 'Molasses')
 
-    await expectNftVisible(page, NFT_IGNORANT_TUBA)
+    await expectNftVisible(page, NFT_UNIQUE_SEARCH_TERM)
     await expectNftHidden(page, NFT_HARD_TO_FIND)
     await expectNftHidden(page, NFT_POLYGON_DEFAULT)
   })

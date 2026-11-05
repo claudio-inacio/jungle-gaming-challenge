@@ -2,11 +2,11 @@ import { expect, test } from '../fixtures/test'
 
 // `nft_001`, seed 42 (`src/mocks/fixtures/nfts.ts`): nome e preço estáveis entre
 // execuções. A edição padrão selecionada é a primeira com `available > 0` ('1/1',
-// 2.250 ETH) - '1/10' nasce esgotada de propósito (`SOLD_OUT_EDITION_NFT_INDEX`/
+// 18.024 ETH) - '1/10' nasce esgotada de propósito (`SOLD_OUT_EDITION_NFT_INDEX`/
 // `SOLD_OUT_EDITION_LABEL`) e é exatamente a que o cenário 3 seleciona manualmente.
 const EXISTING_NFT_ID = 'nft_001'
-const EXISTING_NFT_NAME = 'Scornful Rim'
-const EXISTING_NFT_DEFAULT_PRICE = '2.250 ETH'
+const EXISTING_NFT_NAME = 'Spirited Councilman'
+const EXISTING_NFT_DEFAULT_PRICE = '18.024 ETH'
 const SOLD_OUT_EDITION_ID = 'nft_001-edition-1-10'
 const SOLD_OUT_EDITION_BUTTON_NAME = '1/10 · esgotada'
 
@@ -100,14 +100,16 @@ test.describe('Detalhe do NFT - acesso direto, 404, edições e favoritos', () =
     const firstNftCard = page.locator('main a[href^="/nft/"]').first()
     await firstNftCard.click()
 
-    const addFavoriteButton = page.getByRole('button', { name: 'Adicionar aos favoritos' })
+    // Nome acessível vem do texto visível do botão ("Favoritar"/"Favoritado"), não
+    // de `aria-label` (WCAG 2.5.3 Label in Name - `FavoriteButton` variant="button").
+    const addFavoriteButton = page.getByRole('button', { name: 'Favoritar', exact: true })
     await expect(addFavoriteButton).toBeVisible()
     await expect(addFavoriteButton).toHaveAttribute('aria-pressed', 'false')
 
     await addFavoriteButton.click()
 
     const toggledFavoriteButton = page.getByRole('button', {
-      name: /Adicionar aos favoritos|Remover dos favoritos/,
+      name: /^(Favoritar|Favoritado)$/,
     })
     await expect(toggledFavoriteButton).toHaveAttribute('aria-pressed', 'true')
     // `mutation-failure` força 500/TRANSIENT em POST /api/favorites - o `onError` do
