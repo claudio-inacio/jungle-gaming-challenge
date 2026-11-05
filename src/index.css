@@ -48,6 +48,12 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   --container-page: 1200px;
+  --spacing-card-gap: 34px;
+  --spacing-row-gap: 72px;
+  --spacing-page-margin: 120px;
+  --spacing-page-margin-mobile: 24px;
+  --spacing-sidebar-width: 310px;
+  --spacing-sidebar-gap: 48px;
 }
 
 :root {
