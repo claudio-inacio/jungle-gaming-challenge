@@ -22,11 +22,8 @@ export function useLoginForm(redirectTo?: string) {
 
   const mutation = useMutation({
     mutationFn: async (values: LoginRequest) => {
-      const [session] = await Promise.all([
-        login(values),
-        new Promise((resolve) => setTimeout(resolve, SIMULATED_LOGIN_DELAY_MS)),
-      ])
-      return session
+      await new Promise((resolve) => setTimeout(resolve, SIMULATED_LOGIN_DELAY_MS))
+      return login(values)
     },
     onSuccess: (session) => {
       setAccessToken(session.accessToken)
