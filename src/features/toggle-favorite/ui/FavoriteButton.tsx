@@ -34,10 +34,13 @@ export function FavoriteButton({ nftId, isFavorited, className, variant = 'icon'
         variant="outline"
         onClick={handleClick}
         aria-pressed={isFavorited}
-        className={className}
+        className={cn(
+          'h-10 w-[130px] gap-2 rounded-md border-primary text-accent-foreground hover:bg-accent/20',
+          className,
+        )}
       >
         <Heart
-          className={cn('size-4', isFavorited && 'fill-accent-foreground text-accent-foreground')}
+          className={cn('size-4', isFavorited && 'fill-accent-foreground')}
           aria-hidden="true"
         />
         {isFavorited ? 'Favoritado' : 'Favoritar'}
@@ -51,10 +54,13 @@ export function FavoriteButton({ nftId, isFavorited, className, variant = 'icon'
       onClick={handleClick}
       aria-pressed={isFavorited}
       aria-label={label}
-      className={cn('rounded-full bg-card/80 p-2 backdrop-blur', className)}
+      className={cn(
+        'flex size-9 items-center justify-center rounded-full border border-border bg-surface-raised text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+        className,
+      )}
     >
       <Heart
-        className={cn('size-5', isFavorited && 'fill-accent-foreground text-accent-foreground')}
+        className={cn('size-4', isFavorited && 'fill-accent-foreground text-accent-foreground')}
         aria-hidden="true"
       />
     </button>

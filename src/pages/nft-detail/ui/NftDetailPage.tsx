@@ -11,11 +11,14 @@ import { RelatedNfts } from '@/widgets/related-nfts'
 import { NftDetailSkeleton } from '@/shared/ui/NftDetailSkeleton'
 import { NftPurchasePanel } from '@/features/add-to-cart'
 import { FavoriteButton } from '@/features/toggle-favorite'
+import { useMediaQuery } from '@/shared/lib/hooks'
+import { NftDetailMobile } from './NftDetailMobile'
 
 export function NftDetailPage() {
   const { nftId } = useParams({ from: '/nft/$nftId' })
   const { edition } = useSearch({ from: '/nft/$nftId' })
   const query = useQuery(nftDetailQuery(nftId))
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
 
   if (query.isPending) {
     return (
@@ -37,6 +40,10 @@ export function NftDetailPage() {
   }
 
   const nft = query.data
+
+  if (!isDesktop) {
+    return <NftDetailMobile nft={nft} initialEditionId={edition} />
+  }
 
   return (
     <Container>

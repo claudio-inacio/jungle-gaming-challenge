@@ -1,4 +1,15 @@
+import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures/test'
+
+// Abaixo de 1024px o detalhe do NFT troca para o layout "hero + bottom sheet"
+// (`NftDetailMobile.tsx`), que usa nomes acessíveis diferentes do desktop para
+// o botão de compra ("Comprar NFT" vs "COMPRAR") e para o favorito (ícone com
+// `aria-label`, não mais um botão com texto visível) - replicando o padrão
+// `isMobileViewport` já usado em `01-catalog.spec.ts`.
+function isMobileViewport(page: Page): boolean {
+  const viewport = page.viewportSize()
+  return Boolean(viewport && viewport.width < 1024)
+}
 
 // `nft_001`, seed 42 (`src/mocks/fixtures/nfts.ts`): nome e preço estáveis entre
 // execuções. A edição padrão selecionada é a primeira com `available > 0` ('1/1',
@@ -75,7 +86,11 @@ test.describe('Detalhe do NFT - acesso direto, 404, edições e favoritos', () =
     await expect(page.getByRole('status')).toHaveText(
       'Esta edição está esgotada. Escolha outra edição disponível.',
     )
-    await expect(page.getByRole('button', { name: 'COMPRAR', exact: true })).toBeDisabled()
+    // Mesmo botão, texto acessível diferente por layout - "COMPRAR" no painel
+    // desktop (`NftPurchasePanel.tsx`), "Comprar NFT" na barra fixa mobile
+    // (`NftDetailMobile.tsx`).
+    const buyButtonName = isMobileViewport(page) ? 'Comprar NFT' : 'COMPRAR'
+    await expect(page.getByRole('button', { name: buyButtonName, exact: true })).toBeDisabled()
   })
 
   test('favoritar com falha na mutation desfaz o estado otimista (rollback)', async ({
@@ -100,16 +115,23 @@ test.describe('Detalhe do NFT - acesso direto, 404, edições e favoritos', () =
     const firstNftCard = page.locator('main a[href^="/nft/"]').first()
     await firstNftCard.click()
 
-    // Nome acessível vem do texto visível do botão ("Favoritar"/"Favoritado"), não
-    // de `aria-label` (WCAG 2.5.3 Label in Name - `FavoriteButton` variant="button").
-    const addFavoriteButton = page.getByRole('button', { name: 'Favoritar', exact: true })
+    // No desktop o nome acessível vem do texto visível do botão
+    // ("Favoritar"/"Favoritado", WCAG 2.5.3 Label in Name -
+    // `FavoriteButton` variant="button"). No mobile o favorito vive sobre a
+    // imagem (variant="icon") e só tem `aria-label` ("Adicionar aos
+    // favoritos"/"Remover dos favoritos"), sem texto visível.
+    const addFavoriteButtonName = isMobileViewport(page) ? 'Adicionar aos favoritos' : 'Favoritar'
+    const addFavoriteButton = page.getByRole('button', { name: addFavoriteButtonName, exact: true })
     await expect(addFavoriteButton).toBeVisible()
     await expect(addFavoriteButton).toHaveAttribute('aria-pressed', 'false')
 
     await addFavoriteButton.click()
 
+    const toggledFavoriteButtonName = isMobileViewport(page)
+      ? /^(Adicionar aos favoritos|Remover dos favoritos)$/
+      : /^(Favoritar|Favoritado)$/
     const toggledFavoriteButton = page.getByRole('button', {
-      name: /^(Favoritar|Favoritado)$/,
+      name: toggledFavoriteButtonName,
     })
     await expect(toggledFavoriteButton).toHaveAttribute('aria-pressed', 'true')
     // `mutation-failure` força 500/TRANSIENT em POST /api/favorites - o `onError` do

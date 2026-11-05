@@ -9,7 +9,7 @@ type Props = {
 }
 
 const TAB_TRIGGER_CLASS =
-  'h-auto flex-none rounded-none border-none bg-transparent p-0 text-sm font-medium text-muted-foreground after:hidden data-active:border-none data-active:bg-transparent data-active:font-bold data-active:text-accent-foreground'
+  'h-auto flex-none rounded-none border-none bg-transparent p-0 text-sm font-medium text-muted-foreground after:bg-accent-foreground data-active:border-none data-active:bg-transparent data-active:font-bold data-active:text-accent-foreground'
 
 function truncateAddress(address: string): string {
   if (address.length <= 12) return address
