@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog'
 import { AuthTabs } from '@/shared/ui/auth-tabs'
-import { LoginForm } from '@/features/login'
+import { LoginForm } from '@/features/auth/login'
 
 export function LoginPage() {
   const { redirect } = useSearch({ from: '/login' })

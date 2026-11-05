@@ -2,8 +2,9 @@ import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query
 import { http } from '@/shared/api/http'
 import { cartSchema } from '@/shared/api/contracts/cart'
 import { queryKeys } from '@/shared/api/query-keys'
-import { guestCartStorage } from '../model/guest-cart-storage'
+
 import { useSession } from '@/entities/session'
+import { guestCartStorage } from '../guest-cart-storage'
 
 export function cartQuery(userId: string) {
   return queryOptions({
@@ -28,7 +29,9 @@ export function useUpdateCartItem() {
         if (body.quantity <= 0) {
           if (idx >= 0) items.splice(idx, 1)
         } else if (idx >= 0) {
-          items[idx].quantity = body.quantity
+          const item = items[idx]
+          if (item) item.quantity = body.quantity
+          else items.push(body)
         } else {
           items.push(body)
         }

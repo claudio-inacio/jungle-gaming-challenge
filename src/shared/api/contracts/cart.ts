@@ -29,15 +29,20 @@ export const addCartItemRequestSchema = z.object({
 })
 export type AddCartItemRequest = z.infer<typeof addCartItemRequestSchema>
 
+// `editionId` identifica a linha pela rota (`/cart/items/:nftId/:editionId`),
+// não pelo corpo - uma linha é `nftId` + `editionId` juntos.
 export const updateCartItemRequestSchema = z.object({
-  editionId: idSchema,
   quantity: z.number().int().min(1),
 })
 export type UpdateCartItemRequest = z.infer<typeof updateCartItemRequestSchema>
 
-// DELETE não tem corpo; a edição vem na querystring para identificar a linha
-// sem ambiguidade (uma linha agora é `nftId` + `editionId`, não só `nftId`).
-export const removeCartItemQuerySchema = z.object({
-  editionId: idSchema,
+export const mergeCartRequestSchema = z.object({
+  items: z.array(
+    z.object({
+      nftId: idSchema,
+      editionId: idSchema,
+      quantity: z.number().int().min(1),
+    }),
+  ),
 })
-export type RemoveCartItemQuery = z.infer<typeof removeCartItemQuerySchema>
+export type MergeCartRequest = z.infer<typeof mergeCartRequestSchema>

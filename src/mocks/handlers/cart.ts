@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 import {
   addCartItemRequestSchema,
   cartSchema,
-  removeCartItemQuerySchema,
+  mergeCartRequestSchema,
   updateCartItemRequestSchema,
   type CartItem,
 } from '@/shared/api/contracts/cart'
@@ -117,22 +117,23 @@ export const cartHandlers = [
     }),
   ),
 
-  http.patch('/api/cart/items/:nftId', async ({ request, params }) =>
+  http.patch('/api/cart/items/:nftId/:editionId', async ({ request, params }) =>
     withScenario(async () => {
       const session = getSessionFromRequest(request)
       if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
 
       const nftId = params.nftId as string
+      const editionId = params.editionId as string
       const body = updateCartItemRequestSchema.parse(await request.json())
 
       const entries = db.get().carts[session.userId] ?? []
-      const entry = entries.find((e) => e.nftId === nftId && e.editionId === body.editionId)
+      const entry = entries.find((e) => e.nftId === nftId && e.editionId === editionId)
       if (!entry) return errorResponse(404, 'NOT_FOUND', 'Item não encontrado no carrinho')
 
       const nft = db.get().nfts.find((n) => n.id === nftId)
       if (!nft) return errorResponse(404, 'NOT_FOUND', 'NFT não encontrado')
 
-      const edition = nft.editions.find((e) => e.id === body.editionId)
+      const edition = nft.editions.find((e) => e.id === editionId)
       if (!edition) return errorResponse(404, 'NOT_FOUND', 'Edição não encontrada para este NFT')
 
       if (body.quantity > edition.available)
@@ -144,7 +145,7 @@ export const cartHandlers = [
 
       db.update((d) => {
         const list = d.carts[session.userId] ?? []
-        const target = list.find((e) => e.nftId === nftId && e.editionId === body.editionId)
+        const target = list.find((e) => e.nftId === nftId && e.editionId === editionId)
         if (target) target.quantity = body.quantity
       })
 
@@ -152,16 +153,13 @@ export const cartHandlers = [
     }),
   ),
 
-  http.delete('/api/cart/items/:nftId', async ({ request, params }) =>
+  http.delete('/api/cart/items/:nftId/:editionId', async ({ request, params }) =>
     withScenario(() => {
       const session = getSessionFromRequest(request)
       if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
 
       const nftId = params.nftId as string
-      const url = new URL(request.url)
-      const { editionId } = removeCartItemQuerySchema.parse({
-        editionId: url.searchParams.get('editionId'),
-      })
+      const editionId = params.editionId as string
 
       db.update((d) => {
         d.carts[session.userId] = (d.carts[session.userId] ?? []).filter(
@@ -170,6 +168,46 @@ export const cartHandlers = [
       })
 
       return new HttpResponse(null, { status: 204 })
+    }),
+  ),
+
+  // Mescla o carrinho de visitante (localStorage) no carrinho do usuário após
+  // o login. Itens cujo NFT/edição não existe mais no catálogo são ignorados
+  // silenciosamente (dado de visitante pode estar desatualizado) em vez de
+  // falhar a request inteira. Diferente de POST /api/cart/items: aqui a
+  // quantidade resultante é SATURADA no `available` da edição em vez de
+  // rejeitar com 409 - a intenção é nunca perder o carrinho autenticado por
+  // causa de um excesso trazido do visitante.
+  http.post('/api/cart/merge', async ({ request }) =>
+    withScenario(async () => {
+      const session = getSessionFromRequest(request)
+      if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+
+      const body = mergeCartRequestSchema.parse(await request.json())
+      const nfts = db.get().nfts
+
+      db.update((d) => {
+        const list = d.carts[session.userId] ?? []
+        for (const item of body.items) {
+          const nft = nfts.find((n) => n.id === item.nftId)
+          const edition = nft?.editions.find((e) => e.id === item.editionId)
+          if (!nft || !edition) continue
+
+          const entry = list.find((e) => e.nftId === item.nftId && e.editionId === item.editionId)
+          if (entry) {
+            entry.quantity = Math.min(entry.quantity + item.quantity, edition.available)
+          } else {
+            list.push({
+              nftId: item.nftId,
+              editionId: item.editionId,
+              quantity: Math.min(item.quantity, edition.available),
+            })
+          }
+        }
+        d.carts[session.userId] = list
+      })
+
+      return HttpResponse.json(cartSchema.parse(buildCart(session.userId)))
     }),
   ),
 ]

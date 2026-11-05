@@ -3,8 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { loginRequestSchema, type LoginRequest, ApiError } from '@/shared/api'
+import { loginRequestSchema, type LoginRequest, ApiError, http } from '@/shared/api'
 import { login, startSession } from '@/entities/session'
+import { guestCartStorage } from '@/entities/cart/model/guest-cart-storage'
 
 export function useLoginForm(redirectTo?: string) {
   const queryClient = useQueryClient()
@@ -17,8 +18,18 @@ export function useLoginForm(redirectTo?: string) {
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: (session) => {
+    onSuccess: async (session) => {
       startSession(queryClient, session)
+
+      const guestItems = guestCartStorage.get()
+      if (guestItems.length > 0) {
+        try {
+          await http.post('/cart/merge', { items: guestItems })
+          guestCartStorage.clear()
+        } catch {
+          // mantém o carrinho de visitante se o merge falhar, para tentar de novo depois
+        }
+      }
       toast.success(`Login realizado com sucesso! Bem-vindo, ${session.user.displayName}.`)
       navigate({ to: redirectTo ?? '/' })
     },
