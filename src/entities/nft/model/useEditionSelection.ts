@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react'
-import type { Nft, NftEdition } from '@/shared/api/contracts/nft'
+import type { NftSummary, NftEdition } from '@/shared/api/contracts/nft'
 
-export function useEditionSelection(nft: Nft, initialEditionId?: string) {
+export function useEditionSelection(nft: NftSummary, initialEditionId?: string) {
   const defaultEdition = nft.editions.find((e) => e.available > 0) ?? nft.editions[0]
-  const [editionId, setEditionId] = useState(initialEditionId ?? defaultEdition.id)
+  const [editionId, setEditionId] = useState(initialEditionId ?? defaultEdition?.id)
   const [quantity, setQuantity] = useState(1)
 
   const edition = useMemo<NftEdition>(
-    () => nft.editions.find((e) => e.id === editionId) ?? defaultEdition,
+    () => nft.editions.find((e) => e.id === editionId) ?? defaultEdition!,
     [nft.editions, editionId],
   )
 

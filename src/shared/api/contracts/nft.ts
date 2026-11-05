@@ -9,23 +9,6 @@ export const nftAttributeSchema = z.object({
   value: z.string(),
 })
 export type NftAttribute = z.infer<typeof nftAttributeSchema>
-
-export const nftSummarySchema = z.object({
-  id: idSchema,
-  tokenId: z.string(),
-  name: z.string(),
-  collectionId: idSchema,
-  collectionName: z.string(),
-  image: z.string().min(1),
-  price: ethAmountSchema,
-  previousPrice: ethAmountSchema.nullable(),
-  network: networkSchema,
-  isRare: z.boolean(),
-  favorited: z.boolean(),
-  available: z.number().int().min(0),
-})
-export type NftSummary = z.infer<typeof nftSummarySchema>
-
 export const nftEditionSchema = z.object({
   id: idSchema,
   label: z.enum(['1/1', '1/10', '1/50', 'open']),
@@ -34,6 +17,25 @@ export const nftEditionSchema = z.object({
   available: z.number().int().min(0),
 })
 export type NftEdition = z.infer<typeof nftEditionSchema>
+
+export const nftSummarySchema = z.object({
+  id: idSchema,
+  tokenId: z.string(),
+  name: z.string(),
+  collectionId: idSchema,
+  collectionName: z.string(),
+  image: z.string().min(1),
+  editions: z.array(nftEditionSchema).min(1),
+  reviewCount: z.number().int().min(0),
+  attributes: z.array(z.object({ trait: z.string(), value: z.string() })),
+  price: ethAmountSchema,
+  previousPrice: ethAmountSchema.nullable(),
+  network: networkSchema,
+  isRare: z.boolean(),
+  favorited: z.boolean(),
+  available: z.number().int().min(0),
+})
+export type NftSummary = z.infer<typeof nftSummarySchema>
 
 export const nftDetailSchema = nftSummarySchema.extend({
   description: z.string(),

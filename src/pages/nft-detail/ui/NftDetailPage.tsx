@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
-import { Heart, Minus, Plus, Share2, Star } from 'lucide-react'
+import { Minus, Plus, Share2, Star } from 'lucide-react'
 import { ApiError } from '@/shared/api'
 import { formatEth } from '@/shared/lib/eth'
 import { cn } from '@/shared/lib/utils'
@@ -14,6 +13,7 @@ import { PendingLink } from '@/shared/ui/pending-link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
 import { Text } from '@/shared/ui/Text'
 import { NftCard, nftListQuery } from '@/entities/nft'
+import { NftGallery } from '@/widgets/nft-gallery'
 import { useNftDetailPage } from '../model/useNftDetailPage'
 
 function StarRating({ average, count }: { average: number; count: number }) {
@@ -80,7 +80,6 @@ function RelatedFromCollection({
 export function NftDetailPage() {
   const { query, nft, selectedEdition, selectEdition, quantity, setQuantity, canPurchase } =
     useNftDetailPage()
-  const [activeImageIndex, setActiveImageIndex] = useState(0)
 
   if (query.isPending) {
     return (
@@ -119,60 +118,20 @@ export function NftDetailPage() {
 
   if (!nft || !selectedEdition) return null
 
-  const activeImage = nft.images[activeImageIndex] ?? nft.images[0]!
-
   return (
     <main>
       <Container className="flex flex-col gap-10 py-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-12">
-          <div className="flex flex-col gap-4 lg:w-1/2">
-            <img
-              src={activeImage}
-              alt={nft.name}
-              width={600}
-              height={600}
-              fetchPriority="high"
-              className="aspect-square w-full rounded-xl object-cover"
-            />
-            {nft.images.length > 1 && (
-              <div className="flex gap-3" role="group" aria-label="Miniaturas do NFT">
-                {nft.images.slice(0, 4).map((image, index) => (
-                  <button
-                    key={image}
-                    type="button"
-                    onClick={() => setActiveImageIndex(index)}
-                    aria-pressed={index === activeImageIndex}
-                    aria-label={`Ver imagem ${index + 1} de ${nft.name}`}
-                    className={cn(
-                      'size-16 shrink-0 overflow-hidden rounded-lg border-2 outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50',
-                      index === activeImageIndex ? 'border-primary' : 'border-transparent',
-                    )}
-                  >
-                    <img src={image} alt="" aria-hidden="true" className="size-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="lg:w-1/2">
+            <NftGallery images={nft.images} alt={nft.name} />
           </div>
 
           <div className="flex min-w-0 flex-1 flex-col gap-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex flex-col gap-1">
-                <Text variant="caption">{nft.collectionName}</Text>
-                <Text as="h1" variant="heading">
-                  {nft.name}
-                </Text>
-              </div>
-              <PendingLink
-                aria-pressed={nft.favorited}
-                aria-label={nft.favorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-border"
-              >
-                <Heart
-                  className={cn('size-5', nft.favorited && 'fill-primary text-primary')}
-                  aria-hidden="true"
-                />
-              </PendingLink>
+            <div className="flex flex-col gap-1">
+              <Text variant="caption">{nft.collectionName}</Text>
+              <Text as="h1" variant="heading">
+                {nft.name}
+              </Text>
             </div>
 
             <StarRating average={nft.rating.average} count={nft.rating.count} />
