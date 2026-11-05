@@ -4,7 +4,13 @@ import { useSession } from '@/entities/session'
 import { useToggleFavorite } from '../api/toggle-favorite'
 import { cn } from '@/shared/lib/utils'
 
-export function FavoriteButton({ nftId, isFavorited }: { nftId: string; isFavorited: boolean }) {
+type Props = {
+  nftId: string
+  isFavorited: boolean
+  className?: string
+}
+
+export function FavoriteButton({ nftId, isFavorited, className }: Props) {
   const { isAuthenticated } = useSession()
   const navigate = useNavigate()
   const toggle = useToggleFavorite()
@@ -23,7 +29,7 @@ export function FavoriteButton({ nftId, isFavorited }: { nftId: string; isFavori
       onClick={handleClick}
       aria-pressed={isFavorited}
       aria-label={isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-      className="rounded-full bg-card/80 p-2 backdrop-blur"
+      className={cn('rounded-full bg-card/80 p-2 backdrop-blur', className)}
     >
       <Heart
         className={cn('size-5', isFavorited && 'fill-accent-foreground text-accent-foreground')}

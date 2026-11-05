@@ -11,10 +11,11 @@ type ScenarioId =
   | 'order-timeout'
   | 'quote-changed'
   | 'edition-sold-out'
+  | 'mutation-failure'
 
 // Chaves de `localStorage` reais usadas pela camada de mocks
 // (`src/mocks/db/store.ts` e `src/mocks/scenarios/registry.ts`).
-const DB_STORAGE_KEY = 'kurio-mocks-db:v2'
+const DB_STORAGE_KEY = 'kurio-mocks-db:v3'
 const SCENARIO_STORAGE_KEY = 'kurio-mocks-scenario'
 
 type ScenarioFixture = {
@@ -64,10 +65,14 @@ export const test = base.extend<Fixtures>({
     const loginAs: LoginAsFixture = async (userKey) => {
       const { email, password } = DEMO_USERS[userKey]
       await page.goto('/login')
-      await page.getByLabel('E-mail').fill(email)
-      await page.getByLabel('Senha').fill(password)
+      await page.getByLabel('E-mail', { exact: true }).fill(email)
+      await page.getByLabel('Senha', { exact: true }).fill(password)
       await page.getByRole('button', { name: 'Entrar' }).click()
-      await expect(page.getByRole('button', { name: 'Sair' })).toBeVisible()
+      // O botão "Sair" só existe no cabeçalho desktop (`SiteHeader.tsx`, bloco
+      // `hidden ... lg:flex`) - no viewport mobile não há nenhum indicador de sessão
+      // no cabeçalho, então o sinal confiável nos dois projetos é a navegação
+      // client-side de volta para a Home que o `useLoginForm` dispara em `onSuccess`.
+      await page.waitForURL((url) => url.pathname === '/')
     }
     await provideFixture(loginAs)
   },

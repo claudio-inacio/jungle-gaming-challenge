@@ -29,7 +29,11 @@ export interface DbState {
 
 // v2: fixtures passaram a usar imagens locais em vez de picsum.photos; o sufixo
 // força sessões com DB persistido na v1 a reidratar a partir das novas fixtures.
-const STORAGE_KEY = 'kurio-mocks-db:v2'
+// v3: `nftDetailSchema`/`nftSummarySchema` ganharam campos obrigatórios novos
+// (contractAddress, editions, reviewCount, attributes, isFavorited) - sem esse
+// bump, um DB v2 já persistido no localStorage falha o `zod.parse()` dos
+// handlers (campos ausentes), derrubando o catálogo e o detalhe inteiros.
+const STORAGE_KEY = 'kurio-mocks-db:v3'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
 // um Map em memória para o processo continuar funcionando sem persistência real.

@@ -3,9 +3,8 @@ import { Button } from '@/shared/ui/button'
 import { Badge } from '@/shared/ui/badge'
 import { formatEth } from '@/shared/lib/eth'
 import { useAddToCart } from '../model/useAddToCart'
-import type { NftSummary } from '@/shared/api/contracts/nft'
-import { useEditionSelection } from '@/entities/nft/model/useEditionSelection'
-import { FavoriteButton } from '@/features/toggle-favorite/ui/FavoriteButton'
+import type { NftSummary } from '@/shared/api'
+import { useEditionSelection } from '@/entities/nft'
 
 export function NftPurchasePanel({
   nft,
@@ -20,12 +19,9 @@ export function NftPurchasePanel({
 
   return (
     <div className="flex flex-col gap-6 flex-1">
-      <div className="flex items-start justify-between">
-        <Text as="h1" variant="heading">
-          {nft.name}
-        </Text>
-        <FavoriteButton nftId={nft.id} isFavorited={nft.isFavorited} />
-      </div>
+      <Text as="h1" variant="heading">
+        {nft.name}
+      </Text>
       <Text variant="body-lg" className="text-accent-foreground">
         {formatEth(edition.price)}
       </Text>

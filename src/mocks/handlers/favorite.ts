@@ -5,7 +5,7 @@ import {
   favoriteSchema,
 } from '@/shared/api/contracts/favorite'
 import { db } from '../db/store'
-import { withScenario } from '../scenarios/apply'
+import { matchOverride, withScenario } from '../scenarios/apply'
 import { errorResponse } from './error-response'
 import { toNftSummary } from './nft-summary'
 import { getSessionFromRequest } from './session'
@@ -33,6 +33,10 @@ export const favoriteHandlers = [
       if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
 
       const body = addFavoriteRequestSchema.parse(await request.json())
+
+      const override = matchOverride('POST', '/api/favorites')
+      if (override) return errorResponse(override.status, override.code, override.message)
+
       const nft = db.get().nfts.find((n) => n.id === body.nftId)
       if (!nft) return errorResponse(404, 'NOT_FOUND', 'NFT não encontrado')
 
@@ -56,6 +60,9 @@ export const favoriteHandlers = [
     withScenario(() => {
       const session = getSessionFromRequest(request)
       if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+
+      const override = matchOverride('DELETE', '/api/favorites/:nftId')
+      if (override) return errorResponse(override.status, override.code, override.message)
 
       const nftId = params.nftId as string
       db.update((d) => {

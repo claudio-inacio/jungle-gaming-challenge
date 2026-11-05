@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import { Heart } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { OutOfScopeButton } from '@/shared/ui/out-of-scope'
+import { FavoriteButton } from '@/features/toggle-favorite'
 
 type Props = {
   images: string[]
   alt: string
+  nftId: string
+  isFavorited: boolean
 }
 
-export function NftGallery({ images, alt }: Props) {
+export function NftGallery({ images, alt, nftId, isFavorited }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const thumbnails = images.slice(0, 4)
   const activeImage = images[activeIndex] ?? images[0]
@@ -59,14 +60,11 @@ export function NftGallery({ images, alt }: Props) {
           height={600}
           className="aspect-square w-full rounded-xl object-cover"
         />
-        <OutOfScopeButton
-          variant="outline"
-          size="icon-lg"
-          aria-label="Favoritar este NFT"
-          className="absolute top-3 right-3 rounded-full border-border bg-card/80 backdrop-blur-sm hover:bg-card"
-        >
-          <Heart aria-hidden="true" />
-        </OutOfScopeButton>
+        <FavoriteButton
+          nftId={nftId}
+          isFavorited={isFavorited}
+          className="absolute top-3 right-3"
+        />
       </div>
     </div>
   )

@@ -58,6 +58,7 @@ function ShareBar({ name }: { name: string }) {
       <Button
         variant="outline"
         size="icon-sm"
+        nativeButton={false}
         render={
           <a
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
@@ -72,6 +73,7 @@ function ShareBar({ name }: { name: string }) {
       <Button
         variant="outline"
         size="icon-sm"
+        nativeButton={false}
         render={
           <a
             href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedName}`}

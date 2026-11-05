@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { http } from '@/shared/api/http'
-import { queryKeys } from '@/shared/api/query-keys'
+import { http, queryKeys, type NftSummary } from '@/shared/api'
 import { useSession } from '@/entities/session'
-import type { NftSummary } from '@/shared/api/contracts/nft'
 
 export function useToggleFavorite() {
   const queryClient = useQueryClient()
@@ -10,7 +8,7 @@ export function useToggleFavorite() {
 
   return useMutation({
     mutationFn: async ({ nftId, nextValue }: { nftId: string; nextValue: boolean }) => {
-      if (nextValue) await http.post(`/favorites/${nftId}`)
+      if (nextValue) await http.post('/favorites', { nftId })
       else await http.delete(`/favorites/${nftId}`)
     },
 

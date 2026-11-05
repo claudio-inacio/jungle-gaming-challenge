@@ -83,6 +83,23 @@ export const scenarios: Record<string, Scenario> = {
       },
     },
   },
+  'mutation-failure': {
+    id: 'mutation-failure',
+    description:
+      'Favoritar/desfavoritar falha com TRANSIENT (simula erro de mutation para testar rollback otimista)',
+    overrides: {
+      'POST /api/favorites': {
+        status: 500,
+        code: 'TRANSIENT',
+        message: 'Não foi possível favoritar. Tente novamente.',
+      },
+      'DELETE /api/favorites/:nftId': {
+        status: 500,
+        code: 'TRANSIENT',
+        message: 'Não foi possível remover dos favoritos. Tente novamente.',
+      },
+    },
+  },
 }
 
 export const STORAGE_KEY = 'kurio-mocks-scenario'

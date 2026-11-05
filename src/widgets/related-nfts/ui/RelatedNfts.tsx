@@ -26,7 +26,7 @@ export function RelatedNfts({ collectionId, currentNftId }: Props) {
         <h2 className="mb-4 text-lg font-bold">Mais desta coleção</h2>
         <div className="flex gap-4 overflow-x-auto">
           {Array.from({ length: 4 }, (_, index) => (
-            <div key={index} className="min-w-[244px] shrink-0">
+            <div key={index} className="min-w-61 shrink-0">
               <NftCardSkeleton />
             </div>
           ))}
@@ -52,7 +52,7 @@ export function RelatedNfts({ collectionId, currentNftId }: Props) {
       <h2 className="mb-4 text-lg font-bold">Mais desta coleção</h2>
       <div className="flex gap-4 overflow-x-auto snap-x">
         {relatedItems.map((nft) => (
-          <div key={nft.id} className="min-w-[244px] shrink-0 snap-start">
+          <div key={nft.id} className="min-w-61 shrink-0 snap-start">
             <NftCard nft={nft} />
           </div>
         ))}

@@ -1,3 +1,4 @@
 export { catalogSearchSchema, type CatalogSearch } from './model/catalog-search'
+export { useEditionSelection } from './model/useEditionSelection'
 export { nftListQuery, nftDetailQuery, nftCollectionsQuery } from './api/nft'
 export { NftCard } from './ui/NftCard'

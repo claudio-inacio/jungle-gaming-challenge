@@ -28,6 +28,22 @@ export default defineConfig([
     rules: { 'fsd/insignificant-slice': 'off' },
   },
   {
+    // nft-gallery/nft-detail-tabs/related-nfts/add-to-cart/toggle-favorite são os
+    // widgets/features da tela de detalhe do NFT, separados por responsabilidade
+    // (galeria, abas, relacionados, compra, favoritar) em vez de uma página monolítica
+    // — convenção FSD do projeto, não "pequenos demais para existir". toggle-favorite
+    // em especial ganhará um segundo consumidor real quando o catálogo (NftCard) e a
+    // página de favoritos do perfil usarem o mesmo FavoriteButton.
+    files: [
+      './src/widgets/nft-gallery/**',
+      './src/widgets/nft-detail-tabs/**',
+      './src/widgets/related-nfts/**',
+      './src/features/add-to-cart/**',
+      './src/features/toggle-favorite/**',
+    ],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
+  {
     // hero/catalog-grid/promo-cards/blog-section são seções grandes e
     // independentes da Home, extraídas em widgets próprios para manter
     // HomePage.tsx como composição fina (convenção FSD do projeto) — não
