@@ -1,14 +1,21 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 import { cn } from 'cn'
 
+type SliderProps = SliderPrimitive.Root.Props & {
+  getAriaValueText?: (formattedValue: string, value: number, index: number) => string
+  getAriaLabel?: (index: number) => string
+}
+
 function Slider({
   className,
   defaultValue,
   value,
   min = 0,
   max = 100,
+  getAriaValueText,
+  getAriaLabel,
   ...props
-}: SliderPrimitive.Root.Props) {
+}: SliderProps) {
   const _values = Array.isArray(value)
     ? value
     : Array.isArray(defaultValue)
@@ -40,6 +47,9 @@ function Slider({
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
+            index={index}
+            getAriaValueText={getAriaValueText}
+            getAriaLabel={getAriaLabel}
             className="block size-4 shrink-0 rounded-full border border-primary bg-foreground shadow-sm ring-ring/50 transition-[color,box-shadow] select-none hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 data-dragging:ring-4"
           />
         ))}

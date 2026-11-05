@@ -87,7 +87,7 @@ function SiteFooter() {
   return (
     <footer className="w-full bg-background py-10">
       <Container>
-        <div className="overflow-hidden rounded-3xl bg-card text-card-foreground">
+        <div className="overflow-hidden rounded-1xl bg-card text-card-foreground">
           <div className="border-b border-border-soft px-4 py-8 lg:px-6">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
               {HIGHLIGHTS.map((highlight, index) => (
@@ -209,12 +209,11 @@ function SiteFooter() {
                 </div>
               </div>
             </div>
-
-            <p className="mt-8 text-center text-sm leading-[30px] text-foreground">
-              © 2026 Kurio. Propriedade digital para todos.
-            </p>
           </div>
         </div>
+        <p className="mt-4 text-center text-sm leading-[30px] text-foreground">
+          © 2026 Kurio. Propriedade digital para todos.
+        </p>
       </Container>
     </footer>
   )

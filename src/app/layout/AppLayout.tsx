@@ -16,7 +16,7 @@ function AppLayout({ children }: AppLayoutProps) {
   const isAuthRoute = AUTH_ROUTES.has(pathname)
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh flex-col py-0 md:py-2 px-0 md:px-20">
       <div className={cn(isAuthRoute && 'hidden md:block')}>
         <SiteHeader itemCount={0} />
       </div>
