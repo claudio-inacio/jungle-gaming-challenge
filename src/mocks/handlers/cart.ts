@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw'
 import {
   addCartItemRequestSchema,
   cartSchema,
+  removeCartItemQuerySchema,
   updateCartItemRequestSchema,
   type CartItem,
 } from '@/shared/api/contracts/cart'
@@ -12,9 +13,10 @@ import { getSessionFromRequest } from './session'
 
 /**
  * Preço, nome, imagem e disponibilidade nunca ficam congelados no carrinho -
- * o carrinho guarda só `{ nftId, quantity }` e esta função busca o estado
- * ATUAL do catálogo a cada resposta. Linhas cujo NFT não existe mais são
- * removidas silenciosamente (do db e da resposta) em vez de quebrar a request.
+ * o carrinho guarda só `{ nftId, editionId, quantity }` e esta função busca o
+ * estado ATUAL do catálogo a cada resposta. Linhas cujo NFT ou edição não
+ * existem mais são removidas silenciosamente (do db e da resposta) em vez de
+ * quebrar a request.
  */
 function buildCart(userId: string): { items: CartItem[]; updatedAt: string } {
   const entries = db.get().carts[userId] ?? []
@@ -24,24 +26,30 @@ function buildCart(userId: string): { items: CartItem[]; updatedAt: string } {
 
   for (const entry of entries) {
     const nft = nfts.find((n) => n.id === entry.nftId)
-    if (!nft) {
+    const edition = nft?.editions.find((e) => e.id === entry.editionId)
+    if (!nft || !edition) {
       hasStaleEntry = true
       continue
     }
     items.push({
       nftId: nft.id,
+      editionId: edition.id,
+      editionLabel: edition.label,
       tokenId: nft.tokenId,
       name: nft.name,
       image: nft.image,
-      unitPrice: nft.price,
+      unitPrice: edition.price,
       quantity: entry.quantity,
-      available: nft.available,
+      available: edition.available,
     })
   }
 
   if (hasStaleEntry) {
     db.update((d) => {
-      d.carts[userId] = entries.filter((entry) => nfts.some((n) => n.id === entry.nftId))
+      d.carts[userId] = entries.filter((entry) => {
+        const nft = nfts.find((n) => n.id === entry.nftId)
+        return nft?.editions.some((e) => e.id === entry.editionId) ?? false
+      })
     })
   }
 
@@ -63,6 +71,11 @@ export const cartHandlers = [
   // item pode já existir e só ter a quantidade incrementada), a resposta é
   // 200 com o `cartSchema` completo - mesmo padrão de PATCH/DELETE - em vez
   // de um 201 que sugeriria sempre criação de uma linha nova.
+  //
+  // Uma linha é identificada por `nftId` + `editionId` juntos: o mesmo NFT em
+  // edições diferentes é uma edição de produto diferente (preço e
+  // disponibilidade próprios), então vira uma segunda linha, não soma na
+  // existente.
   http.post('/api/cart/items', async ({ request }) =>
     withScenario(async () => {
       const session = getSessionFromRequest(request)
@@ -72,24 +85,30 @@ export const cartHandlers = [
       const nft = db.get().nfts.find((n) => n.id === body.nftId)
       if (!nft) return errorResponse(404, 'NOT_FOUND', 'NFT não encontrado')
 
+      const edition = nft.editions.find((e) => e.id === body.editionId)
+      if (!edition) return errorResponse(404, 'NOT_FOUND', 'Edição não encontrada para este NFT')
+
       const entries = db.get().carts[session.userId] ?? []
-      const existing = entries.find((e) => e.nftId === body.nftId)
+      const existing = entries.find((e) => e.nftId === body.nftId && e.editionId === body.editionId)
       const nextQuantity = (existing?.quantity ?? 0) + body.quantity
 
-      if (nextQuantity > nft.available)
+      // Checa contra a disponibilidade da edição específica, não do NFT
+      // agregado - agora que a edição é conhecida, é a checagem correta
+      // (duas edições do mesmo NFT têm estoques independentes).
+      if (nextQuantity > edition.available)
         return errorResponse(
           409,
           'AVAILABILITY_CONFLICT',
-          `Apenas ${nft.available} unidade(s) disponível(is) para este NFT`,
+          `Apenas ${edition.available} unidade(s) disponível(is) para esta edição`,
         )
 
       db.update((d) => {
         const list = d.carts[session.userId] ?? []
-        const entry = list.find((e) => e.nftId === body.nftId)
+        const entry = list.find((e) => e.nftId === body.nftId && e.editionId === body.editionId)
         if (entry) {
           entry.quantity = nextQuantity
         } else {
-          list.push({ nftId: body.nftId, quantity: body.quantity })
+          list.push({ nftId: body.nftId, editionId: body.editionId, quantity: body.quantity })
         }
         d.carts[session.userId] = list
       })
@@ -107,22 +126,25 @@ export const cartHandlers = [
       const body = updateCartItemRequestSchema.parse(await request.json())
 
       const entries = db.get().carts[session.userId] ?? []
-      const entry = entries.find((e) => e.nftId === nftId)
+      const entry = entries.find((e) => e.nftId === nftId && e.editionId === body.editionId)
       if (!entry) return errorResponse(404, 'NOT_FOUND', 'Item não encontrado no carrinho')
 
       const nft = db.get().nfts.find((n) => n.id === nftId)
       if (!nft) return errorResponse(404, 'NOT_FOUND', 'NFT não encontrado')
 
-      if (body.quantity > nft.available)
+      const edition = nft.editions.find((e) => e.id === body.editionId)
+      if (!edition) return errorResponse(404, 'NOT_FOUND', 'Edição não encontrada para este NFT')
+
+      if (body.quantity > edition.available)
         return errorResponse(
           409,
           'AVAILABILITY_CONFLICT',
-          `Apenas ${nft.available} unidade(s) disponível(is) para este NFT`,
+          `Apenas ${edition.available} unidade(s) disponível(is) para esta edição`,
         )
 
       db.update((d) => {
         const list = d.carts[session.userId] ?? []
-        const target = list.find((e) => e.nftId === nftId)
+        const target = list.find((e) => e.nftId === nftId && e.editionId === body.editionId)
         if (target) target.quantity = body.quantity
       })
 
@@ -136,8 +158,15 @@ export const cartHandlers = [
       if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
 
       const nftId = params.nftId as string
+      const url = new URL(request.url)
+      const { editionId } = removeCartItemQuerySchema.parse({
+        editionId: url.searchParams.get('editionId'),
+      })
+
       db.update((d) => {
-        d.carts[session.userId] = (d.carts[session.userId] ?? []).filter((e) => e.nftId !== nftId)
+        d.carts[session.userId] = (d.carts[session.userId] ?? []).filter(
+          (e) => !(e.nftId === nftId && e.editionId === editionId),
+        )
       })
 
       return new HttpResponse(null, { status: 204 })

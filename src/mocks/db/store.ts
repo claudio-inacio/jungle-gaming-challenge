@@ -20,7 +20,7 @@ export interface DbState {
   sessions: Record<string, { userId: string; expiresAt: string }>
   nfts: typeof fixtureNfts
   favorites: Record<string, string[]> // userId -> nftId[]
-  carts: Record<string, { nftId: string; quantity: number }[]> // userId -> itens
+  carts: Record<string, { nftId: string; editionId: string; quantity: number }[]> // userId -> itens
   orders: Record<string, Order[]>
   idempotencyKeys: Record<string, { userId: string; orderId: string; bodyHash: string }>
   profiles: Record<string, unknown>
@@ -37,7 +37,11 @@ export interface DbState {
 // (texto da aba "Detalhes do NFT" no detalhe, distinto do `description` curto
 // exibido em "Sobre este NFT") - mesmo motivo do bump v3: campos obrigatórios
 // novos quebrariam o parse de um DB v3 já persistido.
-const STORAGE_KEY = 'kurio-mocks-db:v4'
+// v5: linhas de `carts` passaram a guardar `editionId` (o carrinho agora é
+// edition-aware; sem isso `cartItemSchema.editionId`/`editionLabel` nunca
+// seriam resolvidos) - mesmo motivo dos bumps anteriores: um `carts` v4 já
+// persistido não tem esse campo e quebraria o `buildCart()`/parse da resposta.
+const STORAGE_KEY = 'kurio-mocks-db:v5'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
 // um Map em memória para o processo continuar funcionando sem persistência real.
