@@ -5,7 +5,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { loginRequestSchema, type LoginRequest, ApiError, http } from '@/shared/api'
 import { login, startSession } from '@/entities/session'
-import { guestCartStorage } from '@/entities/cart/model/guest-cart-storage'
+import { guestCartStorage } from '@/entities/cart'
 
 export function useLoginForm(redirectTo?: string) {
   const queryClient = useQueryClient()

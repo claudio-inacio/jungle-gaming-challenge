@@ -1,9 +1,7 @@
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
-import { http } from '@/shared/api/http'
-import { cartSchema } from '@/shared/api/contracts/cart'
-import { queryKeys } from '@/shared/api/query-keys'
-import { useSession } from '@/entities/session'
-import { guestCartStorage } from '../guest-cart-storage'
+import { http, cartSchema, queryKeys } from '@/shared/api'
+import { useSession } from '@/entities/session/@x/cart'
+import { guestCartStorage } from '../model/guest-cart-storage'
 
 export function cartQuery(userId: string) {
   return queryOptions({

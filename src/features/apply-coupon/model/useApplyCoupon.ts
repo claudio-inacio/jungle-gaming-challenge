@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { http } from '@/shared/api/http'
-import { queryKeys } from '@/shared/api/query-keys'
+import { http, queryKeys } from '@/shared/api'
 import { useSession } from '@/entities/session'
 
 export function useApplyCoupon() {

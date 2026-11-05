@@ -33,6 +33,12 @@ export const scenarios: Record<string, Scenario> = {
         message: 'Cupom inválido',
         when: { couponCode: 'KURIO10' },
       },
+      'PATCH /api/cart/coupon': {
+        status: 422,
+        code: 'COUPON_INVALID',
+        message: 'Cupom inválido',
+        when: { couponCode: 'KURIO10' },
+      },
     },
   },
   'coupon-expired': {
@@ -46,6 +52,12 @@ export const scenarios: Record<string, Scenario> = {
         when: { couponCode: 'KURIO10' },
       },
       'POST /api/orders': {
+        status: 422,
+        code: 'COUPON_EXPIRED',
+        message: 'Cupom expirado',
+        when: { couponCode: 'KURIO10' },
+      },
+      'PATCH /api/cart/coupon': {
         status: 422,
         code: 'COUPON_EXPIRED',
         message: 'Cupom expirado',

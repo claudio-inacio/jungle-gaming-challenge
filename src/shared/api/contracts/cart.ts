@@ -18,6 +18,10 @@ export type CartItem = z.infer<typeof cartItemSchema>
 
 export const cartSchema = z.object({
   items: z.array(cartItemSchema),
+  // Cupom é do carrinho como um todo, não de cada linha - evita ter que
+  // sincronizar o mesmo código em N itens e permite representar "sem cupom"
+  // mesmo com o carrinho vazio.
+  couponCode: z.string().nullable(),
   updatedAt: isoDateSchema,
 })
 export type Cart = z.infer<typeof cartSchema>
@@ -46,3 +50,10 @@ export const mergeCartRequestSchema = z.object({
   ),
 })
 export type MergeCartRequest = z.infer<typeof mergeCartRequestSchema>
+
+// `couponCode` string aplica; `null` remove (mesmo padrão de `CouponInput`,
+// que chama `apply.mutate(null)` no botão "Remover").
+export const applyCartCouponRequestSchema = z.object({
+  couponCode: z.string().min(1).nullable(),
+})
+export type ApplyCartCouponRequest = z.infer<typeof applyCartCouponRequestSchema>

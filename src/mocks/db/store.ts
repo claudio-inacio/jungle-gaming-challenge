@@ -21,6 +21,7 @@ export interface DbState {
   nfts: typeof fixtureNfts
   favorites: Record<string, string[]> // userId -> nftId[]
   carts: Record<string, { nftId: string; editionId: string; quantity: number }[]> // userId -> itens
+  cartCoupons: Record<string, string | null> // userId -> código aplicado ao carrinho (ou ausente/null)
   orders: Record<string, Order[]>
   idempotencyKeys: Record<string, { userId: string; orderId: string; bodyHash: string }>
   profiles: Record<string, unknown>
@@ -41,7 +42,10 @@ export interface DbState {
 // edition-aware; sem isso `cartItemSchema.editionId`/`editionLabel` nunca
 // seriam resolvidos) - mesmo motivo dos bumps anteriores: um `carts` v4 já
 // persistido não tem esse campo e quebraria o `buildCart()`/parse da resposta.
-const STORAGE_KEY = 'kurio-mocks-db:v5'
+// v6: cupom passou a ser do carrinho (novo campo `cartCoupons`), não de cada
+// item - um DB v5 persistido não tem esse campo; sem o bump, `buildCart()`
+// leria `undefined` indefinidamente em vez do estado inicial `{}`.
+const STORAGE_KEY = 'kurio-mocks-db:v6'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
 // um Map em memória para o processo continuar funcionando sem persistência real.
@@ -67,6 +71,7 @@ function createInitialState(): DbState {
     nfts: fixtureNfts,
     favorites: {},
     carts: {},
+    cartCoupons: {},
     orders: {},
     idempotencyKeys: {},
     profiles: {},

@@ -2,8 +2,8 @@ import { Trash2 } from 'lucide-react'
 import { Text } from '@/shared/ui/Text'
 import { formatEth, mulEth } from '@/shared/lib/eth'
 
-import type { CartItem } from '@/shared/api/contracts/cart'
-import { useUpdateCartItem } from '@/entities/cart/model/api/cart'
+import type { CartItem } from '@/shared/api'
+import { useUpdateCartItem } from '@/entities/cart'
 
 export function CartTable({ items }: { items: CartItem[] }) {
   const updateItem = useUpdateCartItem()

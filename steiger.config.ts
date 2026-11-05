@@ -24,7 +24,30 @@ export default defineConfig([
     // de public-api-sidestep/reserved-folder-names que motivaram esse
     // formato; "insignificant-slice" aqui é só o reflexo de o roadmap ainda
     // não ter outro consumidor.
-    files: ['./src/features/login/**', './src/features/register/**', './src/features/logout/**'],
+    files: [
+      './src/features/login/**',
+      './src/features/auth/login/**',
+      './src/features/register/**',
+      './src/features/logout/**',
+    ],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
+  {
+    // entities/cart, entities/quote, features/apply-coupon, widgets/cart-summary
+    // e widgets/cart-table são os slices do fluxo de carrinho/cotação, separados
+    // por responsabilidade (carrinho, cotação com cupom, aplicar cupom, resumo,
+    // tabela de itens). entities/cart já tem 3 consumidores reais em slices
+    // diferentes (widgets/cart-table, pages/cart, features/auth/login) — o
+    // steiger reporta só 1 aqui, parece um falso positivo da heurística dele;
+    // os demais têm um único consumidor hoje porque pages/cart é a única
+    // página que os compõe até o checkout existir.
+    files: [
+      './src/entities/cart/**',
+      './src/entities/quote/**',
+      './src/features/apply-coupon/**',
+      './src/widgets/cart-summary/**',
+      './src/widgets/cart-table/**',
+    ],
     rules: { 'fsd/insignificant-slice': 'off' },
   },
   {

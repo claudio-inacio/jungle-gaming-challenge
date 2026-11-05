@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Input } from '@/shared/ui/input'
 import { Button } from '@/shared/ui/button'
 import { useApplyCoupon } from '../model/useApplyCoupon'
-import { ApiError } from '@/shared/api/contracts/error'
+import { ApiError } from '@/shared/api'
 
 export function CouponInput({ appliedCode }: { appliedCode: string | null }) {
   const [value, setValue] = useState('')

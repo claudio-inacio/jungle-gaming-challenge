@@ -5,10 +5,10 @@ import { Button } from '@/shared/ui/button'
 import { OutOfScopeButton } from '@/shared/ui/out-of-scope'
 import { formatEth } from '@/shared/lib/eth'
 import { useSession } from '@/entities/session'
-import { CouponInput } from '@/features/apply-coupon/ui/CouponInput'
-import { CartSummarySkeleton } from '@/shared/ui/CartSummarySkeleton' // criado na Fase 2
-import type { CartItem } from '@/shared/api/contracts/cart'
-import { quoteQuery } from '@/entities/quote/api/quote'
+import { CouponInput } from '@/features/apply-coupon'
+import { CartSummarySkeleton } from '@/shared/ui/CartSummarySkeleton'
+import type { CartItem } from '@/shared/api'
+import { quoteQuery } from '@/entities/quote'
 
 export function CartSummary({
   items,

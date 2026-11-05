@@ -1,9 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
-import { http } from '@/shared/api/http'
-
-import { queryKeys } from '@/shared/api/query-keys'
-import type { CartItem } from '@/shared/api/contracts/cart'
-import { quoteSchema } from '@/shared/api'
+import { http, queryKeys, quoteSchema, type CartItem } from '@/shared/api'
 
 function hashQuoteInput(items: CartItem[], couponCode: string | null) {
   return JSON.stringify({ items: items.map((i) => [i.nftId, i.editionId, i.quantity]), couponCode })

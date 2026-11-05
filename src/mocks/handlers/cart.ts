@@ -1,15 +1,17 @@
 import { http, HttpResponse } from 'msw'
 import {
   addCartItemRequestSchema,
+  applyCartCouponRequestSchema,
   cartSchema,
   mergeCartRequestSchema,
   updateCartItemRequestSchema,
   type CartItem,
 } from '@/shared/api/contracts/cart'
 import { db } from '../db/store'
-import { withScenario } from '../scenarios/apply'
+import { withScenario, matchOverride } from '../scenarios/apply'
 import { errorResponse } from './error-response'
 import { getSessionFromRequest } from './session'
+import { fixtureCoupons } from '../fixtures/coupons'
 
 /**
  * Preço, nome, imagem e disponibilidade nunca ficam congelados no carrinho -
@@ -18,7 +20,11 @@ import { getSessionFromRequest } from './session'
  * existem mais são removidas silenciosamente (do db e da resposta) em vez de
  * quebrar a request.
  */
-function buildCart(userId: string): { items: CartItem[]; updatedAt: string } {
+function buildCart(userId: string): {
+  items: CartItem[]
+  couponCode: string | null
+  updatedAt: string
+} {
   const entries = db.get().carts[userId] ?? []
   const nfts = db.get().nfts
   const items: CartItem[] = []
@@ -53,7 +59,11 @@ function buildCart(userId: string): { items: CartItem[]; updatedAt: string } {
     })
   }
 
-  return { items, updatedAt: new Date().toISOString() }
+  return {
+    items,
+    couponCode: db.get().cartCoupons[userId] ?? null,
+    updatedAt: new Date().toISOString(),
+  }
 }
 
 export const cartHandlers = [
@@ -205,6 +215,35 @@ export const cartHandlers = [
           }
         }
         d.carts[session.userId] = list
+      })
+
+      return HttpResponse.json(cartSchema.parse(buildCart(session.userId)))
+    }),
+  ),
+
+  http.patch('/api/cart/coupon', async ({ request }) =>
+    withScenario(async () => {
+      const session = getSessionFromRequest(request)
+      if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+
+      const body = applyCartCouponRequestSchema.parse(await request.json())
+
+      const forced = matchOverride('PATCH', '/api/cart/coupon', { couponCode: body.couponCode })
+      if (forced) return errorResponse(forced.status, forced.code, forced.message)
+
+      if (body.couponCode === null) {
+        db.update((d) => {
+          d.cartCoupons[session.userId] = null
+        })
+        return HttpResponse.json(cartSchema.parse(buildCart(session.userId)))
+      }
+
+      const coupon = fixtureCoupons[body.couponCode as keyof typeof fixtureCoupons]
+      if (!coupon) return errorResponse(422, 'COUPON_INVALID', 'Cupom inválido')
+      if (coupon.status === 'expired') return errorResponse(422, 'COUPON_EXPIRED', 'Cupom expirado')
+
+      db.update((d) => {
+        d.cartCoupons[session.userId] = body.couponCode
       })
 
       return HttpResponse.json(cartSchema.parse(buildCart(session.userId)))
