@@ -277,7 +277,7 @@ export function NftDetailPage() {
                   <Text variant="caption">Token</Text>
                 </dt>
                 <dd>
-                  <Text variant="body-bold">#{nft.tokenId}</Text>
+                  <Text variant="body-bold">{nft.tokenId}</Text>
                 </dd>
               </div>
               <div className="flex flex-col gap-1">
