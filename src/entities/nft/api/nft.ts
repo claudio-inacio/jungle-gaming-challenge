@@ -1,5 +1,11 @@
-import { queryOptions, keepPreviousData } from '@tanstack/react-query'
-import { http, nftListResponseSchema, nftListQuerySchema, queryKeys } from '@/shared/api'
+import { queryOptions } from '@tanstack/react-query'
+import {
+  http,
+  nftListResponseSchema,
+  nftListQuerySchema,
+  nftCollectionListResponseSchema,
+  queryKeys,
+} from '@/shared/api'
 import type { CatalogSearch } from '../model/catalog-search'
 
 async function fetchNfts(params: CatalogSearch, signal?: AbortSignal) {
@@ -11,7 +17,17 @@ export function nftListQuery(params: CatalogSearch) {
   return queryOptions({
     queryKey: queryKeys.nfts.list(params),
     queryFn: ({ signal }) => fetchNfts(params, signal),
-    placeholderData: keepPreviousData, // evita "piscar" ao trocar filtro/página
+  })
+}
+
+export function nftCollectionsQuery() {
+  return queryOptions({
+    queryKey: queryKeys.nfts.collections(),
+    queryFn: async ({ signal }) => {
+      const { data } = await http.get('/nfts/collections', { signal })
+      return nftCollectionListResponseSchema.parse(data)
+    },
+    staleTime: 60_000,
   })
 }
 

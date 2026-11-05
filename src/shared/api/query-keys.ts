@@ -4,6 +4,7 @@ export const queryKeys = {
   nfts: {
     list: (params: Record<string, unknown>) => ['nfts', 'list', params] as const,
     detail: (id: string) => ['nfts', 'detail', id] as const,
+    collections: () => ['nfts', 'collections'] as const,
   },
 
   favorites: (userId: string) => ['favorites', userId] as const,

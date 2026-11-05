@@ -63,3 +63,12 @@ export type NftListQuery = z.infer<typeof nftListQuerySchema>
 
 export const nftListResponseSchema = paginatedSchema(nftSummarySchema)
 export type NftListResponse = z.infer<typeof nftListResponseSchema>
+
+export const nftCollectionSchema = z.object({
+  id: idSchema,
+  name: z.string(),
+  count: z.number().int().min(0),
+})
+export type NftCollection = z.infer<typeof nftCollectionSchema>
+
+export const nftCollectionListResponseSchema = z.array(nftCollectionSchema)

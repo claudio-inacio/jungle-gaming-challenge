@@ -3,6 +3,7 @@ import {
   nftDetailSchema,
   nftListQuerySchema,
   nftListResponseSchema,
+  nftCollectionListResponseSchema,
 } from '@/shared/api/contracts/nft'
 import { compareEth } from '@/shared/lib/eth'
 import { db } from '../db/store'
@@ -96,6 +97,30 @@ export const nftHandlers = [
           total,
         }),
       )
+    }),
+  ),
+
+  // Precisa vir antes de `/api/nfts/:id` - MSW casa rotas na ordem declarada, e
+  // `:id` casaria com o literal "collections" primeiro se viesse antes.
+  http.get('/api/nfts/collections', async () =>
+    withScenario(() => {
+      const counts = new Map<string, { name: string; count: number }>()
+      for (const nft of db.get().nfts) {
+        const entry = counts.get(nft.collectionId)
+        if (entry) {
+          entry.count += 1
+        } else {
+          counts.set(nft.collectionId, { name: nft.collectionName, count: 1 })
+        }
+      }
+
+      const collections = Array.from(counts.entries()).map(([id, { name, count }]) => ({
+        id,
+        name,
+        count,
+      }))
+
+      return HttpResponse.json(nftCollectionListResponseSchema.parse(collections))
     }),
   ),
 
