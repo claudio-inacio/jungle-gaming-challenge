@@ -74,9 +74,9 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
             </div>
           ) : (
             <Button
-              type="button"
               variant="default"
               className="gap-1.5"
+              nativeButton={false}
               render={<Link to="/login" />}
             >
               <LogIn aria-hidden="true" className="size-4" />

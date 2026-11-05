@@ -10,7 +10,9 @@ export function NotFoundPage() {
         <p className="text-muted-foreground">
           O conteúdo que você procura não existe ou foi removido.
         </p>
-        <Button render={<Link to="/" />}>Voltar para o início</Button>
+        <Button nativeButton={false} render={<Link to="/" />}>
+          Voltar para o início
+        </Button>
       </Container>
     </main>
   )
