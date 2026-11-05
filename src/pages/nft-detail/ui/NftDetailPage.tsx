@@ -4,9 +4,7 @@ import { nftDetailQuery } from '@/entities/nft'
 import { ApiError } from '@/shared/api/contracts/error'
 import { NotFoundPage } from '@/pages/not-found'
 import { ErrorState } from '@/shared/ui/QueryState'
-
 import { NftGallery } from '@/widgets/nft-gallery'
-
 import { NftDetailTabs } from '@/widgets/nft-detail-tabs'
 import { RelatedNfts } from '@/widgets/related-nfts'
 import { NftDetailSkeleton } from '@/shared/ui/NftDetailSkeleton'
