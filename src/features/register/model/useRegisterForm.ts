@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
-import { registerRequestSchema, setAccessToken, queryKeys, ApiError } from '@/shared/api'
-import { register, tokenStorage } from '@/entities/session'
+import { registerRequestSchema, ApiError } from '@/shared/api'
+import { register, startSession } from '@/entities/session'
 
 const registerFormSchema = registerRequestSchema
   .extend({ confirmPassword: z.string().min(1, 'Confirme sua senha') })
@@ -26,9 +26,7 @@ export function useRegisterForm(redirectTo?: string) {
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: (session) => {
-      setAccessToken(session.accessToken)
-      tokenStorage.set(session.accessToken)
-      queryClient.setQueryData(queryKeys.session(), session)
+      startSession(queryClient, session)
       navigate({ to: redirectTo ?? '/' })
     },
     onError: (error) => {

@@ -3,14 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import {
-  loginRequestSchema,
-  type LoginRequest,
-  setAccessToken,
-  queryKeys,
-  ApiError,
-} from '@/shared/api'
-import { login, tokenStorage } from '@/entities/session'
+import { loginRequestSchema, type LoginRequest, ApiError } from '@/shared/api'
+import { login, startSession } from '@/entities/session'
 
 export function useLoginForm(redirectTo?: string) {
   const queryClient = useQueryClient()
@@ -24,9 +18,7 @@ export function useLoginForm(redirectTo?: string) {
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (session) => {
-      setAccessToken(session.accessToken)
-      tokenStorage.set(session.accessToken)
-      queryClient.setQueryData(queryKeys.session(), session)
+      startSession(queryClient, session)
       toast.success(`Login realizado com sucesso! Bem-vindo, ${session.user.displayName}.`)
       navigate({ to: redirectTo ?? '/' })
     },

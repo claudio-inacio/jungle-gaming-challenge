@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { logoutRequest, tokenStorage } from '@/entities/session'
-import { socket } from '@/shared/api'
+import { toast } from 'sonner'
+import { logoutRequest, endSession } from '@/entities/session'
 
 export function useLogout() {
   const queryClient = useQueryClient()
@@ -10,10 +10,9 @@ export function useLogout() {
   return useMutation({
     mutationFn: logoutRequest,
     onSettled: () => {
-      tokenStorage.clear()
-      socket.disconnect()
-      queryClient.clear()
+      endSession(queryClient)
       navigate({ to: '/' })
+      toast.success('Você saiu da sua conta.')
     },
   })
 }

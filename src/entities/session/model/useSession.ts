@@ -1,15 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { queryKeys, setAccessToken, socket } from '@/shared/api'
+import { queryKeys, socket } from '@/shared/api'
 import { fetchSession } from '../api/session'
 import { tokenStorage } from './token-storage'
 
 export function useSession() {
   const queryClient = useQueryClient()
-
-  // reidrata o token antes da query rodar — recuperação após refresh
   const storedToken = tokenStorage.get()
-  if (storedToken) setAccessToken(storedToken)
 
   const query = useQuery({
     queryKey: queryKeys.session(),
@@ -25,8 +22,13 @@ export function useSession() {
   useEffect(() => {
     if (!userId) return
     socket.auth = { token: tokenStorage.get() }
+    function identify() {
+      socket.emit('identify', { token: tokenStorage.get() })
+    }
+    socket.on('connect', identify)
     socket.connect()
     return () => {
+      socket.off('connect', identify)
       socket.disconnect()
     }
   }, [userId])

@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { queryKeys } from '@/shared/api'
-import { fetchSession, tokenStorage } from '@/entities/session'
+import { fetchSession, tokenStorage, endSession } from '@/entities/session'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context, location }) => {
@@ -14,7 +14,7 @@ export const Route = createFileRoute('/_authenticated')({
         queryFn: () => fetchSession(),
       })
     } catch {
-      tokenStorage.clear()
+      endSession(context.queryClient)
       throw redirect({ to: '/login', search: { redirect: location.href } })
     }
   },

@@ -24,11 +24,15 @@ async function enableMocking() {
 // a captura na implementação nativa. O import dinâmico abaixo garante que
 // esses módulos só carregam depois do worker do MSW já estar ativo.
 enableMocking().then(async () => {
-  const [{ queryClient }, { router }, { SessionExpiryListener }] = await Promise.all([
-    import('@/shared/api'),
-    import('@/app/router'),
-    import('@/app/model/SessionExpiryListener'),
-  ])
+  const [{ queryClient }, { router }, { SessionExpiryListener }, { rehydrateAccessToken }] =
+    await Promise.all([
+      import('@/shared/api'),
+      import('@/app/router'),
+      import('@/app/model/SessionExpiryListener'),
+      import('@/entities/session'),
+    ])
+
+  rehydrateAccessToken()
 
   createRoot(document.getElementById('root')!).render(
     <StrictMode>

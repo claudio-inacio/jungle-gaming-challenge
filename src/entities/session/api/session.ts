@@ -24,6 +24,9 @@ export async function register(body: z.infer<typeof registerRequestSchema>): Pro
 }
 
 export async function logoutRequest(): Promise<void> {
-  await http.post('/auth/logout')
-  setAccessToken(null)
+  try {
+    await http.post('/auth/logout')
+  } finally {
+    setAccessToken(null)
+  }
 }
