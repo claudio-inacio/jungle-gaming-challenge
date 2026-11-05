@@ -145,10 +145,19 @@ function buildEditions(nftId: string, basePrice: string, nftIndex: number): NftE
 const NFT_COUNT = 40
 const MAX_GALLERY_SIZE = ARTWORK_POOL.length
 
-export const fixtureNfts: NftDetail[] = withSeed(42, () => {
-  const coverSequence = buildShuffledArtworkSequence(NFT_COUNT)
-  const gallerySequence = buildShuffledArtworkSequence(NFT_COUNT + MAX_GALLERY_SIZE)
+type NftWithoutNarrative = Omit<NftDetail, 'longDescription' | 'networkInfo' | 'royaltyInfo'>
 
+// Seed isolada (44, não 42): `buildShuffledArtworkSequence` consome um número de
+// sorteios do faker proporcional ao tamanho de `ARTWORK_POOL`, então qualquer
+// mudança nesse pool (como já aconteceu, de 6 para 3 itens) desloca a sequência
+// principal usada pelo loop abaixo se rodar na mesma seed - e os nomes/preços
+// fixados em e2e/specs/01-catalog.spec.ts dependem dessa sequência não mudar.
+const { coverSequence, gallerySequence } = withSeed(44, () => ({
+  coverSequence: buildShuffledArtworkSequence(NFT_COUNT),
+  gallerySequence: buildShuffledArtworkSequence(NFT_COUNT + MAX_GALLERY_SIZE),
+}))
+
+const baseNfts: NftWithoutNarrative[] = withSeed(42, () => {
   return Array.from({ length: NFT_COUNT }, (_, index) => {
     const collection = pickCyclic(COLLECTIONS, index)
     const network = pickCyclic(NETWORKS, index)
@@ -172,7 +181,7 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () => {
     const attributes = buildAttributes()
     const editions = buildEditions(id, price, index)
 
-    const nft: NftDetail = {
+    const nft: NftWithoutNarrative = {
       id,
       tokenId: `#${String(faker.number.int({ min: 1, max: 9999 })).padStart(4, '0')}`,
       name: buildName(),
@@ -209,6 +218,36 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () => {
     return nft
   })
 })
+
+const LONG_DESCRIPTION_INTRO: Array<(nft: NftWithoutNarrative) => string> = [
+  (nft) =>
+    `${nft.name} é uma obra digital ${nft.editionType === 'unique' ? '1/1' : nft.editionType === 'open' ? 'de edição aberta' : `1/${nft.totalSupply}`} finalizada à mão da coleção ${nft.collectionName}. Cada atributo fica armazenado nos metadados do token e verificado na ${capitalize(nft.network)}.`,
+  (nft) =>
+    `${nft.name} explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção ${nft.collectionName}.`,
+]
+
+const LONG_DESCRIPTION_OUTRO: Array<(nft: NftWithoutNarrative) => string> = [
+  (nft) =>
+    `A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede ${capitalize(nft.network)}, apoiando novos trabalhos e lançamentos da comunidade.`,
+  () =>
+    'A propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.',
+]
+
+// `longDescription`/`royaltyInfo` rodam numa seed separada (43, não 42) de propósito:
+// gerá-los dentro do loop principal consumiria a sequência compartilhada do faker e
+// deslocaria todo valor gerado depois (contractAddress, e para os NFTs seguintes até
+// name/tokenId/price), quebrando os nomes fixados em e2e/specs/01-catalog.spec.ts.
+export const fixtureNfts: NftDetail[] = withSeed(43, () =>
+  baseNfts.map((nft) => ({
+    ...nft,
+    longDescription: [
+      faker.helpers.arrayElement(LONG_DESCRIPTION_INTRO)(nft),
+      faker.helpers.arrayElement(LONG_DESCRIPTION_OUTRO)(nft),
+    ].join('\n\n'),
+    networkInfo: `Cunhado na ${capitalize(nft.network)} com procedência imutável e metadados armazenados no IPFS.`,
+    royaltyInfo: `Direitos autorais do criador: ${faker.number.int({ min: 2, max: 10 })}% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.`,
+  })),
+)
 
 // Garante que a fixture nunca diverge do contrato (falha rápido se algum campo ficar fora do schema).
 nftDetailSchema.array().parse(fixtureNfts)

@@ -33,7 +33,11 @@ export interface DbState {
 // (contractAddress, editions, reviewCount, attributes, isFavorited) - sem esse
 // bump, um DB v2 já persistido no localStorage falha o `zod.parse()` dos
 // handlers (campos ausentes), derrubando o catálogo e o detalhe inteiros.
-const STORAGE_KEY = 'kurio-mocks-db:v3'
+// v4: `nftDetailSchema` ganhou `longDescription`, `networkInfo` e `royaltyInfo`
+// (texto da aba "Detalhes do NFT" no detalhe, distinto do `description` curto
+// exibido em "Sobre este NFT") - mesmo motivo do bump v3: campos obrigatórios
+// novos quebrariam o parse de um DB v3 já persistido.
+const STORAGE_KEY = 'kurio-mocks-db:v4'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
 // um Map em memória para o processo continuar funcionando sem persistência real.

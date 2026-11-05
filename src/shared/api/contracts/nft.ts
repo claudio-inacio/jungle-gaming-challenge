@@ -40,6 +40,14 @@ export type NftSummary = z.infer<typeof nftSummarySchema>
 
 export const nftDetailSchema = nftSummarySchema.extend({
   description: z.string(),
+  // Dois parágrafos narrativos da aba "Sobre este NFT", separados por "\n\n" —
+  // string única (não array) porque o consumo mais comum é renderizar o texto
+  // corrido completo; quem precisar dos parágrafos separados faz split('\n\n').
+  longDescription: z.string(),
+  // Frase do bloco "Rede:" (onde/como o token foi cunhado).
+  networkInfo: z.string(),
+  // Frase do bloco "Contrato:" (royalties/direitos autorais do criador).
+  royaltyInfo: z.string(),
   contractAddress: z.string().min(1),
   images: z.array(z.string().min(1)).min(1),
   rating: z.object({
