@@ -27,9 +27,9 @@ function HeroMobileBanner() {
   return (
     <div className="flex flex-col items-center gap-4 rounded-xl bg-gradient-to-br from-card to-accent/40 p-4">
       <div className="flex w-full items-center gap-2">
-        <div className="flex flex-1 flex-col items-start gap-1.5">
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5">
           <p className="text-xs font-medium text-foreground">Bem-vindo à Kurio</p>
-          <h1 className="w-[190px] text-lg leading-[29px] font-bold text-foreground">
+          <h1 className="text-lg leading-[29px] font-bold text-foreground">
             SEJA DONO DA
             <br />
             CULTURA DIGITAL

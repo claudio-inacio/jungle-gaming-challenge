@@ -38,11 +38,12 @@ export function RelatedNfts({ collectionId, currentNftId }: Props) {
     return (
       <section>
         <h2 className="mb-4 text-lg font-bold">Mais desta coleção</h2>
-        <div className="flex justify-center gap-4">
+        <div
+          className="grid justify-center gap-4"
+          style={{ gridTemplateColumns: `repeat(${perPage}, minmax(0, 15.25rem))` }}
+        >
           {Array.from({ length: perPage }, (_, index) => (
-            <div key={index} className="min-w-61 shrink-0">
-              <NftCardSkeleton />
-            </div>
+            <NftCardSkeleton key={index} />
           ))}
         </div>
       </section>
@@ -68,11 +69,12 @@ export function RelatedNfts({ collectionId, currentNftId }: Props) {
   return (
     <section>
       <h2 className="mb-4 text-lg font-bold">Mais desta coleção</h2>
-      <div className="flex flex-wrap justify-center gap-4">
+      <div
+        className="grid justify-center gap-4"
+        style={{ gridTemplateColumns: `repeat(${visibleItems.length}, minmax(0, 15.25rem))` }}
+      >
         {visibleItems.map((nft) => (
-          <div key={nft.id} className="min-w-61 shrink-0">
-            <NftCard nft={nft} />
-          </div>
+          <NftCard key={nft.id} nft={nft} />
         ))}
       </div>
 

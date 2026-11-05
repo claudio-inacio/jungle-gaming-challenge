@@ -20,8 +20,11 @@ export function NftDetailTabs({ nft }: Props) {
   const [firstParagraph, secondParagraph] = nft.longDescription.split('\n\n')
 
   return (
-    <Tabs defaultValue="details">
-      <TabsList variant="line" className="h-auto gap-6 border-b border-border p-0">
+    <Tabs defaultValue="details" className="min-w-0">
+      <TabsList
+        variant="line"
+        className="h-auto w-full justify-start gap-6 overflow-x-auto border-b border-border p-0"
+      >
         <TabsTrigger value="details" className={TAB_TRIGGER_CLASS}>
           Detalhes do NFT
         </TabsTrigger>
