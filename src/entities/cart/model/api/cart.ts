@@ -2,7 +2,6 @@ import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query
 import { http } from '@/shared/api/http'
 import { cartSchema } from '@/shared/api/contracts/cart'
 import { queryKeys } from '@/shared/api/query-keys'
-
 import { useSession } from '@/entities/session'
 import { guestCartStorage } from '../guest-cart-storage'
 
