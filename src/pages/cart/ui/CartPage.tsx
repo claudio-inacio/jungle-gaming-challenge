@@ -6,8 +6,7 @@ import { CartSummarySkeleton } from '@/shared/ui/CartSummarySkeleton'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { CartTable } from '@/widgets/cart-table'
 import { CartSummary } from '@/widgets/cart-summary'
-import { cartQuery, useGuestCartItems } from '@/entities/cart'
-import { useCartRealtime } from '@/entities/cart/model/useCartRealTime'
+import { cartQuery, useGuestCartItems, useCartRealtime } from '@/entities/cart'
 
 export function CartPage() {
   const { user, isAuthenticated } = useSession()
