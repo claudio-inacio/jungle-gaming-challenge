@@ -3,11 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { loginRequestSchema, type LoginRequest } from '@/shared/api/contracts/session'
+import {
+  loginRequestSchema,
+  type LoginRequest,
+  setAccessToken,
+  queryKeys,
+  ApiError,
+} from '@/shared/api'
 import { login, tokenStorage } from '@/entities/session'
-import { setAccessToken } from '@/shared/api/http'
-import { queryKeys } from '@/shared/api/query-keys'
-import { ApiError } from '@/shared/api/contracts/error'
 
 export function useLoginForm(redirectTo?: string) {
   const queryClient = useQueryClient()

@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { logoutRequest } from '@/entities/session'
-import { tokenStorage } from '@/entities/session'
-import { socket } from '@/shared/api/socket/client'
+import { logoutRequest, tokenStorage } from '@/entities/session'
+import { socket } from '@/shared/api'
 
 export function useLogout() {
   const queryClient = useQueryClient()

@@ -3,11 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
-import { registerRequestSchema } from '@/shared/api/contracts/session'
+import { registerRequestSchema, setAccessToken, queryKeys, ApiError } from '@/shared/api'
 import { register, tokenStorage } from '@/entities/session'
-import { setAccessToken } from '@/shared/api/http'
-import { queryKeys } from '@/shared/api/query-keys'
-import { ApiError } from '@/shared/api/contracts/error'
 
 const registerFormSchema = registerRequestSchema
   .extend({ confirmPassword: z.string().min(1, 'Confirme sua senha') })

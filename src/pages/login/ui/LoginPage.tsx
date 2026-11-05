@@ -1,5 +1,5 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
-import { useMediaQuery } from '@/shared/lib/hooks/useMediaQuery'
+import { useMediaQuery } from '@/shared/lib/hooks'
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog'
-import { AuthTabs, LoginForm } from '@/features/auth'
+import { AuthTabs } from '@/shared/ui/auth-tabs'
+import { LoginForm } from '@/features/login'
 
 export function LoginPage() {
   const { redirect } = useSearch({ from: '/login' })

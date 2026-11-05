@@ -3,7 +3,7 @@ import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { PasswordInput } from '@/shared/ui/password-input'
 import { Button } from '@/shared/ui/button'
-import { SocialAuthButtons } from '@/features/auth/ui/SocialAuthButtons'
+import { SocialAuthButtons } from '@/shared/ui/social-auth-buttons'
 
 type RegisterFormProps = {
   redirectTo?: string

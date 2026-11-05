@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { LogIn, LogOut, Search, ShoppingCart, SlidersHorizontal } from 'lucide-react'
 import { useSession } from '@/entities/session'
-import { useLogout } from '@/features/auth'
+import { useLogout } from '@/features/logout'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Container } from '@/shared/ui/container'

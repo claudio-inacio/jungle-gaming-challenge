@@ -16,4 +16,15 @@ export default defineConfig([
     ],
     rules: { 'fsd/insignificant-slice': 'off' },
   },
+  {
+    // login/register/logout são slices de verdade (form state, validação,
+    // mutation) hoje com um único consumidor cada (pages/login,
+    // pages/register, widgets/header). Mantê-las como slices próprias, em
+    // vez de aninhadas sob um agrupador "auth", é o que evita os problemas
+    // de public-api-sidestep/reserved-folder-names que motivaram esse
+    // formato; "insignificant-slice" aqui é só o reflexo de o roadmap ainda
+    // não ter outro consumidor.
+    files: ['./src/features/login/**', './src/features/register/**', './src/features/logout/**'],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
 ])

@@ -1,5 +1,5 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
-import { useMediaQuery } from '@/shared/lib/hooks/useMediaQuery'
+import { useMediaQuery } from '@/shared/lib/hooks'
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog'
-import { AuthTabs, RegisterForm } from '@/features/auth'
+import { AuthTabs } from '@/shared/ui/auth-tabs'
+import { RegisterForm } from '@/features/register'
 
 export function RegisterPage() {
   const { redirect } = useSearch({ from: '/register' })

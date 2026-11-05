@@ -5,7 +5,7 @@ import { Label } from '@/shared/ui/label'
 import { PasswordInput } from '@/shared/ui/password-input'
 import { Button } from '@/shared/ui/button'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
-import { SocialAuthButtons } from '@/features/auth/ui/SocialAuthButtons'
+import { SocialAuthButtons } from '@/shared/ui/social-auth-buttons'
 
 export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const { form, onSubmit, mutation } = useLoginForm(redirectTo)
