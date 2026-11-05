@@ -1,20 +1,29 @@
-import { useQuery } from '@tanstack/react-query'
-import { http } from '@/shared/api'
-import { Container } from '@/shared/ui/container'
+import { useSearch } from '@tanstack/react-router'
+import { Hero } from '@/widgets/hero'
+
+import { CatalogGrid } from '@/widgets/catalog-grid'
+import { PromoCards } from '@/widgets/promo-cards'
+import { BlogSection } from '@/widgets/blog-section'
+import { CatalogTabs, FilterSidebar, SortSelect } from '@/features/catalog-filters'
 
 export function HomePage() {
-  const { data, isPending } = useQuery({
-    queryKey: ['health'],
-    queryFn: ({ signal }) =>
-      http.get<{ status: string }>('/health', { signal }).then((r) => r.data),
-  })
+  const search = useSearch({ from: '/' })
 
   return (
-    <main>
-      <Container className="py-8">
-        <h1 className="text-2xl font-bold">Kurio</h1>
-        <p className="text-muted-foreground">API: {isPending ? 'carregando…' : data?.status}</p>
-      </Container>
+    <main className="flex flex-col gap-[96px]">
+      <Hero />
+      <section className="flex flex-col gap-8 lg:flex-row lg:gap-sidebar-gap">
+        <FilterSidebar collections={[]} />
+        <div className="flex-1 flex flex-col gap-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <CatalogTabs />
+            <SortSelect />
+          </div>
+          <CatalogGrid search={search} />
+        </div>
+      </section>
+      <PromoCards />
+      <BlogSection />
     </main>
   )
 }
