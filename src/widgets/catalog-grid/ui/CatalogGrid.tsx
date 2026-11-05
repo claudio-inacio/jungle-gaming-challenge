@@ -11,7 +11,11 @@ export function CatalogGrid({ search }: { search: CatalogSearch }) {
 
   if (query.isPending) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-card-gap">
+      <div
+        aria-busy="true"
+        aria-live="polite"
+        className="grid grid-cols-2 gap-card-gap md:grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,258px))]"
+      >
         {Array.from({ length: 9 }).map((_, i) => (
           <NftCardSkeleton key={i} />
         ))}
@@ -36,7 +40,7 @@ export function CatalogGrid({ search }: { search: CatalogSearch }) {
 
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-card-gap gap-y-row-gap">
+      <div className="grid grid-cols-2 gap-x-card-gap gap-y-row-gap md:grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,258px))]">
         {query.data.items.map((nft) => (
           <NftCard key={nft.id} nft={nft} />
         ))}
