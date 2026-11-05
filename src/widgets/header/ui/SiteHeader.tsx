@@ -1,18 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { LogIn, LogOut, Search, ShoppingCart, SlidersHorizontal, User } from 'lucide-react'
+import { LogIn, LogOut, Search, ShoppingCart, SlidersHorizontal } from 'lucide-react'
 import { useSession } from '@/entities/session'
 import { useLogout } from '@/features/auth'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Container } from '@/shared/ui/container'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/shared/ui/dropdown-menu'
 import { OutOfScopeLink } from '@/shared/ui/out-of-scope'
 
 type SiteHeaderProps = {
@@ -64,30 +56,22 @@ function SiteHeader({ itemCount }: SiteHeaderProps) {
           </span>
 
           {isAuthenticated ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <button
-                    type="button"
-                    aria-label="Minha conta"
-                    className="flex size-9 items-center justify-center rounded-full border border-border bg-muted text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                  />
-                }
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-foreground">
+                Bem-vindo{user ? `, ${user.displayName}` : ''}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-destructive hover:text-destructive"
+                onClick={() => logout.mutate()}
+                disabled={logout.isPending}
               >
-                <User aria-hidden="true" className="size-5" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {user ? <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel> : null}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => logout.mutate()}
-                  className="gap-2 text-destructive focus:text-destructive"
-                >
-                  <LogOut aria-hidden="true" className="size-4" />
-                  Sair
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <LogOut aria-hidden="true" className="size-4" />
+                Sair
+              </Button>
+            </div>
           ) : (
             <Button
               type="button"
