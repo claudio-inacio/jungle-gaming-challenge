@@ -43,7 +43,9 @@ Dois usuários fixos em `src/mocks/fixtures/users.ts`, determinísticos (sem `fa
 | `ana.colecionadora@kurio.test`  | `Kurio@123` | Ana Colecionadora  | `ana.kurio`   |
 | `bruno.colecionador@kurio.test` | `Kurio@123` | Bruno Colecionador | `bruno.kurio` |
 
-São credenciais **fictícias de demonstração** — não existe backend real, e a senha só é comparada em texto nas fixtures (usuários cadastrados em runtime via `POST /api/auth/register` recebem hash de verdade, nunca senha em claro). Também é possível criar uma conta nova via `POST /api/auth/register`.
+São credenciais **fictícias de demonstração** — não existe backend real, e a senha só é comparada em texto nas fixtures (usuários cadastrados em runtime via `POST /api/auth/register` recebem hash de verdade, nunca senha em claro).
+
+Use-as para testar o fluxo de **login** de verdade na tela `/login` (ou no modal de login, no desktop) — elas existiam só como dado de fixture do mock antes de a tela de login existir; hoje autenticam de fato contra o handler simulado e abrem uma sessão real (token persistido, socket conectado, rotas privadas liberadas). Para testar o fluxo de **cadastro**, não reutilize essas credenciais: crie uma conta nova em `/register` com um e-mail/username ainda não usado — o cadastro passa pelo mesmo `POST /api/auth/register` citado acima e também abre sessão ao concluir.
 
 ## Seleção e reset de cenários MSW
 
