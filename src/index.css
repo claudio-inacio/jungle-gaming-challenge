@@ -49,6 +49,11 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   --container-page: 1200px;
+  --spacing-cart-item-gap: 12px;
+  --spacing-cart-item-gap-mobile: 20px;
+  --spacing-cart-summary-gap: 86px;
+  --spacing-cart-summary-width: 332px;
+  --spacing-related-gap: 26px;
   --spacing-card-gap: 34px;
   --spacing-row-gap: 72px;
   --spacing-page-margin: 120px;
