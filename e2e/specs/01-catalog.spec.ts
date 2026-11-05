@@ -3,27 +3,28 @@ import Big from 'big.js'
 import { expect, test } from '../fixtures/test'
 
 // Dados determinísticos: `src/mocks/fixtures/nfts.ts` usa `faker.seed(42)`, então
-// nomes, preços, coleções e redes são sempre os mesmos entre execuções. A ordenação
-// padrão da API é `sortBy=newest` (mapeada a partir de `sort=recent` da URL), então
-// a lista abaixo reflete a ordem por `createdAt` desc, não a ordem crua da fixture -
-// recalculada com `npx tsx` lendo `fixtureNfts` diretamente após o fix do mapeamento
-// `CatalogSearch` → `NftListQuery` (ver `src/entities/nft/api/nft.ts`):
-// "Accomplished Utilization" (ethereum, Violet Nomads) - item 1 da página 1, padrão
-// "Insecure Ownership" (polygon) - item 3 da página 1, padrão, não está em "Em alta"
-// "Hard-to-find E-mail" (ethereum, Violet Nomads, 1.50 ETH) - item 24, página 2 padrão
-// "Damaged Travel" (polygon, Crypto Punks Kurio) - fora das páginas 1-2 no padrão
-// "Ignorant Tuba" (solana, Neon Beasts) - único NFT com "Tuba" no nome
-// "Stained Knitting" (ethereum, mas coleção Pixel Dreams, não Violet Nomads)
-// "Nifty Pearl" (0.637 ETH) - o mais barato dos 40, independe de ordenação/filtro
+// nomes/preços/coleções/redes são sempre os mesmos entre execuções - MAS qualquer
+// chamada nova ao `faker` inserida no meio da geração (ex: o campo `editions` por
+// NFT) desloca a sequência inteira do PRNG compartilhado, mudando todos os nomes
+// daí em diante. Os valores abaixo foram recalculados com `npx tsx` lendo
+// `fixtureNfts` diretamente *depois* da fixture ganhar `editions` (ver tarefa de
+// edições do NFT) - se a geração da fixture mudar de novo, recalcule de novo em vez
+// de adivinhar. Ordenação padrão da API é `sortBy=newest` (`sort=recent` da URL).
+// "Homely Advertisement" (ethereum, Pixel Dreams) - item 1 da página 1, padrão
+// "Potable Swordfish" (polygon) - item 6 da página 1, padrão, não está em "Em alta"
+// "Hard-to-find E-mail" (ethereum, Violet Nomads) - membro da interseção ethereum+Violet Nomads
+// "Flawed Shipper" (ethereum, mas coleção Pixel Dreams, não Violet Nomads)
+// "Noteworthy Tuba" (solana, Neon Beasts) - único NFT com "Tuba" no nome
+// "Utter Privilege" (0.628 ETH) - o mais barato dos 40, independe de ordenação/filtro
+// "Zealous Tributary" - primeiro item da página 2 (itens 13-24) na ordenação padrão
 
-const NFT_ETHEREUM_FIRST = 'Accomplished Utilization'
-const NFT_POLYGON_DEFAULT = 'Insecure Ownership'
-const NFT_DAMAGED_TRAVEL = 'Damaged Travel'
+const NFT_ETHEREUM_FIRST = 'Homely Advertisement'
+const NFT_POLYGON_DEFAULT = 'Potable Swordfish'
 const NFT_HARD_TO_FIND = 'Hard-to-find E-mail'
-const NFT_STAINED_KNITTING = 'Stained Knitting'
-const NFT_IGNORANT_TUBA = 'Ignorant Tuba'
-const NFT_CHEAPEST_OVERALL = 'Nifty Pearl'
-const NFT_FIRST_PAGE_TWO = 'Hard-to-find E-mail'
+const NFT_WRONG_COLLECTION = 'Flawed Shipper'
+const NFT_IGNORANT_TUBA = 'Noteworthy Tuba'
+const NFT_CHEAPEST_OVERALL = 'Utter Privilege'
+const NFT_FIRST_PAGE_TWO = 'Zealous Tributary'
 
 const GRID_ASSERTION_TIMEOUT = 15_000
 
@@ -148,9 +149,9 @@ test.describe('Catálogo - busca, filtros, ordenação, paginação e histórico
     // Violet Nomads é inteiramente ethereum - a interseção deve manter seus itens...
     await expectNftVisible(page, NFT_HARD_TO_FIND)
     // ...mas excluir itens de outras coleções, mesmo que também sejam ethereum.
-    await expectNftHidden(page, NFT_STAINED_KNITTING)
+    await expectNftHidden(page, NFT_WRONG_COLLECTION)
     // e excluir itens de outras redes.
-    await expectNftHidden(page, NFT_DAMAGED_TRAVEL)
+    await expectNftHidden(page, NFT_POLYGON_DEFAULT)
   })
 
   test('mudar de aba reseta a página para 1', async ({ page, scenario }) => {
@@ -215,7 +216,7 @@ test.describe('Catálogo - busca, filtros, ordenação, paginação e histórico
 
     await expectNftVisible(page, NFT_IGNORANT_TUBA)
     await expectNftHidden(page, NFT_HARD_TO_FIND)
-    await expectNftHidden(page, NFT_DAMAGED_TRAVEL)
+    await expectNftHidden(page, NFT_POLYGON_DEFAULT)
   })
 
   test('voltar no navegador restaura o estado de filtro anterior', async ({ page, scenario }) => {

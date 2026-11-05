@@ -26,6 +26,15 @@ export const nftSummarySchema = z.object({
 })
 export type NftSummary = z.infer<typeof nftSummarySchema>
 
+export const nftEditionSchema = z.object({
+  id: idSchema,
+  label: z.enum(['1/1', '1/10', '1/50', 'open']),
+  price: ethAmountSchema,
+  totalSupply: z.number().int().positive().nullable(),
+  available: z.number().int().min(0),
+})
+export type NftEdition = z.infer<typeof nftEditionSchema>
+
 export const nftDetailSchema = nftSummarySchema.extend({
   description: z.string(),
   images: z.array(z.string().min(1)).min(1),
@@ -36,6 +45,7 @@ export const nftDetailSchema = nftSummarySchema.extend({
   attributes: z.array(nftAttributeSchema),
   editionType: nftEditionTypeSchema,
   totalSupply: z.number().int().min(1).nullable(),
+  editions: z.array(nftEditionSchema).min(1),
   isNew: z.boolean(),
   isTrending: z.boolean(),
   createdAt: isoDateSchema,

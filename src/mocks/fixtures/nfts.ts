@@ -1,6 +1,11 @@
 import { faker } from '@faker-js/faker'
 import Big from 'big.js'
-import { nftDetailSchema, type NftDetail, type NftEditionType } from '@/shared/api/contracts/nft'
+import {
+  nftDetailSchema,
+  type NftDetail,
+  type NftEdition,
+  type NftEditionType,
+} from '@/shared/api/contracts/nft'
 import { withSeed } from './seed'
 
 const COLLECTIONS = [
@@ -90,6 +95,53 @@ function buildAvailability(
   return faker.number.int({ min: 1, max: totalSupply ?? 1 })
 }
 
+// Multiplicadores sobre o preço base do NFT: edição única (1/1) é a mais cara,
+// edição aberta a mais barata — reflete escassez sem precisar de outro gerador aleatório.
+const EDITION_PRICE_MULTIPLIER: Record<NftEdition['label'], number> = {
+  '1/1': 1.5,
+  '1/10': 1.2,
+  '1/50': 1,
+  open: 0.7,
+}
+
+const EDITION_TOTAL_SUPPLY: Record<NftEdition['label'], number | null> = {
+  '1/1': 1,
+  '1/10': 10,
+  '1/50': 50,
+  open: null,
+}
+
+// nft_001 (índice 0), edição "1/10", nasce esgotada de propósito: caso determinístico
+// e estável entre execuções para testes E2E de "edição esgotada" sem depender de ação do usuário.
+const SOLD_OUT_EDITION_NFT_INDEX = 0
+const SOLD_OUT_EDITION_LABEL: NftEdition['label'] = '1/10'
+
+function buildEditionAvailability(
+  label: NftEdition['label'],
+  totalSupply: number | null,
+  forceSoldOut: boolean,
+): number {
+  if (forceSoldOut) return 0
+  if (label === '1/1') return 1
+  if (label === 'open') return faker.number.int({ min: 20, max: 500 })
+  return faker.number.int({ min: 1, max: totalSupply ?? 1 })
+}
+
+function buildEditions(nftId: string, basePrice: string, nftIndex: number): NftEdition[] {
+  return (['1/1', '1/10', '1/50', 'open'] as const).map((label) => {
+    const totalSupply = EDITION_TOTAL_SUPPLY[label]
+    const forceSoldOut = nftIndex === SOLD_OUT_EDITION_NFT_INDEX && label === SOLD_OUT_EDITION_LABEL
+
+    return {
+      id: `${nftId}-edition-${label.replace('/', '-')}`,
+      label,
+      price: new Big(basePrice).times(EDITION_PRICE_MULTIPLIER[label]).toFixed(3),
+      totalSupply,
+      available: buildEditionAvailability(label, totalSupply, forceSoldOut),
+    }
+  })
+}
+
 const NFT_COUNT = 40
 const MAX_GALLERY_SIZE = ARTWORK_POOL.length
 
@@ -115,8 +167,10 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () => {
       .between({ from: '2025-06-01T00:00:00.000Z', to: '2026-01-01T00:00:00.000Z' })
       .toISOString()
 
+    const id = `nft_${String(index + 1).padStart(3, '0')}`
+
     const nft: NftDetail = {
-      id: `nft_${String(index + 1).padStart(3, '0')}`,
+      id,
       tokenId: `#${String(faker.number.int({ min: 1, max: 9999 })).padStart(4, '0')}`,
       name: buildName(),
       collectionId: collection.id,
@@ -140,6 +194,7 @@ export const fixtureNfts: NftDetail[] = withSeed(42, () => {
       attributes: buildAttributes(),
       editionType: edition.editionType,
       totalSupply: edition.totalSupply,
+      editions: buildEditions(id, price, index),
       isNew: index % 7 === 0,
       isTrending: index % 6 === 0,
       createdAt,

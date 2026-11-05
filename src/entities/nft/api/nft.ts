@@ -2,7 +2,7 @@ import { queryOptions } from '@tanstack/react-query'
 import {
   http,
   nftListResponseSchema,
-  nftListQuerySchema,
+  nftDetailSchema,
   nftCollectionListResponseSchema,
   queryKeys,
   type NftListSort,
@@ -56,7 +56,7 @@ export function nftDetailQuery(id: string) {
     queryKey: queryKeys.nfts.detail(id),
     queryFn: async ({ signal }) => {
       const { data } = await http.get(`/nfts/${id}`, { signal })
-      return nftListQuerySchema.parse(data)
+      return nftDetailSchema.parse(data)
     },
   })
 }
