@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { Text } from '@/shared/ui/Text'
 import { formatEth } from '@/shared/lib/eth'
-import type { Nft } from '@/shared/api/contracts/nft'
+import type { NftSummary } from '@/shared/api/contracts/nft'
 
-export function NftCard({ nft }: { nft: Nft }) {
+export function NftCard({ nft }: { nft: NftSummary }) {
   return (
     <Link
       to="/nft/$nftId"
@@ -11,7 +11,7 @@ export function NftCard({ nft }: { nft: Nft }) {
       className="flex flex-col gap-3 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
     >
       <img
-        src={nft.imageUrl}
+        src={nft.image}
         alt={nft.name}
         width={258}
         height={300}

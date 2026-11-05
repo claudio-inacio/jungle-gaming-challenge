@@ -1,5 +1,5 @@
 import { ChevronRight } from 'lucide-react'
-import { useCatalogFilters } from '@/features/catalog-filters/model/useCatalogFilters'
+import { useCatalogFilters } from '@/features/catalog-filters'
 import { Button } from '@/shared/ui/button'
 
 type PageEntry = number | 'ellipsis-start' | 'ellipsis-end'
@@ -23,12 +23,14 @@ function getPaginationRange(current: number, total: number): PageEntry[] {
 }
 
 type PaginationProps = {
-  totalPages: number
+  page: number
+  total: number
+  pageSize: number
 }
 
-function Pagination({ totalPages }: PaginationProps) {
-  const { search, setPage } = useCatalogFilters()
-  const currentPage = search.page
+function Pagination({ page: currentPage, total, pageSize }: PaginationProps) {
+  const { setPage } = useCatalogFilters()
+  const totalPages = Math.ceil(total / pageSize)
 
   if (totalPages <= 1) {
     return null
