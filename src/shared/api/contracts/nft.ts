@@ -53,7 +53,7 @@ export const nftListQuerySchema = z.object({
   collections: z.array(idSchema).optional(),
   priceMin: ethAmountSchema.optional(),
   priceMax: ethAmountSchema.optional(),
-  network: networkSchema.optional(),
+  network: z.array(networkSchema).optional(),
   tab: nftListTabSchema.default('all'),
   sortBy: nftListSortSchema.default('relevance'),
   page: z.number().int().min(1).default(1),

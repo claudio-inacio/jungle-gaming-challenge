@@ -23,12 +23,13 @@ function favoriteIdsFromRequest(request: Request): readonly string[] {
 function parseQueryParams(url: URL) {
   const sp = url.searchParams
   const collections = sp.getAll('collections')
+  const network = sp.getAll('network')
   return nftListQuerySchema.parse({
     q: sp.get('q') ?? undefined,
     collections: collections.length > 0 ? collections : undefined,
     priceMin: sp.get('priceMin') ?? undefined,
     priceMax: sp.get('priceMax') ?? undefined,
-    network: sp.get('network') ?? undefined,
+    network: network.length > 0 ? network : undefined,
     tab: sp.get('tab') ?? undefined,
     sortBy: sp.get('sortBy') ?? undefined,
     page: sp.has('page') ? Number(sp.get('page')) : undefined,
@@ -55,8 +56,9 @@ export const nftHandlers = [
         items = items.filter((nft) => collectionSet.has(nft.collectionId))
       }
 
-      if (query.network) {
-        items = items.filter((nft) => nft.network === query.network)
+      if (query.network && query.network.length > 0) {
+        const networkSet = new Set(query.network)
+        items = items.filter((nft) => networkSet.has(nft.network))
       }
 
       if (query.priceMin) {
