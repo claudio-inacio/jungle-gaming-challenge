@@ -1,16 +1,17 @@
 import { useState } from 'react'
+import { ZoomIn } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { FavoriteButton } from '@/features/toggle-favorite'
+import { Button } from '@/shared/ui/button'
+import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog'
 
 type Props = {
   images: string[]
   alt: string
-  nftId: string
-  isFavorited: boolean
 }
 
-export function NftGallery({ images, alt, nftId, isFavorited }: Props) {
+export function NftGallery({ images, alt }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isZoomOpen, setIsZoomOpen] = useState(false)
   const thumbnails = images.slice(0, 4)
   const activeImage = images[activeIndex] ?? images[0]
 
@@ -60,11 +61,28 @@ export function NftGallery({ images, alt, nftId, isFavorited }: Props) {
           height={600}
           className="aspect-square w-full rounded-xl object-cover"
         />
-        <FavoriteButton
-          nftId={nftId}
-          isFavorited={isFavorited}
-          className="absolute top-3 right-3"
-        />
+        <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon-sm"
+            aria-label="Ampliar imagem"
+            className="absolute top-3 right-3 bg-card/80 backdrop-blur"
+            onClick={() => setIsZoomOpen(true)}
+          >
+            <ZoomIn aria-hidden="true" />
+          </Button>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogTitle className="sr-only">{alt}</DialogTitle>
+            <img
+              src={activeImage}
+              alt={`Imagem ampliada de ${alt}`}
+              width={960}
+              height={960}
+              className="aspect-square w-full rounded-lg object-cover"
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   )
