@@ -40,7 +40,7 @@ function Pagination({ page: currentPage, total, pageSize }: PaginationProps) {
   const isLastPage = currentPage >= totalPages
 
   return (
-    <nav aria-label="Paginação" className="flex items-center gap-2">
+    <nav aria-label="Paginação" className="flex items-center justify-end gap-2">
       <ul className="flex items-center gap-2">
         {pages.map((page) =>
           typeof page === 'number' ? (

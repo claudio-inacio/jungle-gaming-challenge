@@ -58,7 +58,7 @@ function FilterSidebar({ collections, rangeMin = 0, rangeMax = 20 }: FilterSideb
 
   return (
     <aside className="w-sidebar-width shrink-0">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 rounded-md border border-border-soft bg-card p-6">
         <fieldset className="flex flex-col gap-3">
           <legend className="text-base font-bold text-foreground">Coleções</legend>
           <div className="flex flex-col gap-3">

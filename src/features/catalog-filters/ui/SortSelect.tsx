@@ -22,7 +22,10 @@ function SortSelect() {
 
   return (
     <Select value={search.sort} onValueChange={(value) => setSort(value as CatalogSearch['sort'])}>
-      <SelectTrigger aria-label="Ordenar por">
+      <SelectTrigger
+        aria-label="Ordenar por"
+        className="border-none bg-transparent p-0 text-sm font-medium text-foreground shadow-none hover:bg-transparent hover:text-accent-foreground"
+      >
         <SelectValue>Ordenar por: {getSortLabel(search.sort)}</SelectValue>
       </SelectTrigger>
       <SelectContent>

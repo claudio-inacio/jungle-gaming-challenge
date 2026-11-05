@@ -48,9 +48,9 @@ function BlogSection() {
           </p>
         </div>
 
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 2xl:grid-cols-4 2xl:justify-center 2xl:gap-[24px]">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {BLOG_POSTS.map((post) => (
-            <li key={post.id} className="w-full 2xl:w-[268px]">
+            <li key={post.id} className="w-full">
               <article className="flex h-full flex-col overflow-hidden rounded-md border border-border-soft bg-card">
                 <div aria-hidden="true" className="aspect-[268/195] w-full bg-muted" />
                 <div className="flex flex-1 flex-col gap-3 p-4">
