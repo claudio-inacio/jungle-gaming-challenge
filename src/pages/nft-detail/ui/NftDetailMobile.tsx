@@ -30,28 +30,26 @@ export function NftDetailMobile({ nft, initialEditionId }: Props) {
   return (
     <div className="flex flex-col gap-10 pb-[180px]">
       <div className="flex flex-col gap-10">
-        <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-card to-surface-raised">
+        <div className="flex flex-col gap-3 px-6 pt-6">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => router.history.back()}
+              aria-label="Voltar"
+              className="flex size-9 items-center justify-center rounded-full border border-border bg-surface-raised text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            >
+              <ArrowLeft aria-hidden="true" className="size-5" />
+            </button>
+            <FavoriteButton nftId={nft.id} isFavorited={nft.isFavorited} variant="icon" />
+          </div>
+
           <img
             src={nft.images[0]}
             alt={`Imagem principal de ${nft.name}`}
             fetchPriority="high"
-            width={361}
+            width={342}
             height={356}
             className="h-[356px] w-full rounded-[24px] object-cover"
-          />
-          <button
-            type="button"
-            onClick={() => router.history.back()}
-            aria-label="Voltar"
-            className="absolute top-6 left-6 flex size-9 items-center justify-center rounded-full border border-border bg-surface-raised text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            <ArrowLeft aria-hidden="true" className="size-5" />
-          </button>
-          <FavoriteButton
-            nftId={nft.id}
-            isFavorited={nft.isFavorited}
-            variant="icon"
-            className="absolute top-6 right-6"
           />
         </div>
 
@@ -88,7 +86,7 @@ export function NftDetailMobile({ nft, initialEditionId }: Props) {
         </Container>
       </div>
 
-      <Container className="flex flex-col gap-10">
+      <Container className="box-border flex min-w-0 flex-col gap-10">
         <NftDetailTabs nft={nft} />
         <RelatedNfts collectionId={nft.collectionId} currentNftId={nft.id} />
       </Container>
