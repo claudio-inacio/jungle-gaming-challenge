@@ -1,7 +1,5 @@
 import { queryOptions, keepPreviousData } from '@tanstack/react-query'
-import { http } from '@/shared/api/http'
-import { nftListResponseSchema, nftListQuerySchema } from '@/shared/api/contracts/nft'
-import { queryKeys } from '@/shared/api/query-keys'
+import { http, nftListResponseSchema, nftListQuerySchema, queryKeys } from '@/shared/api'
 import type { CatalogSearch } from '../model/catalog-search'
 
 async function fetchNfts(params: CatalogSearch, signal?: AbortSignal) {

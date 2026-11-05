@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Text } from '@/shared/ui/Text'
 import { formatEth } from '@/shared/lib/eth'
-import type { NftSummary } from '@/shared/api/contracts/nft'
+import type { NftSummary } from '@/shared/api'
 
 export function NftCard({ nft }: { nft: NftSummary }) {
   return (
