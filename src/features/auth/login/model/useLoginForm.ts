@@ -2,11 +2,14 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { loginRequestSchema, type LoginRequest } from '@/shared/api/contracts/session'
 import { login, tokenStorage } from '@/entities/session'
 import { setAccessToken } from '@/shared/api/http'
 import { queryKeys } from '@/shared/api/query-keys'
 import { ApiError } from '@/shared/api/contracts/error'
+
+const SIMULATED_LOGIN_DELAY_MS = 3000
 
 export function useLoginForm(redirectTo?: string) {
   const queryClient = useQueryClient()
@@ -18,11 +21,18 @@ export function useLoginForm(redirectTo?: string) {
   })
 
   const mutation = useMutation({
-    mutationFn: login,
+    mutationFn: async (values: LoginRequest) => {
+      const [session] = await Promise.all([
+        login(values),
+        new Promise((resolve) => setTimeout(resolve, SIMULATED_LOGIN_DELAY_MS)),
+      ])
+      return session
+    },
     onSuccess: (session) => {
       setAccessToken(session.accessToken)
       tokenStorage.set(session.accessToken)
       queryClient.setQueryData(queryKeys.session(), session)
+      toast.success(`Login realizado com sucesso! Bem-vindo, ${session.user.displayName}.`)
       navigate({ to: redirectTo ?? '/' })
     },
     onError: (error) => {

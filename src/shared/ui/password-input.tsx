@@ -13,7 +13,7 @@ function PasswordInput({ className, ...props }: React.ComponentProps<'input'>) {
         type="button"
         onClick={() => setVisible((value) => !value)}
         aria-label={visible ? 'Ocultar senha' : 'Mostrar senha'}
-        className="absolute inset-y-0 right-0 flex w-9 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="absolute inset-y-0 right-0 flex w-9 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
       >
         {visible ? (
           <EyeOff aria-hidden="true" className="size-4" />
