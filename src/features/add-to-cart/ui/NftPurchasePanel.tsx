@@ -2,7 +2,6 @@ import { Text } from '@/shared/ui/Text'
 import { Button } from '@/shared/ui/button'
 import { Badge } from '@/shared/ui/badge'
 import { formatEth } from '@/shared/lib/eth'
-
 import { useAddToCart } from '../model/useAddToCart'
 import type { NftSummary } from '@/shared/api/contracts/nft'
 import { useEditionSelection } from '@/entities/nft/model/useEditionSelection'
