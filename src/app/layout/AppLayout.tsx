@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react'
 import { useRouterState } from '@tanstack/react-router'
+import { useSession } from '@/entities/session'
 import { SiteHeader } from '@/widgets/header'
 import { SiteFooter } from '@/widgets/footer'
-import { MobileTabBar } from '@/widgets/mobile-tab-bar'
+import { MobileTabBar, MobileLoginBar } from '@/widgets/mobile-tab-bar'
 import { cn } from '@/shared/lib/utils'
 
 type AppLayoutProps = {
@@ -14,6 +15,7 @@ const AUTH_ROUTES = new Set(['/login', '/register'])
 function AppLayout({ children }: AppLayoutProps) {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const isAuthRoute = AUTH_ROUTES.has(pathname)
+  const { isAuthenticated, isLoadingSession } = useSession()
 
   return (
     <div className="flex min-h-dvh flex-col py-0 md:py-2 px-0 md:px-20">
@@ -29,7 +31,8 @@ function AppLayout({ children }: AppLayoutProps) {
         </div>
       )}
 
-      {!isAuthRoute && <MobileTabBar />}
+      {!isAuthRoute &&
+        (isLoadingSession || isAuthenticated ? <MobileTabBar /> : <MobileLoginBar />)}
     </div>
   )
 }
