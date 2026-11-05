@@ -1,11 +1,12 @@
-import { http, setAccessToken } from '@/shared/api/http'
+import { z } from 'zod'
 import {
+  http,
+  setAccessToken,
   sessionSchema,
   loginRequestSchema,
   registerRequestSchema,
   type Session,
-} from '@/shared/api/contracts/session'
-import { z } from 'zod'
+} from '@/shared/api'
 
 export async function fetchSession(signal?: AbortSignal): Promise<Session> {
   const { data } = await http.get('/auth/session', { signal })

@@ -1,10 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { queryKeys } from '@/shared/api/query-keys'
+import { queryKeys, setAccessToken, socket } from '@/shared/api'
 import { fetchSession } from '../api/session'
 import { tokenStorage } from './token-storage'
-import { setAccessToken } from '@/shared/api/http'
-import { socket } from '@/shared/api/socket/client'
 
 export function useSession() {
   const queryClient = useQueryClient()
@@ -21,16 +19,17 @@ export function useSession() {
     staleTime: 60_000,
   })
 
+  const userId = query.data?.user.id
+
   // conecta o socket só quando a sessão é confirmada
   useEffect(() => {
-    if (query.data) {
-      socket.auth = { token: tokenStorage.get() }
-      socket.connect()
-    }
+    if (!userId) return
+    socket.auth = { token: tokenStorage.get() }
+    socket.connect()
     return () => {
       socket.disconnect()
     }
-  }, [query.data?.user.id])
+  }, [userId])
 
   return {
     user: query.data?.user ?? null,

@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { queryKeys } from '@/shared/api/query-keys'
+import { queryKeys } from '@/shared/api'
 import { fetchSession, tokenStorage } from '@/entities/session'
 
 export const Route = createFileRoute('/_authenticated')({
