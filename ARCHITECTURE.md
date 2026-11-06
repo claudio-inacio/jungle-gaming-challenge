@@ -487,6 +487,51 @@ Ajustes feitos nesta rodada, nos primitivos de honestidade de escopo e nos widge
 
 Ajustes específicos de telas de negócio (focus trap em Dialog/Sheet, `aria-live` em mutations, estados não dependentes só de cor em preço riscado/badges) serão documentados aqui conforme implementados, por `ui-dev`/`quality-auditor`.
 
+## Auditoria Lighthouse (2026-11-06)
+
+Configuração versionada em `lighthouserc.mobile.json` e `lighthouserc.desktop.json` (raiz do repo). Ambos auditam `http://localhost:4173/` (home) e `http://localhost:4173/nft/nft_001` (detalhe do NFT, id estável das fixtures congeladas), com `numberOfRuns: 3` e `startServerCommand: "npm run preview -- --port 4173 --strictPort"` contra o build de produção (`npm run build`, mesma pipeline do deploy, servido via `npm run preview`). O perfil mobile não declara `preset` (usa o perfil mobile padrão do Lighthouse, com throttling simulado de CPU e rede); o perfil desktop usa `"preset": "desktop"`. Ambos usam `chromeFlags: "--no-sandbox"` (necessário no ambiente de execução sem sandbox de kernel do Chrome; não altera o throttling de CPU/rede, que segue o preset de cada perfil) e as mesmas assertions: `categories:performance` ≥ 0.9, `categories:accessibility` ≥ 0.95, `categories:best-practices` ≥ 0.95, `categories:seo` ≥ 0.9. Os relatórios são gravados em `reports/lighthouse/{mobile,desktop}/` (HTML + JSON por execução, mais `manifest.json`) — esse diretório está em `/reports/` no `.gitignore`: os artefatos existem em disco após rodar a auditoria, mas **não são versionados**; são reprodutíveis localmente via `npm run lighthouse` (ou `npm run lighthouse:mobile`/`npm run lighthouse:desktop` isoladamente).
+
+Rodada registrada aqui: `npm run build` seguido de `npm run lighthouse:mobile` e `npm run lighthouse:desktop`, 3 execuções por URL/perfil, com o cenário padrão dos mocks (`success`, sem `?scenario=` na URL) e `VITE_ENABLE_MOCKS=true` — ou seja, MSW (REST + Socket.IO) ativo durante a auditoria como em qualquer outra execução do build, sem nenhum atalho, handler simplificado ou dado estático exclusivo para a medição.
+
+### Ambiente e versões
+
+| Item                     | Valor                                                                                                                                                                             |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SO                       | Ubuntu 26.04.1 LTS, 12 vCPUs, 30 GiB RAM                                                                                                                                          |
+| Node.js / npm            | v22.23.2 / 10.9.8                                                                                                                                                                 |
+| Lighthouse / `@lhci/cli` | 13.6.0 / 0.16.0                                                                                                                                                                   |
+| Navegador                | Google Chrome for Testing 156.0.8078.4 (Chromium empacotado pelo Playwright, resolvido dinamicamente por `scripts/resolve-chrome-path.cjs`, sem depender de um Chrome de sistema) |
+| Vite                     | 8.3.5 (build de produção)                                                                                                                                                         |
+| MSW                      | 2.15.0 (REST + Socket.IO ativos, cenário `success`)                                                                                                                               |
+
+### Resultados (mediana de 3 execuções por página/perfil)
+
+**Mobile:**
+
+| Página                          | Performance          | Accessibility | Best Practices | SEO     | LCP     | CLS | TBT    |
+| ------------------------------- | -------------------- | ------------- | -------------- | ------- | ------- | --- | ------ |
+| Home (`/`)                      | 0.67 ❌ (meta ≥0.90) | 1.00 ✅       | 1.00 ✅        | 1.00 ✅ | 4036 ms | 0   | 867 ms |
+| Detalhe do NFT (`/nft/nft_001`) | 0.80 ❌ (meta ≥0.90) | 1.00 ✅       | 1.00 ✅        | 1.00 ✅ | 836 ms  | 0   | 862 ms |
+
+**Desktop:**
+
+| Página                          | Performance | Accessibility | Best Practices | SEO     | LCP     | CLS     | TBT   |
+| ------------------------------- | ----------- | ------------- | -------------- | ------- | ------- | ------- | ----- |
+| Home (`/`)                      | 0.98 ✅     | 1.00 ✅       | 1.00 ✅        | 1.00 ✅ | 1024 ms | 0.00018 | 82 ms |
+| Detalhe do NFT (`/nft/nft_001`) | 0.96 ✅     | 1.00 ✅       | 1.00 ✅        | 1.00 ✅ | 1369 ms | 0       | 72 ms |
+
+Accessibility, Best Practices e SEO atingem a meta nas duas páginas, nos dois perfis. CLS é essencialmente zero em todas as combinações — consequência de skeletons com as mesmas dimensões do conteúdo final (ver seção de acessibilidade/UX acima). Desktop atinge a meta de Performance nas duas páginas. Mobile fica abaixo da meta de Performance em ambas.
+
+### Causa raiz da reprovação de Performance no mobile
+
+A causa é estrutural, não uma regressão pontual a corrigir: o app depende obrigatoriamente de MSW (REST + Socket.IO) para simular 100% do backend — eliminatório do desafio, não pode ser removido ou adiado seletivamente por rota (um handler registrado tardiamente deixaria uma request real escapar para a rede antes de existir, violando a regra "sem resposta fictícia"/"eventos sempre via MSW" — alternativa avaliada e descartada nesta sessão). No boot, mesmo após a rodada de otimização registrada no histórico de commits (`3c3123b perf(app): render static boot shell before msw worker starts`, `efd82dd perf(mocks): replace runtime faker with static nft fixture snapshot`, `7023f52 perf(ui): serve hero and promo images as webp`), o chunk do MSW ainda inclui `msw/browser` + `@mswjs/socket.io-binding` + todos os handlers REST registrados no boot.
+
+Sob o perfil mobile (throttling de CPU 4x + rede 3G simulada), o TBT fica em ~860-870 ms nas duas páginas — avaliação de script do bundle da aplicação + MSW antes de qualquer dado real aparecer, que pesa 30% no score de Performance. No desktop, sem o throttling de CPU, o mesmo trabalho de script cai para 72-82 ms de TBT e não compromete o score.
+
+Mitigações já aplicadas (ver commits acima): BootShell renderizado antes do MSW estar ativo, fixtures de NFT pré-computadas (removendo `@faker-js/faker` do bundle de runtime), imagens do Hero/PromoCards/BlogSection em WebP. Alternativas adicionais foram testadas e descartadas por regredirem o score (ex.: `<link rel="modulepreload">` para paralelizar o download do app com o boot do MSW, que piorou o resultado) — o histórico de commits reflete apenas o que permaneceu.
+
+Trade-off registrado: nenhum handler foi lazy-registrado, nenhum dado fictício foi exibido antes do MSW estar pronto e nenhum threshold de assertion foi reduzido para mascarar o resultado — ao contrário, um commit anterior que havia baixado os thresholds de Performance para 0.4 foi revertido (`385496b revert(ci): restore lighthouse performance thresholds to 0.9`). O custo aceito desse compromisso é o mobile não atingir 0.90 de Performance neste ambiente de medição local; investigações futuras de code-splitting do worker do MSW ou de registro de handlers por rota (sem violar o eliminatório) ficam como próximo passo, não implementado nesta rodada.
+
 ## Dados de teste (fixtures determinísticas)
 
 Referência rápida dos valores reais usados pelos testes e2e e no dia a dia de desenvolvimento, para quem for escrever um novo teste não precisar garimpar o código.
