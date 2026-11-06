@@ -27,7 +27,7 @@ export function useCartRealtime(cartNftIds: string[]) {
       lastAppliedByNftId.current.set(resource.id, { eventId, version })
 
       queryClient.setQueryData(queryKeys.nfts.detail(resource.id), data)
-      if (user) queryClient.invalidateQueries({ queryKey: queryKeys.quote(user.id, '') }) // invalida toda cotação deste usuário
+      if (user) queryClient.invalidateQueries({ queryKey: queryKeys.quote.scope(user.id) })
       toast.info('O preço ou a disponibilidade de um item do seu carrinho mudou.')
     }
 

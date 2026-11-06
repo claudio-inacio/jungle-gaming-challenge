@@ -10,8 +10,13 @@ export const socketHandlers = [
   realtime.addEventListener('connection', (connection) => {
     const io = toSocketIo(connection)
 
+    // Canal fixo `'event'`: o cliente (`useCheckout.ts`, `useCartRealTime.ts`)
+    // escuta um único `socket.on('event', ...)` e discrimina pelo campo
+    // `data.type` do payload - emitir no canal `event.type` (ex.: literalmente
+    // "order.updated") nunca chegaria a esse listener, já que Socket.IO exige
+    // o mesmo nome de canal nos dois lados.
     const { unregister, setToken } = registerEmitter((event: RealtimeEvent) => {
-      io.client.emit(event.type, event)
+      io.client.emit('event', event)
     })
     connection.client.addEventListener('close', unregister)
 

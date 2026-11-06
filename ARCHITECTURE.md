@@ -147,9 +147,11 @@ Preço, nome, imagem e disponibilidade do carrinho **nunca ficam congelados**: `
 
 ### Cotação (`handlers/quote.ts`) — não exige sessão
 
-| Método | Rota         | Request                                                                                                 | Resposta      | Erros                                                                                                                                                                                                                |
-| ------ | ------------ | ------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | `/api/quote` | `{ "items": [{ "nftId": "nft_001", "quantity": 1 }], "couponCode": "KURIO10" }` (`couponCode` opcional) | `200` `Quote` | `422 COUPON_INVALID` / `422 COUPON_EXPIRED` só via override de cenário (ver tabela de cenários); sem cenário ativo, cupom desconhecido vira `couponStatus: "invalid"` dentro de uma resposta `200`, não um erro HTTP |
+| Método | Rota         | Request                                                                                                                                      | Resposta      | Erros                                                                                                                                                                                                                |
+| ------ | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/quote` | `{ "items": [{ "nftId": "nft_001", "editionId": "nft_001-edition-1-50", "quantity": 1 }], "couponCode": "KURIO10" }` (`couponCode` opcional) | `200` `Quote` | `422 COUPON_INVALID` / `422 COUPON_EXPIRED` só via override de cenário (ver tabela de cenários); sem cenário ativo, cupom desconhecido vira `couponStatus: "invalid"` dentro de uma resposta `200`, não um erro HTTP |
+
+`unitPrice`/`subtotal`/`availability` de cada item são resolvidos por **edição** (`nft.editions.find(e => e.id === editionId)`), nunca pelo preço/disponibilidade agregado do NFT (`nft.price`/`nft.available`) — o mesmo critério usado por `POST /api/orders`, para que a cotação e o recibo nunca mostrem totais diferentes para a mesma seleção.
 
 Exemplo de resposta:
 
@@ -158,6 +160,7 @@ Exemplo de resposta:
   "items": [
     {
       "nftId": "nft_001",
+      "editionId": "nft_001-edition-1-50",
       "quantity": 1,
       "unitPrice": "1.19",
       "subtotal": "1.19",
@@ -178,16 +181,16 @@ Taxa de rede fixa (`"0.01"`), todo cálculo via `big.js` (`mulEth`, `sumEth`, `s
 
 ### Pedidos (`handlers/order.ts`) — todas as rotas 🔒
 
-| Método | Rota              | Headers                         | Request                                                                                                                          | Resposta      | Erros                                                                                                                                                                                                                                                                                    |
-| ------ | ----------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | `/api/orders`     | `Idempotency-Key` (obrigatório) | `{ "items": [{ "nftId": "nft_001", "quantity": 1 }], "couponCode": "KURIO10", "walletAddress": "0x...", "network": "ethereum" }` | `201` `Order` | `401 UNAUTHORIZED`, `400 VALIDATION_ERROR` (header ausente), `409 CONFLICT` (chave reusada por outro usuário ou com corpo diferente), `404 NOT_FOUND`, `409 AVAILABILITY_CONFLICT`, `422 COUPON_INVALID`/`422 COUPON_EXPIRED`, `409 QUOTE_CHANGED` (override do cenário `quote-changed`) |
-| GET    | `/api/orders/:id` | —                               | —                                                                                                                                | `200` `Order` | `401 UNAUTHORIZED`, `404 NOT_FOUND`                                                                                                                                                                                                                                                      |
+| Método | Rota              | Headers                         | Request                                                                                                                                                               | Resposta      | Erros                                                                                                                                                                                                                                                                                    |
+| ------ | ----------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/orders`     | `Idempotency-Key` (obrigatório) | `{ "items": [{ "nftId": "nft_001", "editionId": "nft_001-edition-1-50", "quantity": 1 }], "couponCode": "KURIO10", "walletAddress": "0x...", "network": "ethereum" }` | `201` `Order` | `401 UNAUTHORIZED`, `400 VALIDATION_ERROR` (header ausente), `409 CONFLICT` (chave reusada por outro usuário ou com corpo diferente), `404 NOT_FOUND`, `409 AVAILABILITY_CONFLICT`, `422 COUPON_INVALID`/`422 COUPON_EXPIRED`, `409 QUOTE_CHANGED` (override do cenário `quote-changed`) |
+| GET    | `/api/orders/:id` | —                               | —                                                                                                                                                                     | `200` `Order` | `401 UNAUTHORIZED`, `404 NOT_FOUND`                                                                                                                                                                                                                                                      |
 
 Idempotência (header, não campo do body): mesma `Idempotency-Key` + mesmo corpo (hash comparado) → retorna o pedido já criado (`201` de novo, mesmo payload). Mesma chave + corpo diferente, **ou** chave já usada por outro `userId` → `409 CONFLICT` — nunca vaza pedido de uma conta para outra.
 
 O pedido sempre nasce `pending` na resposta do `POST` (nunca `confirmed`/`declined` sincronamente). A transição é assíncrona, resolvida ~1.2s depois dentro do próprio handler (`resolveOrder` em `handlers/order.ts`, simulando o processamento do pagamento) e entregue via `order.updated` — nunca inferida pelo cliente a partir da resposta REST. No cenário `order-timeout` essa transição nunca é agendada: o pedido fica `pending` para sempre, de propósito.
 
-Estoque: `nft.available` só é decrementado dentro de `resolveOrder`, quando o pedido de fato vira `confirmed` — nunca na criação. Pedidos `pending` (cenário `order-timeout`) ou `declined` (cenário `payment-declined`) nunca tocam o catálogo.
+Estoque: `edition.available` (a edição comprada, dentro de `nft.editions`) só é decrementado dentro de `resolveOrder`, quando o pedido de fato vira `confirmed` — nunca na criação. Pedidos `pending` (cenário `order-timeout`) ou `declined` (cenário `payment-declined`) nunca tocam o catálogo. O `nft.available` agregado (campo de topo, usado só como número de "headline" no card do catálogo) não é tocado por nenhum pedido: ele vem de uma distribuição independente das edições reais nas fixtures e nenhum fluxo de disponibilidade (carrinho, cotação, pedido) o lê — sincronizá-lo exigiria inventar um mapeamento arbitrário de volta pra uma das edições.
 
 Exemplo de `Order` confirmado:
 
@@ -230,11 +233,15 @@ Exemplo de `Order` confirmado:
 
 ### Carteiras (`handlers/wallet.ts`) — todas as rotas 🔒
 
-| Método | Rota               | Request                                                                                                | Resposta         | Erros                                                            |
-| ------ | ------------------ | ------------------------------------------------------------------------------------------------------ | ---------------- | ---------------------------------------------------------------- |
-| GET    | `/api/wallets`     | —                                                                                                      | `200` `Wallet[]` | `401 UNAUTHORIZED`                                               |
-| POST   | `/api/wallets`     | `{ "type": "primary", "provider": "metamask", "address": "0x...", "network": "ethereum", "ensName"? }` | `201` `Wallet`   | `401 UNAUTHORIZED`, `409 CONFLICT` (já existe carteira primária) |
-| PATCH  | `/api/wallets/:id` | Parcial de `CreateWalletRequest`                                                                       | `200` `Wallet`   | `401 UNAUTHORIZED`, `404 NOT_FOUND`, `409 CONFLICT`              |
+| Método | Rota                          | Request                                                                                                | Resposta                              | Erros                                                                                               |
+| ------ | ----------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| GET    | `/api/wallets`                | —                                                                                                      | `200` `Wallet[]`                      | `401 UNAUTHORIZED`                                                                                  |
+| POST   | `/api/wallets`                | `{ "type": "primary", "provider": "metamask", "address": "0x...", "network": "ethereum", "ensName"? }` | `201` `Wallet`                        | `401 UNAUTHORIZED`, `409 CONFLICT` (já existe carteira primária)                                    |
+| PATCH  | `/api/wallets/:id`            | Parcial de `CreateWalletRequest`                                                                       | `200` `Wallet`                        | `401 UNAUTHORIZED`, `404 NOT_FOUND`, `409 CONFLICT`                                                 |
+| POST   | `/api/wallets/:id/connect`    | —                                                                                                      | `200` `Wallet` (`isConnected: true`)  | `401 UNAUTHORIZED`, `404 NOT_FOUND`, `403 FORBIDDEN` (override do cenário `wallet-connect-refused`) |
+| POST   | `/api/wallets/:id/disconnect` | —                                                                                                      | `200` `Wallet` (`isConnected: false`) | `401 UNAUTHORIZED`, `404 NOT_FOUND`                                                                 |
+
+`Wallet.isConnected` garante no máximo uma carteira conectada por usuário: conectar uma marca automaticamente qualquer outra do mesmo usuário como desconectada. O estado fica no próprio registro da carteira (persistido no `db`), não em memória do cliente — sobrevive a refresh e é a mesma fonte que `GET /api/wallets` lê.
 
 ### Health check (sem contrato zod)
 
@@ -429,6 +436,7 @@ Limitações conhecidas:
 - `SiteHeader` importava `cn` do pacote npm `cn` (equivalente ao que `@/shared/lib/utils` reexporta, ambos sobre `clsx`+`tailwind-merge`). Corrigido para `@/shared/lib/utils`, por consistência com o resto do projeto — padronização, não correção de bug funcional.
 - **Limite de 10 unidades por compra — decisão do time, não do enunciado.** `useEditionSelection` (`src/entities/nft/model/useEditionSelection.ts`, linha 15) calcula `maxQuantity` como `edition.totalSupply === null ? 10 : Math.min(edition.available, 10)`. Ou seja: mesmo numa edição "aberta" (`totalSupply: null`, sem limite real de supply) ou numa edição limitada com mais de 10 unidades disponíveis, o stepper de quantidade no painel de compra (`NftPurchasePanel`, `src/features/add-to-cart/ui/NftPurchasePanel.tsx`) trava em 10 por pedido. Essa trava não vem de `docs/challenge/README-challenge.md` nem da skill `challenge-context` — é uma decisão de escopo/UX do time, para evitar quantidades de teste absurdas (ex.: 500 unidades num único pedido) durante a demo. Registrado aqui para não ser confundido com um requisito do desafio nem "redescoberto" como bug.
 - **Resumo da carteira sem card de fundo — decisão de design confirmada no Figma, não um atalho.** `CartSummary` (`src/widgets/cart-summary/ui/CartSummary.tsx`) foi auditado visualmente contra o Figma real (fileKey `TWDGE5ytlsmMSUk7jX50Hw`, node `11:1278` no desktop, `16:360` no mobile) e, de propósito, **não** usa o padrão de card (`rounded-xl border border-border bg-card p-6`) adotado em outros blocos de conteúdo do projeto (ex.: `FilterSidebar`, cards de NFT). No desktop é só tipografia direta sobre o fundo da página, largura fixa de 332px via o token `--spacing-cart-summary-width` (`src/index.css`, calculado como `1200 − 782 (tabela) − 86 (gap) = 332`). No mobile ele é um bottom sheet: `bg-card`, cantos arredondados só no topo (`rounded-t-[40px]`), sem borda. Antes desta auditoria o componente tinha sido implementado com card em ambos os breakpoints — foi corrigido para bater com o Figma. Registrado aqui para que uma tarefa futura não "corrija" isso de volta para o padrão de card por engano: a ausência de card aqui é intencional e confirmada visualmente, não uma pendência.
+- **Confirmação de pedido como rota própria (`/orders/$orderId`), não modal — decisão correta, documentada aqui.** `figma-frames.md` descreve a tela de confirmação como um modal (`11:4385`/instância `70376:239`, 578×821, com X de fechar e cantos — comportamento de overlay sobre a página de pagamento). `OrderConfirmationPage` (`src/pages/order-confirmation/ui/OrderConfirmationPage.tsx`) implementa a mesma composição visual (header com ícone, divisórias em `--primary`, meta da transação, detalhes, nota + "Ver no Etherscan", barra de 10px no rodapé) mas como página cheia, navegada via `navigate({ to: '/orders/$orderId' })` ao final do checkout (`CheckoutPage.tsx`), não como `Dialog` sobreposto. Isso é intencional, não um desvio a corrigir: o checkout do projeto não usa fluxo de modal em nenhuma etapa (diferente de login/cadastro, que são `Dialog` no desktop por cima da página atual) — a confirmação é o destino final de uma navegação completa (precisa sobreviver a refresh direto em `/orders/:id`, ser linkável, e não "perder" o pedido se o usuário fechar um modal por engano). Um modal de confirmação faria sentido sobre uma SPA de carrinho/checkout em modal, que não é o padrão adotado aqui. Revisado e confirmado pelo `code-reviewer` na Fase 7.
 - **Tipografia 9–10px: nenhum aumento por legibilidade.** `design-tokens.md` define `Tiny/10 Medium` e `Tiny/9 Bold` como estilos oficiais do design system e alerta que "textos de 9–10px podem prejudicar legibilidade; se aumentar, registre no ARCHITECTURE.md". Conferido nos três usos existentes no código: a variante `tiny` de `src/shared/ui/typography.ts` usa `text-[10px]` (bate com `Tiny/10 Medium`), o badge de quantidade do carrinho no header (`src/widgets/header/ui/SiteHeader.tsx`) usa `text-[10px]`, e a pill "Carteiras compatíveis" do footer (`src/widgets/footer/ui/CompatibleWallets.tsx`) usa `text-[9px]` (bate com `Tiny/9 Bold`). Em nenhum dos três o tamanho foi aumentado além do que o Figma especifica — decisão consciente de manter os 9–10px como especificado, sem ajuste por legibilidade, até que uma revisão de acessibilidade (ex.: teste de zoom 200% ou contraste) aponte necessidade real de mudança, caso em que o ajuste deve ser registrado aqui com before/depois.
 
 ## Estados não desenhados no Figma
@@ -508,18 +516,19 @@ Referência rápida dos valores reais usados pelos testes e2e e no dia a dia de 
 
 Ativados via query param `?scenario=<id>`, `localStorage` (`kurio-mocks-scenario`) ou pela fixture `scenario` do Playwright (`e2e/fixtures/test.ts`):
 
-| Cenário            | Descrição                                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------------------------- |
-| `success`          | Caminho feliz, sem latência extra.                                                                    |
-| `slow-network`     | Latência de 800–2000ms em toda request.                                                               |
-| `offline`          | Toda request falha como erro de rede.                                                                 |
-| `coupon-invalid`   | Cupom `KURIO10` (normalmente válido) responde `COUPON_INVALID` em `/quote` e `/orders`.               |
-| `coupon-expired`   | Cupom `KURIO10` (normalmente válido) responde `COUPON_EXPIRED` em `/quote` e `/orders`.               |
-| `payment-declined` | Pedido criado nasce com status `declined` (pagamento recusado pela carteira).                         |
-| `order-timeout`    | Pedido criado fica `pending` indefinidamente (simula timeout na confirmação).                         |
-| `quote-changed`    | Toda criação de pedido falha com `QUOTE_CHANGED` (preço mudou desde a cotação).                       |
-| `edition-sold-out` | Toda criação de pedido falha com `AVAILABILITY_CONFLICT` (edição esgotada).                           |
-| `mutation-failure` | Favoritar/desfavoritar falha com `TRANSIENT` (simula erro de mutation para testar rollback otimista). |
+| Cenário                  | Descrição                                                                                                |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `success`                | Caminho feliz, sem latência extra.                                                                       |
+| `slow-network`           | Latência de 800–2000ms em toda request.                                                                  |
+| `offline`                | Toda request falha como erro de rede.                                                                    |
+| `coupon-invalid`         | Cupom `KURIO10` (normalmente válido) responde `COUPON_INVALID` em `/quote` e `/orders`.                  |
+| `coupon-expired`         | Cupom `KURIO10` (normalmente válido) responde `COUPON_EXPIRED` em `/quote` e `/orders`.                  |
+| `payment-declined`       | Pedido criado nasce com status `declined` (pagamento recusado pela carteira).                            |
+| `order-timeout`          | Pedido criado fica `pending` indefinidamente (simula timeout na confirmação).                            |
+| `quote-changed`          | Toda criação de pedido falha com `QUOTE_CHANGED` (preço mudou desde a cotação).                          |
+| `edition-sold-out`       | Toda criação de pedido falha com `AVAILABILITY_CONFLICT` (edição esgotada).                              |
+| `wallet-connect-refused` | Toda chamada a `POST /api/wallets/:id/connect` falha com `FORBIDDEN` (recusa determinística da conexão). |
+| `mutation-failure`       | Favoritar/desfavoritar falha com `TRANSIENT` (simula erro de mutation para testar rollback otimista).    |
 
 ### Carrinho de visitante (`kurio-guest-cart` em `localStorage`)
 

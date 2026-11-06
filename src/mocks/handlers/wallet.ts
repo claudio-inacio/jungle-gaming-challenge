@@ -7,7 +7,7 @@ import {
   type Wallet,
 } from '@/shared/api/contracts/wallet'
 import { db } from '../db/store'
-import { withScenario } from '../scenarios/apply'
+import { matchOverride, withScenario } from '../scenarios/apply'
 import { errorResponse } from './error-response'
 import { getSessionFromRequest } from './session'
 
@@ -42,6 +42,7 @@ export const walletHandlers = [
         network: body.network,
         ensName: body.ensName ?? null,
         createdAt: new Date().toISOString(),
+        isConnected: false,
       }
 
       db.update((d) => {
@@ -80,6 +81,54 @@ export const walletHandlers = [
 
       const updated = (db.get().wallets[session.userId] ?? []).find((w) => w.id === walletId)!
       return HttpResponse.json(walletSchema.parse(updated))
+    }),
+  ),
+
+  http.post('/api/wallets/:id/connect', async ({ request, params }) =>
+    withScenario(() => {
+      const session = getSessionFromRequest(request)
+      if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+
+      const override = matchOverride('POST', '/api/wallets/:id/connect')
+      if (override) return errorResponse(override.status, override.code, override.message)
+
+      const walletId = params.id as string
+      const list = db.get().wallets[session.userId] ?? []
+      if (!list.some((w) => w.id === walletId))
+        return errorResponse(404, 'NOT_FOUND', 'Carteira não encontrada')
+
+      // Só uma carteira fica conectada por usuário - conectar uma desconecta
+      // qualquer outra que já estivesse conectada.
+      db.update((d) => {
+        const userWallets = d.wallets[session.userId] ?? []
+        for (const wallet of userWallets) {
+          wallet.isConnected = wallet.id === walletId
+        }
+      })
+
+      const connected = (db.get().wallets[session.userId] ?? []).find((w) => w.id === walletId)!
+      return HttpResponse.json(walletSchema.parse(connected))
+    }),
+  ),
+
+  http.post('/api/wallets/:id/disconnect', async ({ request, params }) =>
+    withScenario(() => {
+      const session = getSessionFromRequest(request)
+      if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+
+      const walletId = params.id as string
+      const list = db.get().wallets[session.userId] ?? []
+      const target = list.find((w) => w.id === walletId)
+      if (!target) return errorResponse(404, 'NOT_FOUND', 'Carteira não encontrada')
+
+      db.update((d) => {
+        const userWallets = d.wallets[session.userId] ?? []
+        const wallet = userWallets.find((w) => w.id === walletId)
+        if (wallet) wallet.isConnected = false
+      })
+
+      const disconnected = (db.get().wallets[session.userId] ?? []).find((w) => w.id === walletId)!
+      return HttpResponse.json(walletSchema.parse(disconnected))
     }),
   ),
 ]

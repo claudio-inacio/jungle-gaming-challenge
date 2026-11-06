@@ -28,12 +28,14 @@ export const quoteHandlers = [
 
       const items: QuoteItem[] = body.items.map((requested) => {
         const nft = nfts.find((n) => n.id === requested.nftId)
-        const unitPrice = nft?.price ?? '0'
-        const available = nft?.available ?? 0
-        const availability = !nft || requested.quantity > available ? 'sold_out' : 'ok'
+        const edition = nft?.editions.find((e) => e.id === requested.editionId)
+        const unitPrice = edition?.price ?? '0'
+        const available = edition?.available ?? 0
+        const availability = !edition || requested.quantity > available ? 'sold_out' : 'ok'
         const subtotal = mulEth(unitPrice, requested.quantity)
         return {
           nftId: requested.nftId,
+          editionId: requested.editionId,
           quantity: requested.quantity,
           unitPrice,
           subtotal,

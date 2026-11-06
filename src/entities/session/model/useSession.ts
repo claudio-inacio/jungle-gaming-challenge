@@ -4,6 +4,16 @@ import { queryKeys, socket } from '@/shared/api'
 import { fetchSession } from '../api/session'
 import { tokenStorage } from './token-storage'
 
+// `useSession()` é chamado de vários pontos da árvore ao mesmo tempo
+// (`AppLayout`, `SiteHeader`, páginas, `useCheckout`, `useConnectWallet`...) -
+// sem uma contagem de referências, cada instância chamava `socket.connect()`/
+// `disconnect()` de forma independente no mount/unmount, e qualquer uma
+// desconectava o socket COMPARTILHADO embaixo de todas as outras, gerando
+// reconexões em cascata (cada reconexão força as outras instâncias a
+// reidentificar) mesmo sem logout real. Só a primeira instância a montar
+// conecta; só a última a desmontar desconecta.
+let activeSessionConsumers = 0
+
 export function useSession() {
   const queryClient = useQueryClient()
   const storedToken = tokenStorage.get()
@@ -26,10 +36,12 @@ export function useSession() {
       socket.emit('identify', { token: tokenStorage.get() })
     }
     socket.on('connect', identify)
-    socket.connect()
+    activeSessionConsumers += 1
+    if (activeSessionConsumers === 1) socket.connect()
     return () => {
       socket.off('connect', identify)
-      socket.disconnect()
+      activeSessionConsumers -= 1
+      if (activeSessionConsumers === 0) socket.disconnect()
     }
   }, [userId])
 

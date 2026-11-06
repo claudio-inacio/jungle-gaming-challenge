@@ -16,7 +16,7 @@ export function quoteQuery({
 }) {
   const hash = hashQuoteInput(items, couponCode)
   return queryOptions({
-    queryKey: queryKeys.quote(userId ?? 'guest', hash),
+    queryKey: queryKeys.quote.detail(userId ?? 'guest', hash),
     queryFn: async ({ signal }) => {
       const { data } = await http.post(
         '/quote',

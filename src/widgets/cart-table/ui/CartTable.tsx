@@ -43,7 +43,7 @@ export function CartTable({ items }: { items: CartItem[] }) {
                 />
                 <div>
                   <Text variant="body-bold">{item.name}</Text>
-                  <Text variant="caption">ID do token: #{item.tokenId}</Text>
+                  <Text variant="caption">ID do token: {item.tokenId}</Text>
                 </div>
               </div>
               <Text variant="body">{formatEth(item.unitPrice)}</Text>

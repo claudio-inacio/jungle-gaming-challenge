@@ -81,4 +81,21 @@ export default defineConfig([
     ],
     rules: { 'fsd/insignificant-slice': 'off' },
   },
+  {
+    // features/connect-wallet e features/place-order são a lógica de negócio
+    // da Fase 7 (pagamento e confirmação) - máquina de estados do checkout,
+    // idempotência, revalidação de cotação e tempo real do pedido. Ainda sem
+    // consumidor porque a página de checkout (UI) é uma tarefa separada,
+    // posterior às medidas do Figma.
+    files: ['./src/features/connect-wallet/**', './src/features/place-order/**'],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
+  {
+    // entities/order (só a query de detalhe do pedido) e features/collector-profile
+    // (formulário RHF+zod do perfil do colecionador) nascem nesta leva da Fase 7
+    // com um único consumidor cada (pages/order-confirmation e pages/checkout,
+    // respectivamente) - mesma situação de connect-wallet/place-order acima.
+    files: ['./src/entities/order/**', './src/features/collector-profile/**'],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
 ])

@@ -42,12 +42,36 @@ function resolveOrder(orderId: string, userId: string, scenarioId: string): void
     if (nextStatus === 'confirmed') {
       stored.transactionId = crypto.randomUUID()
       stored.confirmedAt = new Date().toISOString()
+      // Só `edition.available` (estoque real por edição) é decrementado aqui.
+      // O `nft.available` agregado é gerado nas fixtures a partir de uma
+      // distribuição independente das edições reais (`editions[]`) e nunca é
+      // lido por nenhum fluxo de disponibilidade (carrinho/cotação/pedido
+      // checam sempre `edition.available`) - é só o número de "headline"
+      // mostrado no card do catálogo. Decrementá-lo exigiria inventar um
+      // mapeamento arbitrário de volta pra uma das 4 edições, então ele fica
+      // fora de sincronia por design, não por esquecimento.
       for (const item of stored.items) {
         const nft = d.nfts.find((n) => n.id === item.nftId)
-        if (nft) nft.available = Math.max(0, nft.available - item.quantity)
+        const edition = nft?.editions.find((e) => e.id === item.editionId)
+        if (edition) edition.available = Math.max(0, edition.available - item.quantity)
       }
+
+      // Carrinho só é esvaziado na confirmação de verdade - um pedido que
+      // nasce `pending` e depois é `declined` (ou fica pendente pra sempre no
+      // cenário `order-timeout`) nunca deveria ter tirado nada do carrinho do
+      // usuário. Remove só a quantidade comprada de cada linha (nunca a linha
+      // inteira às ciegas), preservando o que não fez parte deste pedido.
+      const cartEntries = d.carts[userId] ?? []
+      for (const item of stored.items) {
+        const entry = cartEntries.find(
+          (e) => e.nftId === item.nftId && e.editionId === item.editionId,
+        )
+        if (entry) entry.quantity = Math.max(0, entry.quantity - item.quantity)
+      }
+      d.carts[userId] = cartEntries.filter((e) => e.quantity > 0)
     } else {
       stored.declineReason = 'Pagamento recusado pela carteira'
+      stored.declinedAt = new Date().toISOString()
     }
   })
 
@@ -104,21 +128,28 @@ export const orderHandlers = [
       for (const item of body.items) {
         const nft = nfts.find((n) => n.id === item.nftId)
         if (!nft) return errorResponse(404, 'NOT_FOUND', `NFT ${item.nftId} não encontrado`)
-        if (item.quantity > nft.available)
+
+        const edition = nft.editions.find((e) => e.id === item.editionId)
+        if (!edition)
+          return errorResponse(404, 'NOT_FOUND', `Edição ${item.editionId} não encontrada`)
+
+        if (item.quantity > edition.available)
           return errorResponse(
             409,
             'AVAILABILITY_CONFLICT',
-            `Apenas ${nft.available} unidade(s) disponível(is) para ${nft.name}`,
+            `Apenas ${edition.available} unidade(s) disponível(is) para esta edição`,
           )
 
         items.push({
           nftId: nft.id,
+          editionId: edition.id,
+          editionLabel: edition.label,
           tokenId: nft.tokenId,
           name: nft.name,
           image: nft.image,
-          unitPrice: nft.price,
+          unitPrice: edition.price,
           quantity: item.quantity,
-          subtotal: mulEth(nft.price, item.quantity),
+          subtotal: mulEth(edition.price, item.quantity),
         })
       }
 
@@ -152,6 +183,7 @@ export const orderHandlers = [
         declineReason: null,
         createdAt,
         confirmedAt: null,
+        declinedAt: null,
       }
 
       // O pedido nasce `pending`: a confirmação/recusa é sempre assíncrona
@@ -175,6 +207,30 @@ export const orderHandlers = [
       }
 
       return HttpResponse.json(orderSchema.parse(order), { status: 201 })
+    }),
+  ),
+
+  // Permite recuperar o pedido pendente por `Idempotency-Key` após um refresh,
+  // sem reenviar o corpo inteiro do POST (o cliente só precisa ter guardado a
+  // chave que já usou). A chave precisa pertencer à sessão atual - nunca
+  // devolve o pedido de outro usuário mesmo que a chave exista no db.
+  http.get('/api/orders', async ({ request }) =>
+    withScenario(() => {
+      const session = getSessionFromRequest(request)
+      if (!session) return errorResponse(401, 'UNAUTHORIZED', 'Sessão expirada ou inexistente')
+
+      const idempotencyKey = new URL(request.url).searchParams.get('idempotencyKey')
+      if (!idempotencyKey)
+        return errorResponse(400, 'VALIDATION_ERROR', 'Parâmetro idempotencyKey é obrigatório')
+
+      const existingKey = db.get().idempotencyKeys[idempotencyKey]
+      if (!existingKey || existingKey.userId !== session.userId)
+        return errorResponse(404, 'NOT_FOUND', 'Pedido não encontrado para esta chave')
+
+      const order = db.get().orders[existingKey.userId]?.find((o) => o.id === existingKey.orderId)
+      if (!order) return errorResponse(404, 'NOT_FOUND', 'Pedido não encontrado para esta chave')
+
+      return HttpResponse.json(orderSchema.parse(order))
     }),
   ),
 

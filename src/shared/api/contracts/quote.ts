@@ -6,6 +6,7 @@ export type QuoteItemAvailability = z.infer<typeof quoteItemAvailabilitySchema>
 
 export const quoteItemSchema = z.object({
   nftId: idSchema,
+  editionId: idSchema,
   quantity: z.number().int().min(1),
   unitPrice: ethAmountSchema,
   subtotal: ethAmountSchema,
@@ -35,6 +36,7 @@ export type ApplyCouponRequest = z.infer<typeof applyCouponRequestSchema>
 
 export const quoteRequestItemSchema = z.object({
   nftId: idSchema,
+  editionId: idSchema,
   quantity: z.number().int().min(1),
 })
 export type QuoteRequestItem = z.infer<typeof quoteRequestItemSchema>

@@ -1,4 +1,5 @@
 export * from './cart'
+export * from './checkout'
 export * from './common'
 export * from './error'
 export * from './events'

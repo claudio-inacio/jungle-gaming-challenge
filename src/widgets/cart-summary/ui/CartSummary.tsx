@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Text } from '@/shared/ui/Text'
 import { Button } from '@/shared/ui/button'
-import { OutOfScopeButton } from '@/shared/ui/out-of-scope'
 import { formatEth } from '@/shared/lib/eth'
 import { useSession } from '@/entities/session'
 import { CouponInput } from '@/features/apply-coupon'
@@ -64,9 +63,19 @@ export function CartSummary({
           {formatEth(quote.total)}
         </Text>
       </div>
-      <OutOfScopeButton variant="pill">
+      <Button
+        variant="pill"
+        nativeButton={false}
+        render={
+          isAuthenticated ? (
+            <Link to="/checkout" />
+          ) : (
+            <Link to="/login" search={{ redirect: '/checkout' }} />
+          )
+        }
+      >
         {isAuthenticated ? 'Finalizar' : 'Conectar e finalizar'}
-      </OutOfScopeButton>
+      </Button>
       <Button variant="ghost" nativeButton={false} render={<Link to="/" />}>
         Continuar explorando
       </Button>

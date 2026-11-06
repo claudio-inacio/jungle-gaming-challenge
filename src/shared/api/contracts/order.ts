@@ -11,8 +11,12 @@ export const orderStatusSchema = z.enum(['pending', 'confirmed', 'declined'])
 export type OrderStatus = z.infer<typeof orderStatusSchema>
 
 // Snapshot do pedido: nunca recalcular com dados ao vivo do catálogo.
+// `editionId`/`editionLabel` identificam qual edição daquele NFT foi
+// comprada - o recibo precisa mostrar isso, não só o NFT agregado.
 export const orderItemSchema = z.object({
   nftId: idSchema,
+  editionId: idSchema,
+  editionLabel: z.enum(['1/1', '1/10', '1/50', 'open']),
   tokenId: z.string(),
   name: z.string(),
   image: z.string().min(1),
@@ -37,14 +41,21 @@ export const orderSchema = z.object({
   declineReason: z.string().nullable(),
   createdAt: isoDateSchema,
   confirmedAt: isoDateSchema.nullable(),
+  declinedAt: isoDateSchema.nullable(),
 })
 export type Order = z.infer<typeof orderSchema>
 
 // A chave de idempotência agora vai no header HTTP `Idempotency-Key`, não no
 // corpo (ver `src/mocks/handlers/order.ts`).
 export const createOrderRequestSchema = z.object({
-  items: z.array(z.object({ nftId: idSchema, quantity: z.number().int().min(1) })).min(1),
-  couponCode: z.string().optional(),
+  items: z
+    .array(z.object({ nftId: idSchema, editionId: idSchema, quantity: z.number().int().min(1) }))
+    .min(1),
+  // `.nullable()`: `useCheckout.ts` sempre manda `couponCode` no corpo (nunca
+  // omite a chave), com `null` quando o carrinho não tem cupom - igual ao
+  // padrão já usado em `quoteRequestSchema`. Sem isso, toda criação de pedido
+  // sem cupom falhava com 500 (ZodError não tratado como `ApiError`).
+  couponCode: z.string().nullable().optional(),
   walletAddress: walletAddressSchema,
   network: networkSchema,
 })

@@ -95,6 +95,17 @@ export const scenarios: Record<string, Scenario> = {
       },
     },
   },
+  'wallet-connect-refused': {
+    id: 'wallet-connect-refused',
+    description: 'Conectar qualquer carteira falha com FORBIDDEN (recusa determinística)',
+    overrides: {
+      'POST /api/wallets/:id/connect': {
+        status: 403,
+        code: 'FORBIDDEN',
+        message: 'Conexão com a carteira recusada',
+      },
+    },
+  },
   'mutation-failure': {
     id: 'mutation-failure',
     description:
