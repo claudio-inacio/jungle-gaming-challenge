@@ -1,0 +1,3038 @@
+[
+  {
+    "id": "nft_001",
+    "tokenId": "#4561",
+    "name": "Spirited Councilman",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_001-edition-1-1",
+        "label": "1/1",
+        "price": "18.024",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_001-edition-1-10",
+        "label": "1/10",
+        "price": "14.419",
+        "totalSupply": 10,
+        "available": 0
+      },
+      {
+        "id": "nft_001-edition-1-50",
+        "label": "1/50",
+        "price": "12.016",
+        "totalSupply": 50,
+        "available": 15
+      },
+      {
+        "id": "nft_001-edition-open",
+        "label": "open",
+        "price": "8.411",
+        "totalSupply": null,
+        "available": 196
+      }
+    ],
+    "reviewCount": 62,
+    "attributes": [
+      {
+        "trait": "Fur",
+        "value": "Dreamily"
+      },
+      {
+        "trait": "Background",
+        "value": "Chapel"
+      }
+    ],
+    "price": "12.016",
+    "previousPrice": "17.66",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 0,
+    "description": "Omnis adipiscor pectus assumenda advoco vinum vociferor. Cogo alter stella decerno animus deputo adeo verbera caute. Color eius incidunt audacia volubilis terga vigor varius.",
+    "longDescription": "Spirited Councilman é uma obra digital 1/1 finalizada à mão da coleção Violet Nomads. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 3% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xde140785c76b3b1fa40bfaa172cd7167aeda2fac",
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
+    "rating": {
+      "average": 4,
+      "count": 62
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": true,
+    "isTrending": true,
+    "createdAt": "2025-10-07T02:42:35.910Z"
+  },
+  {
+    "id": "nft_002",
+    "tokenId": "#8074",
+    "name": "Unlucky Farmer",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_002-edition-1-1",
+        "label": "1/1",
+        "price": "25.125",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_002-edition-1-10",
+        "label": "1/10",
+        "price": "20.100",
+        "totalSupply": 10,
+        "available": 2
+      },
+      {
+        "id": "nft_002-edition-1-50",
+        "label": "1/50",
+        "price": "16.750",
+        "totalSupply": 50,
+        "available": 45
+      },
+      {
+        "id": "nft_002-edition-open",
+        "label": "open",
+        "price": "11.725",
+        "totalSupply": null,
+        "available": 279
+      }
+    ],
+    "reviewCount": 43,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Bludgeon"
+      },
+      {
+        "trait": "Accessory",
+        "value": "The"
+      }
+    ],
+    "price": "16.75",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 2,
+    "description": "Curso toties undique absconditus. Cur brevis animadverto confero vilitas commodi earum. Convoco volup vivo caste derideo coerceo cinis adfectus.",
+    "longDescription": "Unlucky Farmer é uma obra digital 1/10 finalizada à mão da coleção Crypto Punks Kurio. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xdb16d53af5ea5a8ddb1c740ce0b4e3f8e372ed5e",
+    "images": [
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
+    "rating": {
+      "average": 4.1,
+      "count": 43
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-06-06T10:33:09.485Z"
+  },
+  {
+    "id": "nft_003",
+    "tokenId": "#8920",
+    "name": "Prestigious Seal",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_003-edition-1-1",
+        "label": "1/1",
+        "price": "25.455",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_003-edition-1-10",
+        "label": "1/10",
+        "price": "20.364",
+        "totalSupply": 10,
+        "available": 3
+      },
+      {
+        "id": "nft_003-edition-1-50",
+        "label": "1/50",
+        "price": "16.970",
+        "totalSupply": 50,
+        "available": 49
+      },
+      {
+        "id": "nft_003-edition-open",
+        "label": "open",
+        "price": "11.879",
+        "totalSupply": null,
+        "available": 209
+      }
+    ],
+    "reviewCount": 359,
+    "attributes": [
+      {
+        "trait": "Mouth",
+        "value": "Usually"
+      },
+      {
+        "trait": "Fur",
+        "value": "Often"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Rout"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Frantically"
+      }
+    ],
+    "price": "16.97",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 26,
+    "description": "Depromo autus suppono cicuta acidus similique atqui. Viriliter vergo corpus accendo vestrum cursus voco vix ultio claustrum. Ullus comes assentator iusto video subito.",
+    "longDescription": "Prestigious Seal explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Neon Beasts.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xc2df3bdaff76bbdebbbefbd782c0ab6c00c72ba4",
+    "images": ["/img/desktop/nft-artwork-09.png", "/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 3.1,
+      "count": 359
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-06-20T22:10:32.935Z"
+  },
+  {
+    "id": "nft_004",
+    "tokenId": "#4735",
+    "name": "Deep Hovel",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_004-edition-1-1",
+        "label": "1/1",
+        "price": "2.552",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_004-edition-1-10",
+        "label": "1/10",
+        "price": "2.041",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_004-edition-1-50",
+        "label": "1/50",
+        "price": "1.701",
+        "totalSupply": 50,
+        "available": 5
+      },
+      {
+        "id": "nft_004-edition-open",
+        "label": "open",
+        "price": "1.191",
+        "totalSupply": null,
+        "available": 256
+      }
+    ],
+    "reviewCount": 291,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Hammock"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Behind"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Hm"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Unless"
+      }
+    ],
+    "price": "1.701",
+    "previousPrice": "2.35",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 211,
+    "description": "Rem adipisci corrupti quidem desolo umerus soluta. Aeneus sapiente acquiro occaecati. Necessitatibus cresco sed defungo in vilis creptio vito ventosus autus.",
+    "longDescription": "Deep Hovel explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Pixel Dreams.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Ethereum, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x1202f17c0b62fddab63abf98b7ec9aa2dbc7d80d",
+    "images": ["/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 3.6,
+      "count": 291
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-10-15T09:50:23.907Z"
+  },
+  {
+    "id": "nft_005",
+    "tokenId": "#3707",
+    "name": "Sturdy Understanding",
+    "collectionId": "col_cosmic_cats",
+    "collectionName": "Cosmic Cats",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_005-edition-1-1",
+        "label": "1/1",
+        "price": "45.608",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_005-edition-1-10",
+        "label": "1/10",
+        "price": "36.486",
+        "totalSupply": 10,
+        "available": 1
+      },
+      {
+        "id": "nft_005-edition-1-50",
+        "label": "1/50",
+        "price": "30.405",
+        "totalSupply": 50,
+        "available": 50
+      },
+      {
+        "id": "nft_005-edition-open",
+        "label": "open",
+        "price": "21.284",
+        "totalSupply": null,
+        "available": 200
+      }
+    ],
+    "reviewCount": 253,
+    "attributes": [
+      {
+        "trait": "Mouth",
+        "value": "Since"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Than"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Birdcage"
+      }
+    ],
+    "price": "30.405",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Tardus coruscus agnosco tergiversatio labore curriculum ventus amoveo depromo absum. Adstringo angustus angulus sodalitas tamen nostrum. Corrupti circumvenio ustilo caecus vix abundans volubilis adimpleo vallum eum.",
+    "longDescription": "Sturdy Understanding é uma obra digital 1/1 finalizada à mão da coleção Cosmic Cats. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xf1cfbdf9dcd06edad64a7c1fffb6bf3ecefd9ed0",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 3.7,
+      "count": 253
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-10-01T17:10:37.176Z"
+  },
+  {
+    "id": "nft_006",
+    "tokenId": "#7723",
+    "name": "Miserly Sticker",
+    "collectionId": "col_retro_waves",
+    "collectionName": "Retro Waves",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_006-edition-1-1",
+        "label": "1/1",
+        "price": "38.921",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_006-edition-1-10",
+        "label": "1/10",
+        "price": "31.136",
+        "totalSupply": 10,
+        "available": 2
+      },
+      {
+        "id": "nft_006-edition-1-50",
+        "label": "1/50",
+        "price": "25.947",
+        "totalSupply": 50,
+        "available": 34
+      },
+      {
+        "id": "nft_006-edition-open",
+        "label": "open",
+        "price": "18.163",
+        "totalSupply": null,
+        "available": 270
+      }
+    ],
+    "reviewCount": 238,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Yuppify"
+      },
+      {
+        "trait": "Fur",
+        "value": "Loftily"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Formula"
+      }
+    ],
+    "price": "25.947",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 6,
+    "description": "Utor culpo appello ad temeritas quam succurro. Approbo accedo consequatur officia. Debitis ventito conqueror doloribus terra crux.",
+    "longDescription": "Miserly Sticker é uma obra digital 1/10 finalizada à mão da coleção Retro Waves. Cada atributo fica armazenado nos metadados do token e verificado na Solana.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Solana, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xdce3ea5afa7d512233e47dae34036312a48bf0bd",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 4.8,
+      "count": 238
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-03T04:32:28.149Z"
+  },
+  {
+    "id": "nft_007",
+    "tokenId": "#0201",
+    "name": "Glorious Curl",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_007-edition-1-1",
+        "label": "1/1",
+        "price": "44.205",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_007-edition-1-10",
+        "label": "1/10",
+        "price": "35.364",
+        "totalSupply": 10,
+        "available": 3
+      },
+      {
+        "id": "nft_007-edition-1-50",
+        "label": "1/50",
+        "price": "29.470",
+        "totalSupply": 50,
+        "available": 14
+      },
+      {
+        "id": "nft_007-edition-open",
+        "label": "open",
+        "price": "20.629",
+        "totalSupply": null,
+        "available": 201
+      }
+    ],
+    "reviewCount": 300,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Atop"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Obediently"
+      }
+    ],
+    "price": "29.47",
+    "previousPrice": "36.54",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 17,
+    "description": "Validus optio spoliatio. Deripio aiunt fuga ocer tamdiu custodia antiquus ciminatio conventus. Molestias constans vos pecto capillus ambitus argumentum cariosus.",
+    "longDescription": "Glorious Curl é uma obra digital 1/50 finalizada à mão da coleção Violet Nomads. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x3463d1b9f28fdb53eecc6a479b52d6c3ab1721f7",
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
+    "rating": {
+      "average": 3.5,
+      "count": 300
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": true,
+    "createdAt": "2025-11-20T12:38:59.183Z"
+  },
+  {
+    "id": "nft_008",
+    "tokenId": "#3014",
+    "name": "Simple Knitting",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_008-edition-1-1",
+        "label": "1/1",
+        "price": "32.736",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_008-edition-1-10",
+        "label": "1/10",
+        "price": "26.189",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_008-edition-1-50",
+        "label": "1/50",
+        "price": "21.824",
+        "totalSupply": 50,
+        "available": 19
+      },
+      {
+        "id": "nft_008-edition-open",
+        "label": "open",
+        "price": "15.277",
+        "totalSupply": null,
+        "available": 242
+      }
+    ],
+    "reviewCount": 189,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Silently"
+      },
+      {
+        "trait": "Fur",
+        "value": "Defiantly"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Sin"
+      }
+    ],
+    "price": "21.824",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 131,
+    "description": "Credo illum ventus quia angelus vigor quisquam conculco apud thalassinus. Expedita varietas tertius argentum color carpo tam. Molestiae tempus utor.",
+    "longDescription": "Simple Knitting explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Crypto Punks Kurio.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 10% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x7c2c28b35ffefb573dc8ae3cbd0decfef3cd9aee",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3.2,
+      "count": 189
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": true,
+    "isTrending": false,
+    "createdAt": "2025-10-06T11:12:02.058Z"
+  },
+  {
+    "id": "nft_009",
+    "tokenId": "#0671",
+    "name": "Sinful Cruelty",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_009-edition-1-1",
+        "label": "1/1",
+        "price": "47.274",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_009-edition-1-10",
+        "label": "1/10",
+        "price": "37.819",
+        "totalSupply": 10,
+        "available": 10
+      },
+      {
+        "id": "nft_009-edition-1-50",
+        "label": "1/50",
+        "price": "31.516",
+        "totalSupply": 50,
+        "available": 26
+      },
+      {
+        "id": "nft_009-edition-open",
+        "label": "open",
+        "price": "22.061",
+        "totalSupply": null,
+        "available": 306
+      }
+    ],
+    "reviewCount": 369,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Up"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Character"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Pretty"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Broadly"
+      }
+    ],
+    "price": "31.516",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Bardus aufero adfectus demens maiores aedificium terga defessus error decet. Laborum armarium attonbitus universe vindico corroboro. Sequi cunabula acies armarium sumptus.",
+    "longDescription": "Sinful Cruelty é uma obra digital 1/1 finalizada à mão da coleção Neon Beasts. Cada atributo fica armazenado nos metadados do token e verificado na Solana.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xe045e02b3e525fcc8e46d01403c9db758c5d9c96",
+    "images": [
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
+    "rating": {
+      "average": 4.6,
+      "count": 369
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-06-27T16:16:03.110Z"
+  },
+  {
+    "id": "nft_010",
+    "tokenId": "#1754",
+    "name": "Unwritten Hello",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_010-edition-1-1",
+        "label": "1/1",
+        "price": "6.789",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_010-edition-1-10",
+        "label": "1/10",
+        "price": "5.431",
+        "totalSupply": 10,
+        "available": 6
+      },
+      {
+        "id": "nft_010-edition-1-50",
+        "label": "1/50",
+        "price": "4.526",
+        "totalSupply": 50,
+        "available": 31
+      },
+      {
+        "id": "nft_010-edition-open",
+        "label": "open",
+        "price": "3.168",
+        "totalSupply": null,
+        "available": 339
+      }
+    ],
+    "reviewCount": 320,
+    "attributes": [
+      {
+        "trait": "Mouth",
+        "value": "Contrast"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Since"
+      },
+      {
+        "trait": "Background",
+        "value": "Which"
+      }
+    ],
+    "price": "4.526",
+    "previousPrice": "6.11",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 0,
+    "description": "Earum adipiscor aspernatur taceo agnitio pax. Creta civitas constans super. Maxime demonstro sonitus video synagoga.",
+    "longDescription": "Unwritten Hello explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Pixel Dreams.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Ethereum, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x405d1ad7a21aaf95cbf5c72e3e94bdabefc5a4fe",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 4.4,
+      "count": 320
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-12-09T10:25:12.855Z"
+  },
+  {
+    "id": "nft_011",
+    "tokenId": "#3153",
+    "name": "Natural Scrap",
+    "collectionId": "col_cosmic_cats",
+    "collectionName": "Cosmic Cats",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_011-edition-1-1",
+        "label": "1/1",
+        "price": "44.415",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_011-edition-1-10",
+        "label": "1/10",
+        "price": "35.532",
+        "totalSupply": 10,
+        "available": 4
+      },
+      {
+        "id": "nft_011-edition-1-50",
+        "label": "1/50",
+        "price": "29.610",
+        "totalSupply": 50,
+        "available": 37
+      },
+      {
+        "id": "nft_011-edition-open",
+        "label": "open",
+        "price": "20.727",
+        "totalSupply": null,
+        "available": 51
+      }
+    ],
+    "reviewCount": 367,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Gleaming"
+      },
+      {
+        "trait": "Fur",
+        "value": "Scarcely"
+      }
+    ],
+    "price": "29.61",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 16,
+    "description": "Valde praesentium candidus acidus usus acer utilis eveniet. Theologus vulpes consequatur tenetur cuius denego quis uterque vorax tenuis. Curiositas tabula capitulus amor conspergo cito.",
+    "longDescription": "Natural Scrap é uma obra digital 1/50 finalizada à mão da coleção Cosmic Cats. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x6500f98e4eb19dead3f5eedb5344b71fdef38af3",
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
+    "rating": {
+      "average": 3.4,
+      "count": 367
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-09-30T12:58:00.135Z"
+  },
+  {
+    "id": "nft_012",
+    "tokenId": "#8512",
+    "name": "Major Iridescence",
+    "collectionId": "col_retro_waves",
+    "collectionName": "Retro Waves",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_012-edition-1-1",
+        "label": "1/1",
+        "price": "10.802",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_012-edition-1-10",
+        "label": "1/10",
+        "price": "8.641",
+        "totalSupply": 10,
+        "available": 3
+      },
+      {
+        "id": "nft_012-edition-1-50",
+        "label": "1/50",
+        "price": "7.201",
+        "totalSupply": 50,
+        "available": 35
+      },
+      {
+        "id": "nft_012-edition-open",
+        "label": "open",
+        "price": "5.041",
+        "totalSupply": null,
+        "available": 56
+      }
+    ],
+    "reviewCount": 232,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Neaten"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Blah"
+      }
+    ],
+    "price": "7.201",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 304,
+    "description": "Conqueror spiritus maxime cenaculum utrimque thema solus ullam usque. Tui subiungo sponte quae tantum articulus utrum ut. Tremo aperiam conculco.",
+    "longDescription": "Major Iridescence explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Retro Waves.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 10% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xa3bcb06dfd5dbb2abf7de2ef16f1c7d1dffa2a00",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 4,
+      "count": 232
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-10-05T21:20:22.219Z"
+  },
+  {
+    "id": "nft_013",
+    "tokenId": "#9681",
+    "name": "Dependent Summary",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_013-edition-1-1",
+        "label": "1/1",
+        "price": "36.998",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_013-edition-1-10",
+        "label": "1/10",
+        "price": "29.598",
+        "totalSupply": 10,
+        "available": 4
+      },
+      {
+        "id": "nft_013-edition-1-50",
+        "label": "1/50",
+        "price": "24.665",
+        "totalSupply": 50,
+        "available": 44
+      },
+      {
+        "id": "nft_013-edition-open",
+        "label": "open",
+        "price": "17.266",
+        "totalSupply": null,
+        "available": 247
+      }
+    ],
+    "reviewCount": 399,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Ick"
+      },
+      {
+        "trait": "Background",
+        "value": "Before"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Really"
+      }
+    ],
+    "price": "24.665",
+    "previousPrice": "32.80",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Tepidus tutamen temptatio quidem apostolus adduco verumtamen provident theca. Angulus antea stillicidium curtus averto deprimo. Non censura thema.",
+    "longDescription": "Dependent Summary explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Violet Nomads.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x6a018ad6fcb0a25f3adfc07b170182cfb432ef0e",
+    "images": ["/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 4.1,
+      "count": 399
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": true,
+    "createdAt": "2025-07-29T13:20:47.609Z"
+  },
+  {
+    "id": "nft_014",
+    "tokenId": "#1996",
+    "name": "Respectful Bell",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_014-edition-1-1",
+        "label": "1/1",
+        "price": "34.058",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_014-edition-1-10",
+        "label": "1/10",
+        "price": "27.246",
+        "totalSupply": 10,
+        "available": 10
+      },
+      {
+        "id": "nft_014-edition-1-50",
+        "label": "1/50",
+        "price": "22.705",
+        "totalSupply": 50,
+        "available": 49
+      },
+      {
+        "id": "nft_014-edition-open",
+        "label": "open",
+        "price": "15.894",
+        "totalSupply": null,
+        "available": 332
+      }
+    ],
+    "reviewCount": 321,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Bossy"
+      },
+      {
+        "trait": "Background",
+        "value": "Incidentally"
+      },
+      {
+        "trait": "Fur",
+        "value": "Enchanting"
+      }
+    ],
+    "price": "22.705",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Delectatio ustilo suscipio talis cursim. Correptius votum adhaero usque nihil. Surgo depono uterque velut curis charisma.",
+    "longDescription": "Respectful Bell é uma obra digital 1/10 finalizada à mão da coleção Crypto Punks Kurio. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xde4dda2fd35f3ca5d9b7d38f5e7b2f9513b7c95d",
+    "images": [
+      "/img/desktop/nft-artwork-04.png",
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
+    "rating": {
+      "average": 3.3,
+      "count": 321
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-10-31T19:33:01.741Z"
+  },
+  {
+    "id": "nft_015",
+    "tokenId": "#6668",
+    "name": "Cool Allegation",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_015-edition-1-1",
+        "label": "1/1",
+        "price": "8.115",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_015-edition-1-10",
+        "label": "1/10",
+        "price": "6.492",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_015-edition-1-50",
+        "label": "1/50",
+        "price": "5.410",
+        "totalSupply": 50,
+        "available": 26
+      },
+      {
+        "id": "nft_015-edition-open",
+        "label": "open",
+        "price": "3.787",
+        "totalSupply": null,
+        "available": 255
+      }
+    ],
+    "reviewCount": 266,
+    "attributes": [
+      {
+        "trait": "Mouth",
+        "value": "Whoever"
+      },
+      {
+        "trait": "Fur",
+        "value": "Apparatus"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Hmph"
+      }
+    ],
+    "price": "5.41",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 16,
+    "description": "Baiulus speculum volubilis aliquid spectaculum decor ustilo atqui. Tum vinco statua derideo quae ustulo molestias adaugeo. Strenuus spes bibo soluta cruentus soleo amissio solus xiphias administratio.",
+    "longDescription": "Cool Allegation explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Neon Beasts.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 7% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xf8dbcad87ebab9b2b0788f895841deda8cba0788",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 4.1,
+      "count": 266
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": true,
+    "isTrending": false,
+    "createdAt": "2025-11-05T14:09:38.698Z"
+  },
+  {
+    "id": "nft_016",
+    "tokenId": "#2726",
+    "name": "Indolent Casement",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_016-edition-1-1",
+        "label": "1/1",
+        "price": "29.210",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_016-edition-1-10",
+        "label": "1/10",
+        "price": "23.368",
+        "totalSupply": 10,
+        "available": 4
+      },
+      {
+        "id": "nft_016-edition-1-50",
+        "label": "1/50",
+        "price": "19.473",
+        "totalSupply": 50,
+        "available": 31
+      },
+      {
+        "id": "nft_016-edition-open",
+        "label": "open",
+        "price": "13.631",
+        "totalSupply": null,
+        "available": 364
+      }
+    ],
+    "reviewCount": 383,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Incidentally"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Lest"
+      }
+    ],
+    "price": "19.473",
+    "previousPrice": "29.40",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 107,
+    "description": "Attonbitus esse sui amissio minima cauda vivo denuo. Inventore adimpleo recusandae virgo pauper totus vado calcar beneficium. Cunctatio tunc velut considero capillus termes cervus.",
+    "longDescription": "Indolent Casement é uma obra digital de edição aberta finalizada à mão da coleção Pixel Dreams. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 3% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xc9e2d9c3ac420edc58daf3f89fff22fc611d4747",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 4,
+      "count": 383
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-11-01T16:16:48.430Z"
+  },
+  {
+    "id": "nft_017",
+    "tokenId": "#1278",
+    "name": "Supportive Scarification",
+    "collectionId": "col_cosmic_cats",
+    "collectionName": "Cosmic Cats",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_017-edition-1-1",
+        "label": "1/1",
+        "price": "3.315",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_017-edition-1-10",
+        "label": "1/10",
+        "price": "2.652",
+        "totalSupply": 10,
+        "available": 7
+      },
+      {
+        "id": "nft_017-edition-1-50",
+        "label": "1/50",
+        "price": "2.210",
+        "totalSupply": 50,
+        "available": 5
+      },
+      {
+        "id": "nft_017-edition-open",
+        "label": "open",
+        "price": "1.547",
+        "totalSupply": null,
+        "available": 383
+      }
+    ],
+    "reviewCount": 216,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Blindly"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Burgeon"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Essential"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Inside"
+      }
+    ],
+    "price": "2.210",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Adfectus cognatus celebrer contigo alias viduo iste cohaero. Dedecor pauci ducimus verto derideo vulgivagus. Bellicus via angelus totidem creator utrimque ustilo timidus texo.",
+    "longDescription": "Supportive Scarification é uma obra digital 1/1 finalizada à mão da coleção Cosmic Cats. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x6183f7fec2ceada3b838102fcf96b92e4de31ba1",
+    "images": [
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
+    "rating": {
+      "average": 3.1,
+      "count": 216
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-21T00:20:42.909Z"
+  },
+  {
+    "id": "nft_018",
+    "tokenId": "#7336",
+    "name": "Soggy Address",
+    "collectionId": "col_retro_waves",
+    "collectionName": "Retro Waves",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_018-edition-1-1",
+        "label": "1/1",
+        "price": "33.386",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_018-edition-1-10",
+        "label": "1/10",
+        "price": "26.708",
+        "totalSupply": 10,
+        "available": 4
+      },
+      {
+        "id": "nft_018-edition-1-50",
+        "label": "1/50",
+        "price": "22.257",
+        "totalSupply": 50,
+        "available": 21
+      },
+      {
+        "id": "nft_018-edition-open",
+        "label": "open",
+        "price": "15.580",
+        "totalSupply": null,
+        "available": 418
+      }
+    ],
+    "reviewCount": 57,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Beside"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Enormously"
+      }
+    ],
+    "price": "22.257",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 5,
+    "description": "Accusantium caveo temporibus approbo facere bestia. Caput voluptates thesis. Depopulo amo infit defetiscor tutamen alter depopulo architecto communis tabula.",
+    "longDescription": "Soggy Address é uma obra digital 1/10 finalizada à mão da coleção Retro Waves. Cada atributo fica armazenado nos metadados do token e verificado na Solana.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xa88abdfb6f95c0daeeded1b3abe01f110fa767be",
+    "images": ["/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 3.3,
+      "count": 57
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-22T04:25:44.455Z"
+  },
+  {
+    "id": "nft_019",
+    "tokenId": "#8117",
+    "name": "Querulous Cellar",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_019-edition-1-1",
+        "label": "1/1",
+        "price": "4.790",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_019-edition-1-10",
+        "label": "1/10",
+        "price": "3.832",
+        "totalSupply": 10,
+        "available": 7
+      },
+      {
+        "id": "nft_019-edition-1-50",
+        "label": "1/50",
+        "price": "3.193",
+        "totalSupply": 50,
+        "available": 30
+      },
+      {
+        "id": "nft_019-edition-open",
+        "label": "open",
+        "price": "2.235",
+        "totalSupply": null,
+        "available": 379
+      }
+    ],
+    "reviewCount": 8,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Whenever"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Wrongly"
+      }
+    ],
+    "price": "3.193",
+    "previousPrice": "4.76",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 0,
+    "description": "Vestrum caelestis corrigo custodia decens. Villa caput animus avaritia valens sint circumvenio. Universe tyrannus verto caste temeritas degusto turbo suscipit tergeo.",
+    "longDescription": "Querulous Cellar explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Violet Nomads.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Ethereum, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xe3bfe032fb4bcabcb6cfdda3a05ff28b4cad47bc",
+    "images": ["/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 4.5,
+      "count": 8
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": true,
+    "createdAt": "2025-07-27T17:16:42.441Z"
+  },
+  {
+    "id": "nft_020",
+    "tokenId": "#8050",
+    "name": "Fine Sock",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_020-edition-1-1",
+        "label": "1/1",
+        "price": "1.767",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_020-edition-1-10",
+        "label": "1/10",
+        "price": "1.414",
+        "totalSupply": 10,
+        "available": 6
+      },
+      {
+        "id": "nft_020-edition-1-50",
+        "label": "1/50",
+        "price": "1.178",
+        "totalSupply": 50,
+        "available": 31
+      },
+      {
+        "id": "nft_020-edition-open",
+        "label": "open",
+        "price": "0.825",
+        "totalSupply": null,
+        "available": 345
+      }
+    ],
+    "reviewCount": 384,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Paltry"
+      },
+      {
+        "trait": "Background",
+        "value": "Than"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Midst"
+      }
+    ],
+    "price": "1.178",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 259,
+    "description": "Adsum concido territo. Tertius ea decerno arceo complectus damno alienus bos. Tabesco vulticulus victoria sapiente curiositas repellat territo.",
+    "longDescription": "Fine Sock explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Crypto Punks Kurio.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x29c8cc47700c6b6e59dc4baa21aa9aa3d2aef116",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3.5,
+      "count": 384
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-14T07:56:24.565Z"
+  },
+  {
+    "id": "nft_021",
+    "tokenId": "#6085",
+    "name": "Gullible Cappelletti",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_021-edition-1-1",
+        "label": "1/1",
+        "price": "43.515",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_021-edition-1-10",
+        "label": "1/10",
+        "price": "34.812",
+        "totalSupply": 10,
+        "available": 6
+      },
+      {
+        "id": "nft_021-edition-1-50",
+        "label": "1/50",
+        "price": "29.010",
+        "totalSupply": 50,
+        "available": 24
+      },
+      {
+        "id": "nft_021-edition-open",
+        "label": "open",
+        "price": "20.307",
+        "totalSupply": null,
+        "available": 487
+      }
+    ],
+    "reviewCount": 304,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Incidentally"
+      },
+      {
+        "trait": "Background",
+        "value": "Absent"
+      },
+      {
+        "trait": "Fur",
+        "value": "Cycle"
+      }
+    ],
+    "price": "29.01",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 1,
+    "description": "Caelum casso ullam laudantium. Amplus undique supra aegre suggero illo aggredior. Deorsum asperiores vinculum ullam sortitus deinde.",
+    "longDescription": "Gullible Cappelletti é uma obra digital 1/1 finalizada à mão da coleção Neon Beasts. Cada atributo fica armazenado nos metadados do token e verificado na Solana.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Solana, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x9eb1bba1b4537ab4ddd59fa01aeba2ec8bf4b6bc",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 4.6,
+      "count": 304
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-29T04:44:01.656Z"
+  },
+  {
+    "id": "nft_022",
+    "tokenId": "#8190",
+    "name": "Naughty Programme",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_022-edition-1-1",
+        "label": "1/1",
+        "price": "19.052",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_022-edition-1-10",
+        "label": "1/10",
+        "price": "15.241",
+        "totalSupply": 10,
+        "available": 8
+      },
+      {
+        "id": "nft_022-edition-1-50",
+        "label": "1/50",
+        "price": "12.701",
+        "totalSupply": 50,
+        "available": 10
+      },
+      {
+        "id": "nft_022-edition-open",
+        "label": "open",
+        "price": "8.891",
+        "totalSupply": null,
+        "available": 432
+      }
+    ],
+    "reviewCount": 279,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Yowza"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Vicinity"
+      },
+      {
+        "trait": "Fur",
+        "value": "Hope"
+      },
+      {
+        "trait": "Eyes",
+        "value": "After"
+      }
+    ],
+    "price": "12.701",
+    "previousPrice": "17.40",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 4,
+    "description": "Trado degenero contabesco depulso tribuo conculco. Summa trepide amaritudo capto. Conqueror defaeco tamquam soleo.",
+    "longDescription": "Naughty Programme é uma obra digital 1/10 finalizada à mão da coleção Pixel Dreams. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xd7cafd2e7f13c4c6efb6406eedabe5dec29adc8f",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3.8,
+      "count": 279
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": true,
+    "isTrending": false,
+    "createdAt": "2025-07-04T19:15:21.492Z"
+  },
+  {
+    "id": "nft_023",
+    "tokenId": "#9954",
+    "name": "Tight Lender",
+    "collectionId": "col_cosmic_cats",
+    "collectionName": "Cosmic Cats",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_023-edition-1-1",
+        "label": "1/1",
+        "price": "2.088",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_023-edition-1-10",
+        "label": "1/10",
+        "price": "1.670",
+        "totalSupply": 10,
+        "available": 8
+      },
+      {
+        "id": "nft_023-edition-1-50",
+        "label": "1/50",
+        "price": "1.392",
+        "totalSupply": 50,
+        "available": 2
+      },
+      {
+        "id": "nft_023-edition-open",
+        "label": "open",
+        "price": "0.974",
+        "totalSupply": null,
+        "available": 300
+      }
+    ],
+    "reviewCount": 112,
+    "attributes": [
+      {
+        "trait": "Mouth",
+        "value": "Supplier"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Madly"
+      },
+      {
+        "trait": "Fur",
+        "value": "Until"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Fast"
+      }
+    ],
+    "price": "1.392",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 4,
+    "description": "Patruus amplus aliquid verbera sortitus tricesimus utroque mollitia ea. Comes dapifer teres pauper vapulus decipio. Quos omnis subvenio capio doloremque amicitia creo.",
+    "longDescription": "Tight Lender é uma obra digital 1/50 finalizada à mão da coleção Cosmic Cats. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xaeedabd157a136f7a4d64b004027bcb6e81d27bd",
+    "images": ["/img/desktop/nft-artwork-09.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 4.4,
+      "count": 112
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-12-14T11:14:28.220Z"
+  },
+  {
+    "id": "nft_024",
+    "tokenId": "#6787",
+    "name": "Heartfelt Muscat",
+    "collectionId": "col_retro_waves",
+    "collectionName": "Retro Waves",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_024-edition-1-1",
+        "label": "1/1",
+        "price": "47.655",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_024-edition-1-10",
+        "label": "1/10",
+        "price": "38.124",
+        "totalSupply": 10,
+        "available": 4
+      },
+      {
+        "id": "nft_024-edition-1-50",
+        "label": "1/50",
+        "price": "31.770",
+        "totalSupply": 50,
+        "available": 48
+      },
+      {
+        "id": "nft_024-edition-open",
+        "label": "open",
+        "price": "22.239",
+        "totalSupply": null,
+        "available": 341
+      }
+    ],
+    "reviewCount": 158,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "On"
+      },
+      {
+        "trait": "Fur",
+        "value": "Considering"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Book"
+      }
+    ],
+    "price": "31.77",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 24,
+    "description": "Vereor perspiciatis uterque surculus animi veniam aeger explicabo. Absum curis claustrum depereo. Adimpleo annus laboriosam conicio suspendo solio tutis.",
+    "longDescription": "Heartfelt Muscat é uma obra digital de edição aberta finalizada à mão da coleção Retro Waves. Cada atributo fica armazenado nos metadados do token e verificado na Solana.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xf9e66b9bcce97c8dff8393d730ee7196ed84f9f3",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3,
+      "count": 158
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-29T19:01:16.014Z"
+  },
+  {
+    "id": "nft_025",
+    "tokenId": "#1947",
+    "name": "Bad Flint",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_025-edition-1-1",
+        "label": "1/1",
+        "price": "24.299",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_025-edition-1-10",
+        "label": "1/10",
+        "price": "19.439",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_025-edition-1-50",
+        "label": "1/50",
+        "price": "16.199",
+        "totalSupply": 50,
+        "available": 16
+      },
+      {
+        "id": "nft_025-edition-open",
+        "label": "open",
+        "price": "11.339",
+        "totalSupply": null,
+        "available": 144
+      }
+    ],
+    "reviewCount": 12,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Underneath"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Yahoo"
+      },
+      {
+        "trait": "Background",
+        "value": "Soup"
+      }
+    ],
+    "price": "16.199",
+    "previousPrice": "21.06",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Voco labore conor nisi apud. Quidem deporto cuius vulgo utrum qui. Quas baiulus crur adflicto demonstro illo calcar.",
+    "longDescription": "Bad Flint explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Violet Nomads.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xfefbd2b2b6de3afacc864a8bacdf8cacf42c9cd1",
+    "images": [
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-09.png",
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
+    "rating": {
+      "average": 3.9,
+      "count": 12
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": true,
+    "createdAt": "2025-06-09T08:17:00.674Z"
+  },
+  {
+    "id": "nft_026",
+    "tokenId": "#4876",
+    "name": "Bogus Hamburger",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_026-edition-1-1",
+        "label": "1/1",
+        "price": "24.537",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_026-edition-1-10",
+        "label": "1/10",
+        "price": "19.630",
+        "totalSupply": 10,
+        "available": 9
+      },
+      {
+        "id": "nft_026-edition-1-50",
+        "label": "1/50",
+        "price": "16.358",
+        "totalSupply": 50,
+        "available": 31
+      },
+      {
+        "id": "nft_026-edition-open",
+        "label": "open",
+        "price": "11.451",
+        "totalSupply": null,
+        "available": 62
+      }
+    ],
+    "reviewCount": 7,
+    "attributes": [
+      {
+        "trait": "Mouth",
+        "value": "Vein"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Shyly"
+      },
+      {
+        "trait": "Fur",
+        "value": "Schlep"
+      }
+    ],
+    "price": "16.358",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 5,
+    "description": "Conscendo amor titulus. Aequus vis eos coepi aestus desino thalassinus suffragium admitto aequus. Claustrum candidus cicuta thymbra vetus cultellus.",
+    "longDescription": "Bogus Hamburger é uma obra digital 1/10 finalizada à mão da coleção Crypto Punks Kurio. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xd7a4efd7e2db9cd1f5fcbcb3b5a62d1a60b16f1c",
+    "images": ["/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 3.5,
+      "count": 7
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-12-16T05:54:03.846Z"
+  },
+  {
+    "id": "nft_027",
+    "tokenId": "#7610",
+    "name": "Weird Premium",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_027-edition-1-1",
+        "label": "1/1",
+        "price": "35.580",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_027-edition-1-10",
+        "label": "1/10",
+        "price": "28.464",
+        "totalSupply": 10,
+        "available": 8
+      },
+      {
+        "id": "nft_027-edition-1-50",
+        "label": "1/50",
+        "price": "23.720",
+        "totalSupply": 50,
+        "available": 34
+      },
+      {
+        "id": "nft_027-edition-open",
+        "label": "open",
+        "price": "16.604",
+        "totalSupply": null,
+        "available": 484
+      }
+    ],
+    "reviewCount": 144,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Brisk"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Conjecture"
+      }
+    ],
+    "price": "23.72",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 15,
+    "description": "Tero sequi administratio. Viscus desidero damnatio defungo bellicus. Corpus admoveo tenetur cur traho.",
+    "longDescription": "Weird Premium explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Neon Beasts.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Solana, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 7% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xc4ead4ed63ea6e8f4d6812b5c087029a8bd0afbe",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 4.6,
+      "count": 144
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-06-22T19:19:09.498Z"
+  },
+  {
+    "id": "nft_028",
+    "tokenId": "#3657",
+    "name": "Emotional Cosset",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_028-edition-1-1",
+        "label": "1/1",
+        "price": "37.118",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_028-edition-1-10",
+        "label": "1/10",
+        "price": "29.694",
+        "totalSupply": 10,
+        "available": 6
+      },
+      {
+        "id": "nft_028-edition-1-50",
+        "label": "1/50",
+        "price": "24.745",
+        "totalSupply": 50,
+        "available": 49
+      },
+      {
+        "id": "nft_028-edition-open",
+        "label": "open",
+        "price": "17.322",
+        "totalSupply": null,
+        "available": 56
+      }
+    ],
+    "reviewCount": 6,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Beneath"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Phew"
+      },
+      {
+        "trait": "Background",
+        "value": "Jellyfish"
+      },
+      {
+        "trait": "Fur",
+        "value": "Worth"
+      }
+    ],
+    "price": "24.745",
+    "previousPrice": "39.34",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 0,
+    "description": "Quasi terminatio nesciunt arca. Repellat cresco sperno caveo conitor vero clamo delinquo validus. Advenio arceo absens quos dedico appono vita ex.",
+    "longDescription": "Emotional Cosset explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Pixel Dreams.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x5be16bac903941cfbc5f4efffc59d1df4bdefbfa",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 4,
+      "count": 6
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-06-27T20:49:33.251Z"
+  },
+  {
+    "id": "nft_029",
+    "tokenId": "#2889",
+    "name": "Impassioned Tooth",
+    "collectionId": "col_cosmic_cats",
+    "collectionName": "Cosmic Cats",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_029-edition-1-1",
+        "label": "1/1",
+        "price": "34.500",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_029-edition-1-10",
+        "label": "1/10",
+        "price": "27.600",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_029-edition-1-50",
+        "label": "1/50",
+        "price": "23.000",
+        "totalSupply": 50,
+        "available": 34
+      },
+      {
+        "id": "nft_029-edition-open",
+        "label": "open",
+        "price": "16.100",
+        "totalSupply": null,
+        "available": 76
+      }
+    ],
+    "reviewCount": 267,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Prioritize"
+      },
+      {
+        "trait": "Accessory",
+        "value": "About"
+      }
+    ],
+    "price": "23.00",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Adinventitias temptatio corrigo crudelis tego versus virga neque consuasor tersus. Magni contego sollicito caput aureus. Ambitus dicta bos adficio adeptio atque usitas cimentarius virga non.",
+    "longDescription": "Impassioned Tooth é uma obra digital 1/1 finalizada à mão da coleção Cosmic Cats. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x9cba67ded9baa4d47c411eb9bc7fae3db6902a09",
+    "images": ["/img/desktop/nft-artwork-09.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 3.1,
+      "count": 267
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": true,
+    "isTrending": false,
+    "createdAt": "2025-10-16T02:11:58.498Z"
+  },
+  {
+    "id": "nft_030",
+    "tokenId": "#5906",
+    "name": "Quintessential Bidet",
+    "collectionId": "col_retro_waves",
+    "collectionName": "Retro Waves",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_030-edition-1-1",
+        "label": "1/1",
+        "price": "46.710",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_030-edition-1-10",
+        "label": "1/10",
+        "price": "37.368",
+        "totalSupply": 10,
+        "available": 10
+      },
+      {
+        "id": "nft_030-edition-1-50",
+        "label": "1/50",
+        "price": "31.140",
+        "totalSupply": 50,
+        "available": 38
+      },
+      {
+        "id": "nft_030-edition-open",
+        "label": "open",
+        "price": "21.798",
+        "totalSupply": null,
+        "available": 209
+      }
+    ],
+    "reviewCount": 121,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Beside"
+      },
+      {
+        "trait": "Background",
+        "value": "Uh-huh"
+      }
+    ],
+    "price": "31.14",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 6,
+    "description": "Aspicio termes nulla viridis adicio cena paulatim clibanus. Tempore ambulo doloribus dolor corporis vicissitudo tres subiungo. Deinde verus suasoria suspendo universe certus timor autus.",
+    "longDescription": "Quintessential Bidet explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Retro Waves.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Solana, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 7% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x77fcffcea83ba80c0ff95fbcf1bfc3bc82d366de",
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
+    "rating": {
+      "average": 3.5,
+      "count": 121
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-08-05T02:21:52.646Z"
+  },
+  {
+    "id": "nft_031",
+    "tokenId": "#7379",
+    "name": "Same Hexagon",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_031-edition-1-1",
+        "label": "1/1",
+        "price": "30.023",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_031-edition-1-10",
+        "label": "1/10",
+        "price": "24.018",
+        "totalSupply": 10,
+        "available": 10
+      },
+      {
+        "id": "nft_031-edition-1-50",
+        "label": "1/50",
+        "price": "20.015",
+        "totalSupply": 50,
+        "available": 6
+      },
+      {
+        "id": "nft_031-edition-open",
+        "label": "open",
+        "price": "14.011",
+        "totalSupply": null,
+        "available": 214
+      }
+    ],
+    "reviewCount": 4,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Since"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Unblinking"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Alongside"
+      },
+      {
+        "trait": "Background",
+        "value": "Confusion"
+      }
+    ],
+    "price": "20.015",
+    "previousPrice": "30.42",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 18,
+    "description": "Celo basium denuncio censura civis solum. Peccatus aestus aestivus virgo clibanus aliqua patruus quia socius ceno. Vociferor casso spes.",
+    "longDescription": "Same Hexagon explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Violet Nomads.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 10% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xfd65dde23ead4cfe80c59f8c4ef2092ae959f0cd",
+    "images": ["/img/desktop/nft-artwork-09.png", "/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3.5,
+      "count": 4
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": true,
+    "createdAt": "2025-12-11T21:39:47.314Z"
+  },
+  {
+    "id": "nft_032",
+    "tokenId": "#7054",
+    "name": "Intent Hutch",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_032-edition-1-1",
+        "label": "1/1",
+        "price": "34.290",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_032-edition-1-10",
+        "label": "1/10",
+        "price": "27.432",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_032-edition-1-50",
+        "label": "1/50",
+        "price": "22.860",
+        "totalSupply": 50,
+        "available": 32
+      },
+      {
+        "id": "nft_032-edition-open",
+        "label": "open",
+        "price": "16.002",
+        "totalSupply": null,
+        "available": 139
+      }
+    ],
+    "reviewCount": 351,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "After"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Distant"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Verbally"
+      },
+      {
+        "trait": "Background",
+        "value": "Splendid"
+      }
+    ],
+    "price": "22.86",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 332,
+    "description": "Adversus tredecim clarus decor acer coerceo desolo adstringo deprecator vestigium. Tendo cunae sollers. Artificiose arto aeneus audax sonitus.",
+    "longDescription": "Intent Hutch explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Crypto Punks Kurio.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xdbf2665bb77cb6ee77bed28cb4cecca9d3e3f523",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 4.5,
+      "count": 351
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-13T15:27:08.813Z"
+  },
+  {
+    "id": "nft_033",
+    "tokenId": "#6964",
+    "name": "Sad Commodity",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_033-edition-1-1",
+        "label": "1/1",
+        "price": "35.175",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_033-edition-1-10",
+        "label": "1/10",
+        "price": "28.140",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_033-edition-1-50",
+        "label": "1/50",
+        "price": "23.450",
+        "totalSupply": 50,
+        "available": 22
+      },
+      {
+        "id": "nft_033-edition-open",
+        "label": "open",
+        "price": "16.415",
+        "totalSupply": null,
+        "available": 280
+      }
+    ],
+    "reviewCount": 33,
+    "attributes": [
+      {
+        "trait": "Fur",
+        "value": "Pfft"
+      },
+      {
+        "trait": "Background",
+        "value": "Ugh"
+      }
+    ],
+    "price": "23.450",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 1,
+    "description": "Cupiditas usus quos exercitationem ancilla pecto angulus. Aranea stultus beatae cruciamentum vehemens. Distinctio curatio accusamus textor.",
+    "longDescription": "Sad Commodity explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Neon Beasts.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Solana, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x1acdf50fbccca7b94cda18bd41d8bf1e18b9fc74",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 3.7,
+      "count": 33
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-07-05T12:45:33.646Z"
+  },
+  {
+    "id": "nft_034",
+    "tokenId": "#3138",
+    "name": "Excellent Cutlet",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_034-edition-1-1",
+        "label": "1/1",
+        "price": "3.375",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_034-edition-1-10",
+        "label": "1/10",
+        "price": "2.700",
+        "totalSupply": 10,
+        "available": 8
+      },
+      {
+        "id": "nft_034-edition-1-50",
+        "label": "1/50",
+        "price": "2.250",
+        "totalSupply": 50,
+        "available": 14
+      },
+      {
+        "id": "nft_034-edition-open",
+        "label": "open",
+        "price": "1.575",
+        "totalSupply": null,
+        "available": 117
+      }
+    ],
+    "reviewCount": 263,
+    "attributes": [
+      {
+        "trait": "Fur",
+        "value": "Modulo"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Gee"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Reward"
+      },
+      {
+        "trait": "Background",
+        "value": "Forenenst"
+      }
+    ],
+    "price": "2.25",
+    "previousPrice": "3.02",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 5,
+    "description": "Dignissimos audeo aestus subito crebro traho soluta theca cernuus stultus. Vigor repellat communis centum aufero. Blanditiis pariatur celo somniculosus tot tergo temptatio audeo.",
+    "longDescription": "Excellent Cutlet explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Pixel Dreams.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Ethereum, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x1f89050d5c0e7dd7dfcc5c12f7abcf509207bc6e",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "rating": {
+      "average": 3,
+      "count": 263
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-11-02T15:58:51.944Z"
+  },
+  {
+    "id": "nft_035",
+    "tokenId": "#2753",
+    "name": "Cuddly Overload",
+    "collectionId": "col_cosmic_cats",
+    "collectionName": "Cosmic Cats",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_035-edition-1-1",
+        "label": "1/1",
+        "price": "36.707",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_035-edition-1-10",
+        "label": "1/10",
+        "price": "29.365",
+        "totalSupply": 10,
+        "available": 7
+      },
+      {
+        "id": "nft_035-edition-1-50",
+        "label": "1/50",
+        "price": "24.471",
+        "totalSupply": 50,
+        "available": 35
+      },
+      {
+        "id": "nft_035-edition-open",
+        "label": "open",
+        "price": "17.130",
+        "totalSupply": null,
+        "available": 331
+      }
+    ],
+    "reviewCount": 15,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Illiterate"
+      },
+      {
+        "trait": "Fur",
+        "value": "Each"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Awesome"
+      },
+      {
+        "trait": "Accessory",
+        "value": "In"
+      }
+    ],
+    "price": "24.471",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 30,
+    "description": "Sufficio deficio sordeo tui. Accusantium tergum pel subnecto. Thymbra vitium facilis deporto cuius arguo nam charisma verus.",
+    "longDescription": "Cuddly Overload é uma obra digital 1/50 finalizada à mão da coleção Cosmic Cats. Cada atributo fica armazenado nos metadados do token e verificado na Polygon.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Polygon, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xcd71091ddde4cd4a6bf0ddfac171fbce18145a52",
+    "images": ["/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3.3,
+      "count": 15
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-11-11T03:11:10.606Z"
+  },
+  {
+    "id": "nft_036",
+    "tokenId": "#8038",
+    "name": "Considerate Molasses",
+    "collectionId": "col_retro_waves",
+    "collectionName": "Retro Waves",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_036-edition-1-1",
+        "label": "1/1",
+        "price": "46.710",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_036-edition-1-10",
+        "label": "1/10",
+        "price": "37.368",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_036-edition-1-50",
+        "label": "1/50",
+        "price": "31.140",
+        "totalSupply": 50,
+        "available": 16
+      },
+      {
+        "id": "nft_036-edition-open",
+        "label": "open",
+        "price": "21.798",
+        "totalSupply": null,
+        "available": 290
+      }
+    ],
+    "reviewCount": 176,
+    "attributes": [
+      {
+        "trait": "Eyes",
+        "value": "Barge"
+      },
+      {
+        "trait": "Fur",
+        "value": "Blah"
+      }
+    ],
+    "price": "31.140",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": true,
+    "favorited": false,
+    "available": 263,
+    "description": "Quia certus depopulo agnitio. Cohibeo traho adstringo curatio defungo surgo. Sopor tergiversatio unus combibo fugiat tunc vox.",
+    "longDescription": "Considerate Molasses explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Retro Waves.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xd84aaaac7c879a24e3ccae5c8e3c4644c6efc38b",
+    "images": ["/img/desktop/nft-artwork-09.png", "/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 3.1,
+      "count": 176
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": true,
+    "isTrending": false,
+    "createdAt": "2025-12-25T02:25:22.389Z"
+  },
+  {
+    "id": "nft_037",
+    "tokenId": "#9084",
+    "name": "Likely Insolence",
+    "collectionId": "col_violet_nomads",
+    "collectionName": "Violet Nomads",
+    "image": "/img/mobile/mobile-nft-artwork-5.png",
+    "editions": [
+      {
+        "id": "nft_037-edition-1-1",
+        "label": "1/1",
+        "price": "26.759",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_037-edition-1-10",
+        "label": "1/10",
+        "price": "21.407",
+        "totalSupply": 10,
+        "available": 3
+      },
+      {
+        "id": "nft_037-edition-1-50",
+        "label": "1/50",
+        "price": "17.839",
+        "totalSupply": 50,
+        "available": 11
+      },
+      {
+        "id": "nft_037-edition-open",
+        "label": "open",
+        "price": "12.487",
+        "totalSupply": null,
+        "available": 134
+      }
+    ],
+    "reviewCount": 269,
+    "attributes": [
+      {
+        "trait": "Fur",
+        "value": "Requirement"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Oh"
+      }
+    ],
+    "price": "17.839",
+    "previousPrice": "26.76",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 0,
+    "description": "Arma depono curtus patria xiphias tenus cubicularis tres assumenda. Bardus confugo dolorem. Verbum dolore desino admitto adeo ipsa debitis.",
+    "longDescription": "Likely Insolence é uma obra digital 1/1 finalizada à mão da coleção Violet Nomads. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xc30951f2d638b8a2b5ece810cbb570fee5de6ced",
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
+    "rating": {
+      "average": 3.5,
+      "count": 269
+    },
+    "editionType": "unique",
+    "totalSupply": 1,
+    "isNew": false,
+    "isTrending": true,
+    "createdAt": "2025-07-08T11:25:56.811Z"
+  },
+  {
+    "id": "nft_038",
+    "tokenId": "#4024",
+    "name": "Unfinished Teammate",
+    "collectionId": "col_crypto_punks_kurio",
+    "collectionName": "Crypto Punks Kurio",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_038-edition-1-1",
+        "label": "1/1",
+        "price": "13.571",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_038-edition-1-10",
+        "label": "1/10",
+        "price": "10.856",
+        "totalSupply": 10,
+        "available": 3
+      },
+      {
+        "id": "nft_038-edition-1-50",
+        "label": "1/50",
+        "price": "9.047",
+        "totalSupply": 50,
+        "available": 34
+      },
+      {
+        "id": "nft_038-edition-open",
+        "label": "open",
+        "price": "6.333",
+        "totalSupply": null,
+        "available": 217
+      }
+    ],
+    "reviewCount": 287,
+    "attributes": [
+      {
+        "trait": "Headwear",
+        "value": "Crank"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Commandeer"
+      },
+      {
+        "trait": "Fur",
+        "value": "Ouch"
+      },
+      {
+        "trait": "Accessory",
+        "value": "Accidentally"
+      }
+    ],
+    "price": "9.047",
+    "previousPrice": null,
+    "network": "polygon",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 10,
+    "description": "Studio cernuus aufero audacia congregatio. Tripudio animadverto tabesco excepturi civis depromo. Patior damno asper angelus incidunt.",
+    "longDescription": "Unfinished Teammate explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Crypto Punks Kurio.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xd7aeecced870cb2ca2f41da0eb23c6ecf5f9711f",
+    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "rating": {
+      "average": 3.4,
+      "count": 287
+    },
+    "editionType": "limited",
+    "totalSupply": 10,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-06-03T04:49:16.216Z"
+  },
+  {
+    "id": "nft_039",
+    "tokenId": "#9384",
+    "name": "Quintessential Best-seller",
+    "collectionId": "col_neon_beasts",
+    "collectionName": "Neon Beasts",
+    "image": "/img/desktop/nft-artwork-04.png",
+    "editions": [
+      {
+        "id": "nft_039-edition-1-1",
+        "label": "1/1",
+        "price": "29.505",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_039-edition-1-10",
+        "label": "1/10",
+        "price": "23.604",
+        "totalSupply": 10,
+        "available": 5
+      },
+      {
+        "id": "nft_039-edition-1-50",
+        "label": "1/50",
+        "price": "19.670",
+        "totalSupply": 50,
+        "available": 6
+      },
+      {
+        "id": "nft_039-edition-open",
+        "label": "open",
+        "price": "13.769",
+        "totalSupply": null,
+        "available": 314
+      }
+    ],
+    "reviewCount": 144,
+    "attributes": [
+      {
+        "trait": "Accessory",
+        "value": "Wherever"
+      },
+      {
+        "trait": "Eyes",
+        "value": "Beside"
+      },
+      {
+        "trait": "Mouth",
+        "value": "Gah"
+      },
+      {
+        "trait": "Fur",
+        "value": "Afore"
+      }
+    ],
+    "price": "19.67",
+    "previousPrice": null,
+    "network": "solana",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 18,
+    "description": "Culpa triumphus torrens perspiciatis corrumpo cattus amiculum. Cupiditate spes solus aeneus crur. Aro tres adhuc curatio.",
+    "longDescription": "Quintessential Best-seller é uma obra digital 1/50 finalizada à mão da coleção Neon Beasts. Cada atributo fica armazenado nos metadados do token e verificado na Solana.\n\nA propriedade inclui acesso antecipado a lançamentos futuros da coleção e um registro permanente de procedência, apoiando novos trabalhos da comunidade de criadores.",
+    "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0x3dc5baf4deedd8abe9ac3cbc98e5cab6c7050ff8",
+    "images": [
+      "/img/desktop/nft-artwork-04.png",
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
+    "rating": {
+      "average": 3.7,
+      "count": 144
+    },
+    "editionType": "limited",
+    "totalSupply": 50,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-10-02T14:43:00.085Z"
+  },
+  {
+    "id": "nft_040",
+    "tokenId": "#3931",
+    "name": "Calculating Adviser",
+    "collectionId": "col_pixel_dreams",
+    "collectionName": "Pixel Dreams",
+    "image": "/img/desktop/nft-artwork-09.png",
+    "editions": [
+      {
+        "id": "nft_040-edition-1-1",
+        "label": "1/1",
+        "price": "32.238",
+        "totalSupply": 1,
+        "available": 1
+      },
+      {
+        "id": "nft_040-edition-1-10",
+        "label": "1/10",
+        "price": "25.790",
+        "totalSupply": 10,
+        "available": 8
+      },
+      {
+        "id": "nft_040-edition-1-50",
+        "label": "1/50",
+        "price": "21.492",
+        "totalSupply": 50,
+        "available": 45
+      },
+      {
+        "id": "nft_040-edition-open",
+        "label": "open",
+        "price": "15.044",
+        "totalSupply": null,
+        "available": 60
+      }
+    ],
+    "reviewCount": 314,
+    "attributes": [
+      {
+        "trait": "Background",
+        "value": "Questioningly"
+      },
+      {
+        "trait": "Headwear",
+        "value": "Woot"
+      }
+    ],
+    "price": "21.492",
+    "previousPrice": "33.96",
+    "network": "ethereum",
+    "isFavorited": false,
+    "isRare": false,
+    "favorited": false,
+    "available": 338,
+    "description": "Ascisco canis acervus truculenter voluptatem appositus campana. Vester curia admitto adflicto natus crudelis ad nostrum absum. Cohibeo adhaero odio cubicularis voluptate illum cervus sui cernuus.",
+    "longDescription": "Calculating Adviser explora identidade, movimento e luz em um mundo digital sem fronteiras, com uma paleta inspirada na coleção Pixel Dreams.\n\nA propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede Ethereum, apoiando novos trabalhos e lançamentos da comunidade.",
+    "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
+    "royaltyInfo": "Direitos autorais do criador: 3% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "contractAddress": "0xd8c19cb44be297d14a1a978b3cba33578e108f4e",
+    "images": ["/img/desktop/nft-artwork-09.png"],
+    "rating": {
+      "average": 4.8,
+      "count": 314
+    },
+    "editionType": "open",
+    "totalSupply": null,
+    "isNew": false,
+    "isTrending": false,
+    "createdAt": "2025-08-25T15:29:24.895Z"
+  }
+]
