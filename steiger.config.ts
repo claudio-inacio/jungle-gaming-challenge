@@ -98,4 +98,20 @@ export default defineConfig([
     files: ['./src/entities/order/**', './src/features/collector-profile/**'],
     rules: { 'fsd/insignificant-slice': 'off' },
   },
+  {
+    // entities/profile, entities/wallet, features/edit-profile, features/update-avatar,
+    // features/change-password e features/manage-wallet são a lógica de negócio da
+    // Fase 8 (Perfil e Carteiras) - cada um com um único consumidor hoje
+    // (pages/profile ou pages/wallets) porque essas são as únicas páginas que os
+    // compõem; mesma situação dos overrides de Fase 7 acima.
+    files: [
+      './src/entities/profile/**',
+      './src/entities/wallet/**',
+      './src/features/edit-profile/**',
+      './src/features/update-avatar/**',
+      './src/features/change-password/**',
+      './src/features/manage-wallet/**',
+    ],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
 ])
