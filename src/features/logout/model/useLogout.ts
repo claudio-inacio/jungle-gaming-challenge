@@ -9,8 +9,8 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: logoutRequest,
-    onSettled: () => {
-      endSession(queryClient)
+    onSettled: async () => {
+      await endSession(queryClient)
       navigate({ to: '/' })
       toast.success('Você saiu da sua conta.')
     },

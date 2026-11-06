@@ -9,9 +9,9 @@ export function SessionExpiryListener() {
   const router = useRouter()
 
   useEffect(() => {
-    function handleExpired() {
-      endSession(queryClient)
+    async function handleExpired() {
       const current = router.state.location.href
+      await endSession(queryClient)
       toast.error('Sua sessão expirou. Entre novamente para continuar.')
       router.navigate({ to: '/login', search: { redirect: current } })
     }

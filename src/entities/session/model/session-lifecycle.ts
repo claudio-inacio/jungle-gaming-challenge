@@ -14,9 +14,14 @@ export function startSession(queryClient: QueryClient, session: Session): void {
   queryClient.setQueryData(queryKeys.session(), session)
 }
 
-export function endSession(queryClient: QueryClient): void {
+export async function endSession(queryClient: QueryClient): Promise<void> {
   setAccessToken(null)
   tokenStorage.clear()
   socket.disconnect()
+  // Assenta qualquer query em voo (ex.: o fetch de sessão que disparou um 401
+  // no boot) antes de limpar o cache - limpar com a query ainda buscando a
+  // destrói silenciosamente sem notificar observers, travando para sempre
+  // quem lê esse estado (ex. `useSessionRestoring`).
+  await queryClient.cancelQueries()
   queryClient.clear()
 }

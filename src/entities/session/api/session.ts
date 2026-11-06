@@ -5,12 +5,22 @@ import {
   sessionSchema,
   loginRequestSchema,
   registerRequestSchema,
+  queryKeys,
   type Session,
 } from '@/shared/api'
 
 export async function fetchSession(signal?: AbortSignal): Promise<Session> {
   const { data } = await http.get('/auth/session', { signal })
   return sessionSchema.parse(data)
+}
+
+export function sessionQuery() {
+  return {
+    queryKey: queryKeys.session(),
+    queryFn: ({ signal }: { signal: AbortSignal }) => fetchSession(signal),
+    retry: false,
+    staleTime: 60_000,
+  }
 }
 
 export async function login(body: z.infer<typeof loginRequestSchema>): Promise<Session> {

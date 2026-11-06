@@ -1,4 +1,5 @@
 export { useSession } from './model/useSession'
+export { useSessionRestoring } from './model/useSessionRestoring'
 export { tokenStorage } from './model/token-storage'
 export { rehydrateAccessToken, startSession, endSession } from './model/session-lifecycle'
-export { fetchSession, login, register, logoutRequest } from './api/session'
+export { fetchSession, login, register, logoutRequest, sessionQuery } from './api/session'

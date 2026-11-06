@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { queryKeys, socket } from '@/shared/api'
-import { fetchSession } from '../api/session'
+import { socket } from '@/shared/api'
+import { sessionQuery } from '../api/session'
 import { tokenStorage } from './token-storage'
 
 // `useSession()` monta em vários pontos da árvore ao mesmo tempo; sem essa
@@ -14,11 +14,8 @@ export function useSession() {
   const storedToken = tokenStorage.get()
 
   const query = useQuery({
-    queryKey: queryKeys.session(),
-    queryFn: ({ signal }) => fetchSession(signal),
+    ...sessionQuery(),
     enabled: Boolean(storedToken),
-    retry: false,
-    staleTime: 60_000,
   })
 
   const userId = query.data?.user.id
