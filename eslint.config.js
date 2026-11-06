@@ -38,9 +38,34 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/main.tsx'],
+    files: ['src/main.tsx', 'src/app/layout/BootShell.tsx'],
     rules: {
-      'no-restricted-imports': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/mocks', '@/mocks/*', '**/mocks/*'],
+              message:
+                'src/mocks é infraestrutura de simulação; não pode ser importado por código de negócio (app/pages/widgets/features/entities/shared).',
+            },
+            {
+              group: [
+                '@/shared/api',
+                '@/shared/api/*',
+                '@/entities/*',
+                '@/features/*',
+                '@/widgets/header',
+                '@/app/router',
+                '@/app/AppRoot',
+                'socket.io-client',
+              ],
+              message:
+                'Import estático indisponível aqui: avaliaria socket.io-client antes do MSW estar ativo. Use import() dinâmico após enableMocking().',
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -49,6 +74,12 @@ export default defineConfig([
       'react-refresh/only-export-components': 'off',
       // Primitivos genéricos: a associação label/control acontece no local de uso.
       'jsx-a11y/label-has-associated-control': 'off',
+    },
+  },
+  {
+    files: ['src/app/AppRoot.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
     },
   },
 ])
