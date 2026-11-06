@@ -37,3 +37,6 @@ dist-ssr
 # Lighthouse CI
 /reports/
 /.lighthouseci/
+
+# Scratch files from ad-hoc visual debugging (not part of the deliverable)
+/.tmp-visual/
