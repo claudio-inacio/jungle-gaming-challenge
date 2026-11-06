@@ -14,8 +14,6 @@ export function CartItemMobile({ item }: { item: CartItem }) {
     updateItem.variables?.quantity === 0
   return (
     <div className="flex gap-2 items-start">
-      {' '}
-      {/* imagem→texto ~8px no Figma mobile */}
       <img
         src={item.imageUrl}
         alt=""
@@ -66,9 +64,6 @@ export function CartItemMobile({ item }: { item: CartItem }) {
           <Plus className="size-3.5" aria-hidden="true" />
         </button>
       </div>
-      {/* Confirmado no Figma (node 16:360): no item 3 o ícone de lixeira está sobreposto ao
-          botão "+", um erro de edição do arquivo, não um estado desenhado — por isso mantemos
-          +/- e remover explícitos e acessíveis em todos os itens, igual ao padrão dos demais. */}
       <button
         type="button"
         aria-label={`Remover ${item.name} do carrinho`}

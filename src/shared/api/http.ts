@@ -8,12 +8,8 @@ declare module 'axios' {
   }
 }
 
-/**
- * Minimum duration every REST request appears to take, so loading states are
- * visible and consistent even against the mocks' near-instant responses.
- * Applies uniformly to success and error paths; socket.io traffic is separate
- * and unaffected.
- */
+// Duração mínima simulada de toda request REST, para loading states ficarem
+// visíveis mesmo contra respostas quase instantâneas dos mocks.
 const SIMULATED_REQUEST_DELAY_MS = 3000
 
 export const http = axios.create({ baseURL: env.apiUrl, timeout: 10_000 })

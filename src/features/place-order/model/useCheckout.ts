@@ -179,18 +179,12 @@ export function useCheckout({ items, couponCode, walletAddress, network }: UseCh
   useEffect(() => {
     if (step !== 'pending' || !order || !user) return
 
-    // A resposta do POST que leva o pedido a `pending` já demora os mesmos
-    // 3s simulados de toda request, mas o servidor resolve o pedido pra
-    // `confirmed`/`declined` bem antes disso: o `order.updated` do caminho
-    // feliz é emitido antes de existir qualquer listener pra ele. Por isso
-    // reconciliamos direto pelo REST assim que entramos em `pending` (sem
-    // esperar nenhum evento), e também na reconexão do socket, que cobre a
-    // desconexão entre a emissão e a entrega de um `order.updated` futuro -
-    // esse evento perdido nunca será reenviado. `reconciledOrderIdsRef` só
-    // marca o pedido como reconciliado quando a resposta chega de fato, pra
-    // um unmount antes da resposta (ex.: double-invoke do StrictMode em
-    // desenvolvimento) tentar de novo em vez de ficar sem nenhuma chamada
-    // imediata.
+    // O servidor resolve o pedido pra confirmed/declined antes do cliente
+    // sequer ter um listener registrado (a resposta do POST demora mais que
+    // isso) - o order.updated do caminho feliz é perdido. Por isso
+    // reconciliamos pelo REST assim que entramos em `pending`, e de novo na
+    // reconexão do socket, que cobre um evento futuro perdido por queda de
+    // conexão.
     const orderId = order.id
     let active = true
     const controller = new AbortController()
@@ -218,9 +212,8 @@ export function useCheckout({ items, couponCode, walletAddress, network }: UseCh
 
   function enterReview() {
     if (!user || !walletAddress || !network || items.length === 0) return
-    // A chave de idempotência nasce aqui, na entrada da revisão - uma única
-    // vez por tentativa de compra - e não a cada clique em "confirmar", para
-    // que retomadas (refresh/timeout) do mesmo pedido reusem a mesma chave.
+    // Uma chave por tentativa de compra, não por clique - retomadas
+    // (refresh/timeout) do mesmo pedido reusam a mesma chave.
     idempotency.ensure(user.id)
     if (quoteResult.data) setLastSeenTotal(quoteResult.data.total)
     setQuoteChanged(false)
@@ -265,10 +258,6 @@ export function useCheckout({ items, couponCode, walletAddress, network }: UseCh
       const placedOrder = await placeOrderMutation.mutateAsync(key)
       applyOrder(placedOrder)
     } catch (caughtError) {
-      // `QUOTE_CHANGED` significa que o servidor recusou o pedido porque a
-      // cotação mudou entre a revisão e a confirmação - a UI precisa mostrar
-      // o valor mais recente e exigir "Aceitar novo valor" antes de permitir
-      // confirmar de novo, igual ao caminho detectado antes do POST acima.
       if (caughtError instanceof ApiError && caughtError.code === 'QUOTE_CHANGED') {
         const refetched = await quoteResult.refetch()
         if (refetched.data) setLastSeenTotal(refetched.data.total)

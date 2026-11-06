@@ -4,11 +4,10 @@ import { ethAmountSchema, idSchema, isoDateSchema } from './common'
 export const cartItemSchema = z.object({
   nftId: idSchema,
   editionId: idSchema,
-  editionLabel: z.enum(['1/1', '1/10', '1/50', 'open']), // exibido no card mobile: "Edição: 1/50"
+  editionLabel: z.enum(['1/1', '1/10', '1/50', 'open']),
   name: z.string(),
   tokenId: z.string(),
-  // Mesmo padrão de `nftSummarySchema`/`orderSchema.image` (caminho relativo em
-  // `public/img`, não URL absoluta) - `.url()` quebraria com o dado real do catálogo.
+  // Caminho relativo em `public/img`, não URL absoluta - `.url()` quebraria.
   imageUrl: z.string().min(1),
   unitPrice: ethAmountSchema,
   quantity: z.number().int().min(1),
@@ -18,9 +17,7 @@ export type CartItem = z.infer<typeof cartItemSchema>
 
 export const cartSchema = z.object({
   items: z.array(cartItemSchema),
-  // Cupom é do carrinho como um todo, não de cada linha - evita ter que
-  // sincronizar o mesmo código em N itens e permite representar "sem cupom"
-  // mesmo com o carrinho vazio.
+  // Cupom é do carrinho como um todo, não de cada linha.
   couponCode: z.string().nullable(),
   updatedAt: isoDateSchema,
 })
@@ -33,8 +30,7 @@ export const addCartItemRequestSchema = z.object({
 })
 export type AddCartItemRequest = z.infer<typeof addCartItemRequestSchema>
 
-// `editionId` identifica a linha pela rota (`/cart/items/:nftId/:editionId`),
-// não pelo corpo - uma linha é `nftId` + `editionId` juntos.
+// Linha identificada pela rota (`/cart/items/:nftId/:editionId`), não pelo corpo.
 export const updateCartItemRequestSchema = z.object({
   quantity: z.number().int().min(1),
 })
@@ -51,8 +47,7 @@ export const mergeCartRequestSchema = z.object({
 })
 export type MergeCartRequest = z.infer<typeof mergeCartRequestSchema>
 
-// `couponCode` string aplica; `null` remove (mesmo padrão de `CouponInput`,
-// que chama `apply.mutate(null)` no botão "Remover").
+// `couponCode` string aplica; `null` remove.
 export const applyCartCouponRequestSchema = z.object({
   couponCode: z.string().min(1).nullable(),
 })

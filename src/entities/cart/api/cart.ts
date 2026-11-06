@@ -20,7 +20,6 @@ export function useUpdateCartItem() {
   return useMutation({
     mutationFn: async (body: { nftId: string; editionId: string; quantity: number }) => {
       if (!user) {
-        // visitante: muta local, sem request
         const items = guestCartStorage.get()
         const idx = items.findIndex((i) => i.nftId === body.nftId && i.editionId === body.editionId)
         if (body.quantity <= 0) {

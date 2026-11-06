@@ -28,7 +28,6 @@ export function HomePage() {
     count: collection.count,
   }))
 
-  // evita que o filtro mobile fique "aberto" no store ao navegar para outra rota
   useEffect(() => closeMobileFilterSheet, [])
 
   return (

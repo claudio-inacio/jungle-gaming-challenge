@@ -52,13 +52,9 @@ export function useConnectWallet() {
     },
   })
 
-  // O MSW aplica o `connect` no servidor assim que o handler roda, sem ligar
-  // pro `AbortController` do axios - abortar a request só impede o CLIENTE de
-  // ver a resposta, nunca garante que o servidor não processou. Por isso o
-  // desfazer (chamar /disconnect de verdade) precisa rodar tanto quando a
-  // resposta de sucesso chega depois do cancelamento (ramo normal) quanto
-  // quando a própria request é cancelada no cliente antes disso (catch) -
-  // nos dois casos a carteira pode já estar conectada no servidor.
+  // Abortar a request no cliente não garante que o servidor não processou o
+  // connect - por isso o /disconnect de desfazer roda tanto se a resposta de
+  // sucesso chega depois do cancelamento quanto se a request foi abortada.
   async function revertCancelledConnection(walletId: string) {
     try {
       const revertedWallet = await disconnectMutation.mutateAsync(walletId)
@@ -91,9 +87,6 @@ export function useConnectWallet() {
       const wasCancelled = wasCancelledRef.current
       wasCancelledRef.current = false
       if (axios.isCancel(caughtError) || wasCancelled) {
-        // A request foi cancelada no cliente, mas o handler do MSW pode ter
-        // terminado de processar o /connect mesmo assim - reconcilia com o
-        // servidor em vez de assumir que nada aconteceu.
         await revertCancelledConnection(selectedWalletId)
         return
       }

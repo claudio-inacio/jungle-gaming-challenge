@@ -20,8 +20,6 @@ export function CouponInput({ appliedCode }: { appliedCode: string | null }) {
       <label htmlFor="coupon" className="text-sm font-bold mb-2 block">
         Código promocional
       </label>
-      {/* Mobile (16:360): pílula, borda color/border, h-50. Desktop (11:1278): cantos de 3px,
-          borda color/primary, h-40 — confirmado no Figma. Botão colado na borda direita, sem seam. */}
       <div className="flex h-[50px] items-stretch overflow-hidden rounded-full border border-border md:h-10 md:rounded-[3px] md:border-primary">
         <input
           id="coupon"

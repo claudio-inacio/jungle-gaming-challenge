@@ -15,8 +15,7 @@ export const walletSchema = z.object({
   network: networkSchema,
   ensName: z.string().nullable(),
   createdAt: isoDateSchema,
-  // Só uma carteira por usuário fica conectada por vez - conectar uma marca
-  // as demais como desconectadas (ver `POST /api/wallets/:id/connect`).
+  // Só uma carteira por usuário fica conectada por vez - conectar uma marca as demais como desconectadas.
   isConnected: z.boolean(),
 })
 export type Wallet = z.infer<typeof walletSchema>

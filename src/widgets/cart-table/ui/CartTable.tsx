@@ -17,7 +17,6 @@ export function CartTable({ items }: { items: CartItem[] }) {
         <span className="font-medium">Total</span>
         <span className="sr-only">Remover</span>
       </div>
-      {/* Sem divisor entre linhas, só gap-3 (12px) — confirmado no node 11:1278 do Figma. */}
       <div className="flex flex-col gap-3 pt-3">
         {items.map((item) => {
           const atLimit = item.quantity >= item.available
@@ -32,8 +31,6 @@ export function CartTable({ items }: { items: CartItem[] }) {
               className="grid h-[70px] grid-cols-[250px_77px_75px_87px_24px] items-center gap-[61px] bg-card pr-6"
             >
               <div className="flex items-center gap-4">
-                {' '}
-                {/* imagem→texto: 16px, confirmado no Figma */}
                 <img
                   src={item.imageUrl}
                   alt=""
@@ -49,8 +46,6 @@ export function CartTable({ items }: { items: CartItem[] }) {
               <Text variant="body">{formatEth(item.unitPrice)}</Text>
               <div>
                 <div className="flex items-center gap-3">
-                  {' '}
-                  {/* 12px entre botão e número, real */}
                   <button
                     type="button"
                     aria-label={`Diminuir quantidade de ${item.name}`}

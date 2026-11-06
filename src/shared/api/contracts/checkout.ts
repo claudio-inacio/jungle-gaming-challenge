@@ -4,9 +4,7 @@ import { userSchema } from './session'
 import { walletTypeSchema } from './wallet'
 
 // Perfil do colecionador preenchido no checkout - não é o mesmo recurso que
-// `profileSchema` (conta/usuário): `email`/`displayName` aqui reaproveitam o
-// mesmo formato de `userSchema` (mesma validação `.email()`), mas o restante
-// (rede, carteira, indicação) é específico do fluxo de pagamento.
+// `profileSchema` (conta/usuário).
 export const collectorProfileSchema = z.object({
   displayName: z.string().min(1),
   username: z.string().min(3).max(24),

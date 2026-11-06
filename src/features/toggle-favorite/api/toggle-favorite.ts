@@ -28,7 +28,7 @@ export function useToggleFavorite() {
         nextValue ? [...old, nftId] : old.filter((id) => id !== nftId),
       )
 
-      return { previousDetail, previousFavorites } // snapshot para o rollback
+      return { previousDetail, previousFavorites }
     },
 
     onError: (_err, { nftId }, context) => {

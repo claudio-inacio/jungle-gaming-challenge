@@ -30,8 +30,6 @@ export function CartSummary({
   const quote = query.data
 
   return (
-    // Desktop (11:1278): Resumo da carteira não tem card (sem borda/fundo/padding), 332px fixos.
-    // Mobile (16:360): é um bottom sheet (fundo card, cantos superiores de 40px, sem borda).
     <aside className="flex flex-col gap-6 rounded-t-[40px] bg-card px-6 pt-6 pb-9 md:w-[var(--spacing-cart-summary-width)] md:shrink-0 md:rounded-none md:bg-transparent md:p-0">
       <div className="flex flex-col gap-3">
         <Text variant="heading" className="text-lg">

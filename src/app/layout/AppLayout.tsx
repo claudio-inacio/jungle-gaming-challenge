@@ -14,9 +14,7 @@ type AppLayoutProps = {
 
 const AUTH_ROUTES = new Set(['/login', '/register'])
 
-// A página de detalhe do NFT tem seu próprio header/rodapé no mobile (hero em
-// tela cheia + barra de compra fixa, que substitui a tab bar padrão) - ver
-// `NftDetailMobile.tsx`. No desktop ela segue o layout padrão normalmente.
+// NftDetailMobile.tsx substitui header/footer/tab bar padrão no mobile.
 const MOBILE_OWN_CHROME_ROUTE_PATTERN = /^\/nft\//
 
 function AppLayout({ children }: AppLayoutProps) {

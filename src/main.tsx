@@ -9,7 +9,6 @@ import './index.css'
 import '@/shared/config/zod'
 import { env } from '@/shared/config'
 import { Toaster } from '@/shared/ui/sonner'
-// import { ScenarioPanelGate } from './mocks/dev/ScenarioPanelGate'
 
 async function enableMocking() {
   if (!env.enableMocks) return
@@ -17,12 +16,10 @@ async function enableMocking() {
   await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
 }
 
-// `@/shared/api` e `@/app/router` puxam socket.io-client, que lê
-// `globalThis.WebSocket` assim que seu módulo é avaliado (e não só quando
-// conecta). Importá-los estaticamente no topo deste arquivo os avaliaria
-// antes de `enableMocking` interceptar o WebSocket global via MSW, travando
-// a captura na implementação nativa. O import dinâmico abaixo garante que
-// esses módulos só carregam depois do worker do MSW já estar ativo.
+// Import dinâmico: `@/shared/api`/`@/app/router` avaliam socket.io-client no
+// load do módulo, que já lê `globalThis.WebSocket` nesse momento - carregar
+// isso antes do worker do MSW estar ativo travaria a captura do WebSocket
+// na implementação nativa em vez da simulada.
 enableMocking().then(async () => {
   const [{ queryClient }, { router }, { SessionExpiryListener }, { rehydrateAccessToken }] =
     await Promise.all([
@@ -42,7 +39,6 @@ enableMocking().then(async () => {
           <Matches />
         </RouterContextProvider>
         <Toaster />
-        {/* <ScenarioPanelGate /> */}
       </QueryClientProvider>
     </StrictMode>,
   )
