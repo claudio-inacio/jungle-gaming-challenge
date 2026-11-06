@@ -17,8 +17,8 @@ export function toPublicUser(user: MockUser): User {
     displayName: user.displayName,
     username: user.username,
     email: user.email,
-    avatarUrl: null,
-    ensName: null,
+    avatarUrl: user.avatarUrl ?? null,
+    ensName: user.ensName ?? null,
     createdAt: user.createdAt,
   }
 }

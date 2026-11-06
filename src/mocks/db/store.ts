@@ -13,6 +13,8 @@ export interface MockUser {
   createdAt: string
   password?: string
   passwordHash?: string
+  avatarUrl?: string | null
+  ensName?: string | null
 }
 
 export interface DbState {
@@ -24,7 +26,6 @@ export interface DbState {
   cartCoupons: Record<string, string | null> // userId -> código aplicado ao carrinho (ou ausente/null)
   orders: Record<string, Order[]>
   idempotencyKeys: Record<string, { userId: string; orderId: string; bodyHash: string }>
-  profiles: Record<string, unknown>
   wallets: Record<string, Wallet[]>
 }
 
@@ -57,6 +58,17 @@ export interface DbState {
 // pré-cadastrada (cadastro de novas carteiras ainda não tem UI, ver
 // `NoWalletsNotice`) - sem o bump, quem já tinha um DB v8 persistido (sem
 // nenhuma carteira) ficaria sem conseguir testar o checkout.
+// v10: `MockUser` ganhou `avatarUrl`/`ensName` opcionais (persistem o que
+// `PATCH /api/profile` e `POST /api/profile/avatar` salvam - antes
+// `toPublicUser` sempre devolvia `null` e nada persistia) e o campo vestigial
+// `profiles` (nunca lido/escrito - perfil sempre viveu em `users`) saiu do
+// `DbState`. `walletSchema` também ganhou `label` (apelido livre da carteira,
+// exibido em Perfil e Carteiras - distinto do `ensName`), com a carteira
+// primária seed de cada usuário nascendo com `label: 'Carteira principal'`.
+// Diferente dos bumps anteriores, não há bump de `STORAGE_KEY` aqui: nenhum
+// campo obrigatório mudou, então um DB v9 já persistido continua passando no
+// `zod.parse()` dos handlers sem migração (os campos novos são opcionais e
+// `profiles` simplesmente some do objeto sem quebrar nada).
 const STORAGE_KEY = 'kurio-mocks-db:v9'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
@@ -91,7 +103,6 @@ function createInitialState(): DbState {
     cartCoupons: {},
     orders: {},
     idempotencyKeys: {},
-    profiles: {},
     wallets: Object.fromEntries(
       fixtureUsers.map((user) => [
         user.id,
@@ -103,6 +114,7 @@ function createInitialState(): DbState {
             address: DEMO_WALLET_ADDRESSES[user.id] ?? DEMO_WALLET_ADDRESSES['user-1']!,
             network: 'ethereum' as const,
             ensName: null,
+            label: 'Carteira principal',
             createdAt: user.createdAt,
             isConnected: false,
           },
