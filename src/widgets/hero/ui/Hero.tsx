@@ -98,7 +98,7 @@ function Hero() {
 
             <div className="flex w-[450px] flex-col items-center gap-4">
               <img
-                src="/img/desktop/frame-136.png"
+                src="/img/desktop/frame-136.webp"
                 alt="Macaco ilustrado usando jaqueta verde e óculos escuros, mascote da Kurio"
                 width={450}
                 height={450}

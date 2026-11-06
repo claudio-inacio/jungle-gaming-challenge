@@ -16,7 +16,7 @@ const BLOG_POSTS: BlogPost[] = [
     meta: '12 de setembro · Leitura de 6 min',
     title: 'Como funciona a propriedade de NFTs',
     excerpt: 'Aprenda a colecionar, negociar e verificar ativos digitais.',
-    image: '/img/desktop/frame-136.png',
+    image: '/img/desktop/frame-136.webp',
     imageAlt: 'Macaco ilustrado usando jaqueta verde e óculos escuros, mascote da Kurio',
   },
   {
@@ -24,7 +24,7 @@ const BLOG_POSTS: BlogPost[] = [
     meta: '13 de setembro · Leitura de 2 min',
     title: '10 artistas digitais para acompanhar',
     excerpt: 'Conheça criadores que moldam a cultura digital.',
-    image: '/img/desktop/nft-artwork-04.png',
+    image: '/img/desktop/nft-artwork-04.webp',
     imageAlt: 'Macaco ilustrado usando chapéu de pescador e moletom roxo, mascote da Kurio',
   },
   {
@@ -40,7 +40,7 @@ const BLOG_POSTS: BlogPost[] = [
     meta: '15 de setembro · Leitura de 2 min',
     title: 'Como proteger sua carteira',
     excerpt: 'Proteja sua carteira, seus ativos e sua identidade.',
-    image: '/img/desktop/nft-artwork-09.png',
+    image: '/img/desktop/nft-artwork-09.webp',
     imageAlt: 'Macaco ilustrado usando fones de ouvido, mascote da Kurio',
   },
 ]

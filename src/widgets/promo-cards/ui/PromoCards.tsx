@@ -14,7 +14,7 @@ const PROMO_CARDS: PromoCardData[] = [
     id: 'genesis-drops',
     title: 'Lançamentos gênesis de edição limitada',
     description: 'Colecione edições escassas diretamente dos criadores antes da revelação pública.',
-    image: '/img/desktop/nft-artwork-04.png',
+    image: '/img/desktop/nft-artwork-04.webp',
     imageAlt: 'Macaco ilustrado usando chapéu de pescador e moletom roxo, mascote da Kurio',
   },
   {
@@ -22,7 +22,7 @@ const PROMO_CARDS: PromoCardData[] = [
     title: 'Arte digital selecionada e muito mais',
     description:
       'Explore novos artistas, coleções verificadas e obras digitais que definem a cultura.',
-    image: '/img/desktop/nft-artwork-09.png',
+    image: '/img/desktop/nft-artwork-09.webp',
     imageAlt: 'Macaco ilustrado usando fones de ouvido, mascote da Kurio',
   },
 ]
