@@ -28,7 +28,7 @@ export function NftDetailMobile({ nft, initialEditionId }: Props) {
   const attributeValues = nft.attributes.map((attribute) => attribute.value).join(', ')
 
   return (
-    <div className="flex flex-col gap-10 pb-[180px]">
+    <main className="flex flex-col gap-10 pb-[180px]">
       <div className="flex flex-col gap-10">
         <div className="flex flex-col gap-3 px-6 pt-6">
           <div className="flex items-center justify-between">
@@ -135,6 +135,6 @@ export function NftDetailMobile({ nft, initialEditionId }: Props) {
           </OutOfScopeButton>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
