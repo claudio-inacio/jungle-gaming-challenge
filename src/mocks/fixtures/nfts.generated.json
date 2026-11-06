@@ -217,7 +217,10 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xc2df3bdaff76bbdebbbefbd782c0ab6c00c72ba4",
-    "images": ["/img/desktop/nft-artwork-09.png", "/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 3.1,
       "count": 359
@@ -296,7 +299,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x1202f17c0b62fddab63abf98b7ec9aa2dbc7d80d",
-    "images": ["/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 3.6,
       "count": 291
@@ -371,7 +376,9 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xf1cfbdf9dcd06edad64a7c1fffb6bf3ecefd9ed0",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 3.7,
       "count": 253
@@ -446,7 +453,9 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xdce3ea5afa7d512233e47dae34036312a48bf0bd",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 4.8,
       "count": 238
@@ -596,7 +605,10 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 10% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x7c2c28b35ffefb573dc8ae3cbd0decfef3cd9aee",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3.2,
       "count": 189
@@ -754,7 +766,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x405d1ad7a21aaf95cbf5c72e3e94bdabefc5a4fe",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 4.4,
       "count": 320
@@ -900,7 +914,9 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 10% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xa3bcb06dfd5dbb2abf7de2ef16f1c7d1dffa2a00",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 4,
       "count": 232
@@ -975,7 +991,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x6a018ad6fcb0a25f3adfc07b170182cfb432ef0e",
-    "images": ["/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 4.1,
       "count": 399
@@ -1129,7 +1147,10 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 7% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xf8dbcad87ebab9b2b0788f895841deda8cba0788",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 4.1,
       "count": 266
@@ -1200,7 +1221,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 3% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xc9e2d9c3ac420edc58daf3f89fff22fc611d4747",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 4,
       "count": 383
@@ -1354,7 +1377,9 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xa88abdfb6f95c0daeeded1b3abe01f110fa767be",
-    "images": ["/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 3.3,
       "count": 57
@@ -1425,7 +1450,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xe3bfe032fb4bcabcb6cfdda3a05ff28b4cad47bc",
-    "images": ["/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 4.5,
       "count": 8
@@ -1500,7 +1527,9 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x29c8cc47700c6b6e59dc4baa21aa9aa3d2aef116",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3.5,
       "count": 384
@@ -1575,7 +1604,10 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x9eb1bba1b4537ab4ddd59fa01aeba2ec8bf4b6bc",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 4.6,
       "count": 304
@@ -1654,7 +1686,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xd7cafd2e7f13c4c6efb6406eedabe5dec29adc8f",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3.8,
       "count": 279
@@ -1733,7 +1767,10 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xaeedabd157a136f7a4d64b004027bcb6e81d27bd",
-    "images": ["/img/desktop/nft-artwork-09.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 4.4,
       "count": 112
@@ -1808,7 +1845,10 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 4% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xf9e66b9bcce97c8dff8393d730ee7196ed84f9f3",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3,
       "count": 158
@@ -1962,7 +2002,9 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xd7a4efd7e2db9cd1f5fcbcb3b5a62d1a60b16f1c",
-    "images": ["/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 3.5,
       "count": 7
@@ -2033,7 +2075,9 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 7% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xc4ead4ed63ea6e8f4d6812b5c087029a8bd0afbe",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 4.6,
       "count": 144
@@ -2112,7 +2156,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x5be16bac903941cfbc5f4efffc59d1df4bdefbfa",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 4,
       "count": 6
@@ -2183,7 +2229,10 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 2% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x9cba67ded9baa4d47c411eb9bc7fae3db6902a09",
-    "images": ["/img/desktop/nft-artwork-09.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 3.1,
       "count": 267
@@ -2337,7 +2386,10 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 10% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xfd65dde23ead4cfe80c59f8c4ef2092ae959f0cd",
-    "images": ["/img/desktop/nft-artwork-09.png", "/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3.5,
       "count": 4
@@ -2416,7 +2468,9 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xdbf2665bb77cb6ee77bed28cb4cecca9d3e3f523",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 4.5,
       "count": 351
@@ -2487,7 +2541,10 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x1acdf50fbccca7b94cda18bd41d8bf1e18b9fc74",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 3.7,
       "count": 33
@@ -2566,7 +2623,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 6% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0x1f89050d5c0e7dd7dfcc5c12f7abcf509207bc6e",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png"
+    ],
     "rating": {
       "average": 3,
       "count": 263
@@ -2645,7 +2704,9 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xcd71091ddde4cd4a6bf0ddfac171fbce18145a52",
-    "images": ["/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3.3,
       "count": 15
@@ -2716,7 +2777,10 @@
     "networkInfo": "Cunhado na Solana com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 8% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xd84aaaac7c879a24e3ccae5c8e3c4644c6efc38b",
-    "images": ["/img/desktop/nft-artwork-09.png", "/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png",
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 3.1,
       "count": 176
@@ -2870,7 +2934,10 @@
     "networkInfo": "Cunhado na Polygon com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 9% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xd7aeecced870cb2ca2f41da0eb23c6ecf5f9711f",
-    "images": ["/img/mobile/mobile-nft-artwork-5.png", "/img/desktop/nft-artwork-04.png"],
+    "images": [
+      "/img/mobile/mobile-nft-artwork-5.png",
+      "/img/desktop/nft-artwork-04.png"
+    ],
     "rating": {
       "average": 3.4,
       "count": 287
@@ -3024,7 +3091,9 @@
     "networkInfo": "Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.",
     "royaltyInfo": "Direitos autorais do criador: 3% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "contractAddress": "0xd8c19cb44be297d14a1a978b3cba33578e108f4e",
-    "images": ["/img/desktop/nft-artwork-09.png"],
+    "images": [
+      "/img/desktop/nft-artwork-09.png"
+    ],
     "rating": {
       "average": 4.8,
       "count": 314

@@ -4,3 +4,4 @@ playwright-report
 test-results
 reports
 src/app/routeTree.gen.ts
+src/mocks/fixtures/nfts.generated.json
