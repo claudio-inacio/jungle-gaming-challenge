@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Container } from '@/shared/ui/container'
 import { OutOfScopeButton, OutOfScopeInput, OutOfScopeLink } from '@/shared/ui/out-of-scope'
 import { PendingLink } from '@/shared/ui/pending-link'
@@ -32,7 +33,8 @@ const HIGHLIGHTS: Highlight[] = [
 
 type FooterLink = {
   label: string
-  kind: 'pending' | 'out-of-scope'
+  kind: 'pending' | 'out-of-scope' | 'route'
+  to?: '/profile'
 }
 
 type LinkColumn = {
@@ -44,7 +46,7 @@ const LINK_COLUMNS: LinkColumn[] = [
   {
     title: 'Meu perfil',
     links: [
-      { label: 'Meu perfil', kind: 'pending' },
+      { label: 'Meu perfil', kind: 'route', to: '/profile' },
       { label: 'Minha coleção', kind: 'out-of-scope' },
       { label: 'Atividade', kind: 'out-of-scope' },
       { label: 'Estúdio do criador', kind: 'out-of-scope' },
@@ -173,6 +175,18 @@ function SiteFooter() {
                   <h2 className="mb-2 text-lg font-bold text-foreground">{column.title}</h2>
                   <ul className="flex flex-col gap-1">
                     {column.links.map((link) => {
+                      if (link.kind === 'route' && link.to) {
+                        return (
+                          <li key={link.label}>
+                            <Link
+                              to={link.to}
+                              className="block py-1 text-sm leading-[22px] text-foreground hover:underline"
+                            >
+                              {link.label}
+                            </Link>
+                          </li>
+                        )
+                      }
                       const LinkComponent = link.kind === 'pending' ? PendingLink : OutOfScopeLink
                       return (
                         <li key={link.label}>
