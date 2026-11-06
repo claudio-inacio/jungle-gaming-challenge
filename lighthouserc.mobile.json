@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "startServerCommand": "npm run preview -- --port 4173 --strictPort",
-      "url": ["http://localhost:4173/"],
+      "url": ["http://localhost:4173/", "http://localhost:4173/nft/nft_001"],
       "numberOfRuns": 3,
       "settings": {
         "chromeFlags": "--no-sandbox"
