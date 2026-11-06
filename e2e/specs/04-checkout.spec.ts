@@ -21,6 +21,12 @@ const TOTAL_ETH_TEXT = '12.026 ETH'
 const WALLET_ADDRESS = '0x1a2b3c4d5e6f7890a1b2c3d4e5f6a7b8c9d0e1f2'
 const WALLET_ADDRESS_SHORT = '0x1a2b…e1f2'
 
+// Carteira secundária criada em runtime (ver `cadastra uma carteira via API e a
+// usa no checkout` abaixo) - endereço distinto do seed, mesma regra de 40 hex
+// chars depois do `0x`.
+const SECONDARY_WALLET_ADDRESS = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'
+const SECONDARY_WALLET_ADDRESS_SHORT = '0xdead…beef'
+
 // Chaves reais de `localStorage` usadas pela app (não dá pra importar os módulos
 // de `src/` aqui - ver nota em `e2e/fixtures/test.ts` sobre o alias `@/` não
 // resolver no projeto TS do Playwright).
@@ -91,6 +97,45 @@ async function fetchOrderByIdempotencyKey(
 // não é preciso digitar nada a mais pra "Avançar para revisão" ficar habilitado.
 async function connectSeededWallet(page: Page) {
   await page.getByRole('button', { name: /MetaMask/ }).click()
+  await expect(page.getByRole('button', { name: 'Trocar carteira' })).toBeVisible({
+    timeout: CHECKOUT_LOAD_TIMEOUT,
+  })
+}
+
+// Cadastra uma carteira direto pela API simulada (handler real de
+// `POST /api/wallets`, validado pelo mesmo schema zod usado pelo formulário) -
+// `page.request` não passa pelo service worker do MSW, só `fetch` dentro de
+// `page.evaluate` (mesmo motivo do `fetchOrderByIdempotencyKey` acima).
+async function createWalletViaApi(
+  page: Page,
+  body: {
+    type: 'primary' | 'secondary'
+    provider: 'metamask' | 'wallet_connect' | 'coinbase'
+    network: 'ethereum' | 'polygon' | 'solana'
+    address: string
+  },
+): Promise<void> {
+  const result = await page.evaluate(
+    async ({ tokenKey, payload }) => {
+      const token = window.localStorage.getItem(tokenKey)
+      const response = await fetch('/api/wallets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload),
+      })
+      return { status: response.status, body: await response.json() }
+    },
+    { tokenKey: ACCESS_TOKEN_KEY, payload: body },
+  )
+  if (result.status !== 201)
+    throw new Error(`Falha ao cadastrar carteira via API: ${JSON.stringify(result)}`)
+}
+
+async function connectWalletByAddress(page: Page, addressShort: string) {
+  await page
+    .getByRole('group', { name: 'Carteiras cadastradas' })
+    .getByRole('button', { name: new RegExp(addressShort) })
+    .click()
   await expect(page.getByRole('button', { name: 'Trocar carteira' })).toBeVisible({
     timeout: CHECKOUT_LOAD_TIMEOUT,
   })
@@ -243,5 +288,50 @@ test.describe('Checkout - pagamento e confirmação', () => {
       timeout: CONFIRM_STEP_TIMEOUT,
     })
     await expect(confirmButton).toBeEnabled()
+  })
+
+  test('carteira cadastrada via API aparece selecionável no checkout e no recibo', async ({
+    page,
+    scenario,
+    loginAs,
+  }) => {
+    await scenario.use('success')
+    await loginAs('collector-a')
+
+    await createWalletViaApi(page, {
+      type: 'secondary',
+      provider: 'wallet_connect',
+      network: 'ethereum',
+      address: SECONDARY_WALLET_ADDRESS,
+    })
+
+    await buyIntoCart(page)
+    await page.goto('/checkout')
+    await expect(page.getByText(NFT_NAME)).toBeVisible({ timeout: CHECKOUT_LOAD_TIMEOUT })
+
+    const walletGroup = page.getByRole('group', { name: 'Carteiras cadastradas' })
+    await expect(walletGroup.getByRole('button')).toHaveCount(2, { timeout: CHECKOUT_LOAD_TIMEOUT })
+    await connectWalletByAddress(page, SECONDARY_WALLET_ADDRESS_SHORT)
+
+    const advanceButton = page.getByRole('button', { name: 'Avançar para revisão' })
+    await expect(advanceButton).toBeEnabled({ timeout: 10_000 })
+    await advanceButton.click()
+
+    await expect(page.getByText(SECONDARY_WALLET_ADDRESS)).toBeVisible({
+      timeout: CHECKOUT_LOAD_TIMEOUT,
+    })
+    await expect(page.getByRole('button', { name: 'Confirmar compra' })).toBeVisible({
+      timeout: CHECKOUT_LOAD_TIMEOUT,
+    })
+
+    await page.getByRole('button', { name: 'Confirmar compra' }).click()
+    await page.waitForURL((url) => /\/orders\//.test(url.pathname), {
+      timeout: CONFIRMED_REDIRECT_TIMEOUT,
+    })
+
+    await expect(page.getByText(SECONDARY_WALLET_ADDRESS_SHORT)).toBeVisible({
+      timeout: CHECKOUT_LOAD_TIMEOUT,
+    })
+    await expect(page.getByText(WALLET_ADDRESS_SHORT)).toHaveCount(0)
   })
 })
