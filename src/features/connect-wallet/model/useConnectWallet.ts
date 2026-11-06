@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useSession } from '@/entities/session'
+import { walletsQuery } from '@/entities/wallet'
 import { ApiError, http, queryKeys, walletSchema, type Wallet } from '@/shared/api'
-import { walletsQuery } from '../api/wallets'
 
 export type ConnectWalletStatus = 'idle' | 'connecting' | 'connected' | 'refused'
 

@@ -1,9 +1,12 @@
-import { PendingLink } from '@/shared/ui/pending-link'
+import { Link } from '@tanstack/react-router'
 
 export function NoWalletsNotice() {
   return (
     <p>
-      Nenhuma carteira cadastrada. <PendingLink>Cadastrar carteira</PendingLink>
+      Nenhuma carteira cadastrada.{' '}
+      <Link to="/wallets" className="font-bold text-accent-foreground hover:underline">
+        Cadastrar carteira
+      </Link>
     </p>
   )
 }
