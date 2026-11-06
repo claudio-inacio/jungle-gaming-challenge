@@ -14,7 +14,9 @@ const TOTAL_ETH_TEXT = '12.026 ETH'
 // sobra (~196 unidades, tipo "aberta") pra não esgotar entre execuções.
 const BACKGROUND_EDITION_ID = 'nft_001-edition-open'
 
-const WALLET_ADDRESS = '0x1234567890123456789012345678901234567890'
+// Carteira primária pré-cadastrada para cada usuário de demo (`createInitialState`
+// em `src/mocks/db/store.ts`) - endereço de `collector-a`/`user-1`.
+const WALLET_ADDRESS = '0x1a2b3c4d5e6f7890a1b2c3d4e5f6a7b8c9d0e1f2'
 
 const ACCESS_TOKEN_KEY = 'kurio-access-token' // src/entities/session/model/token-storage.ts
 const IDEMPOTENCY_KEY_PREFIX = 'kurio-pending-order-key:' // src/shared/lib/idempotency.ts
@@ -38,25 +40,6 @@ async function buyIntoCart(page: Page) {
   const buyButtonName = isMobileViewport(page) ? 'Comprar NFT' : 'COMPRAR'
   await page.getByRole('button', { name: buyButtonName, exact: true }).click()
   await expect(page.getByRole('button', { name: buyButtonName, exact: true })).toBeEnabled()
-}
-
-async function seedPrimaryWallet(page: Page) {
-  await page.evaluate(
-    async ({ tokenKey, address }) => {
-      const token = window.localStorage.getItem(tokenKey)
-      await fetch('/api/wallets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          type: 'primary',
-          provider: 'metamask',
-          address,
-          network: 'ethereum',
-        }),
-      })
-    },
-    { tokenKey: ACCESS_TOKEN_KEY, address: WALLET_ADDRESS },
-  )
 }
 
 async function connectSeededWallet(page: Page) {
@@ -126,7 +109,6 @@ async function createBackgroundOrder(page: Page, editionId: string) {
 
 async function goToCheckoutReview(page: Page) {
   await buyIntoCart(page)
-  await seedPrimaryWallet(page)
   await page.goto('/checkout')
   await expect(page.getByText(NFT_NAME)).toBeVisible({ timeout: CHECKOUT_LOAD_TIMEOUT })
   await connectSeededWallet(page)
@@ -193,7 +175,6 @@ test.describe('Checkout - recuperação de pedido e eventos em tempo real', () =
     await scenario.use('success')
     await loginAs('collector-a')
     await buyIntoCart(page)
-    await seedPrimaryWallet(page)
     await page.goto('/checkout')
 
     await expect(page.getByText(NFT_NAME)).toBeVisible({ timeout: CHECKOUT_LOAD_TIMEOUT })

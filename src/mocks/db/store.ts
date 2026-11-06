@@ -53,7 +53,11 @@ export interface DbState {
 // v8: `walletSchema` ganhou `isConnected` (suporta `POST /api/wallets/:id/connect`
 // e `/disconnect`) - uma carteira v7 já persistida não tem esse campo e
 // quebraria o `walletSchema.parse()` em todo handler de carteira.
-const STORAGE_KEY = 'kurio-mocks-db:v8'
+// v9: cada usuário de demo passou a nascer com uma carteira primária
+// pré-cadastrada (cadastro de novas carteiras ainda não tem UI, ver
+// `NoWalletsNotice`) - sem o bump, quem já tinha um DB v8 persistido (sem
+// nenhuma carteira) ficaria sem conseguir testar o checkout.
+const STORAGE_KEY = 'kurio-mocks-db:v9'
 
 // Em Node (testes de integração, SSR) não há `window`/`localStorage`; cai para
 // um Map em memória para o processo continuar funcionando sem persistência real.
@@ -72,6 +76,11 @@ function setStorageItem(key: string, value: string): void {
   window.localStorage.setItem(key, value)
 }
 
+const DEMO_WALLET_ADDRESSES: Record<string, string> = {
+  'user-1': '0x1a2b3c4d5e6f7890a1b2c3d4e5f6a7b8c9d0e1f2',
+  'user-2': '0x9f8e7d6c5b4a39281f0e1d2c3b4a59687d6e5f4a',
+}
+
 function createInitialState(): DbState {
   return {
     users: [...fixtureUsers],
@@ -83,7 +92,23 @@ function createInitialState(): DbState {
     orders: {},
     idempotencyKeys: {},
     profiles: {},
-    wallets: {},
+    wallets: Object.fromEntries(
+      fixtureUsers.map((user) => [
+        user.id,
+        [
+          {
+            id: `wallet-${user.id}`,
+            type: 'primary' as const,
+            provider: 'metamask' as const,
+            address: DEMO_WALLET_ADDRESSES[user.id] ?? DEMO_WALLET_ADDRESSES['user-1']!,
+            network: 'ethereum' as const,
+            ensName: null,
+            createdAt: user.createdAt,
+            isConnected: false,
+          },
+        ],
+      ]),
+    ),
   }
 }
 

@@ -16,8 +16,10 @@ const TOTAL_ETH_TEXT = '12.026 ETH'
 // Endereço fictício só precisa bater com `walletAddressSchema`
 // (`/^0x[a-fA-F0-9]{40}$/`, `src/shared/api/contracts/common.ts`). O recibo mostra
 // a versão abreviada (`shortenAddress`, igual em `OrderConfirmationPage.tsx`).
-const WALLET_ADDRESS = '0x1234567890123456789012345678901234567890'
-const WALLET_ADDRESS_SHORT = '0x1234…7890'
+// Carteira primária pré-cadastrada para cada usuário de demo (`createInitialState`
+// em `src/mocks/db/store.ts`) - endereço de `collector-a`/`user-1`.
+const WALLET_ADDRESS = '0x1a2b3c4d5e6f7890a1b2c3d4e5f6a7b8c9d0e1f2'
+const WALLET_ADDRESS_SHORT = '0x1a2b…e1f2'
 
 // Chaves reais de `localStorage` usadas pela app (não dá pra importar os módulos
 // de `src/` aqui - ver nota em `e2e/fixtures/test.ts` sobre o alias `@/` não
@@ -53,29 +55,6 @@ async function buyIntoCart(page: Page) {
   const buyButtonName = isMobileViewport(page) ? 'Comprar NFT' : 'COMPRAR'
   await page.getByRole('button', { name: buyButtonName, exact: true }).click()
   await expect(page.getByRole('button', { name: buyButtonName, exact: true })).toBeEnabled()
-}
-
-// Não existe UI para cadastrar a primeira carteira ainda ("Cadastrar carteira" é
-// um `PendingLink` desabilitado) - semeamos via chamada real à API simulada,
-// igual a qualquer outra escrita no `db` do MSW, só sem passar pela UI que não
-// existe nesta fase.
-async function seedPrimaryWallet(page: Page) {
-  await page.evaluate(
-    async ({ tokenKey, address }) => {
-      const token = window.localStorage.getItem(tokenKey)
-      await fetch('/api/wallets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          type: 'primary',
-          provider: 'metamask',
-          address,
-          network: 'ethereum',
-        }),
-      })
-    },
-    { tokenKey: ACCESS_TOKEN_KEY, address: WALLET_ADDRESS },
-  )
 }
 
 async function readIdempotencyKey(page: Page): Promise<string> {
@@ -119,7 +98,6 @@ async function connectSeededWallet(page: Page) {
 
 async function goToCheckoutReview(page: Page) {
   await buyIntoCart(page)
-  await seedPrimaryWallet(page)
   await page.goto('/checkout')
   await expect(page.getByText(NFT_NAME)).toBeVisible({ timeout: CHECKOUT_LOAD_TIMEOUT })
   await connectSeededWallet(page)
