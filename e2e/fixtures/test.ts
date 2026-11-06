@@ -23,7 +23,7 @@ type ScenarioId =
 // desatualizada uma vez (v3 vs v4) e quebrou o reset de estado entre testes
 // sem erro visível - sempre que o bump de versão em `db/store.ts` mudar,
 // atualize aqui também.
-const DB_STORAGE_KEY = 'kurio-mocks-db:v8'
+const DB_STORAGE_KEY = 'kurio-mocks-db:v9'
 const SCENARIO_STORAGE_KEY = 'kurio-mocks-scenario'
 
 type ScenarioFixture = {
